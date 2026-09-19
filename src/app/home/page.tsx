@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import {
   Arrow,
   ImageSlot,
@@ -79,10 +80,14 @@ export default function HomePage() {
 
         <div className="mx-auto mt-8 grid max-w-[1600px] grid-cols-1 items-end gap-8 px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-10">
           <div className="hidden lg:block" />
-          <ImageSlot
-            label="Retrato da Joana"
-            ratio="3 / 3.6"
-            className="mx-auto w-full max-w-[340px]"
+          <Image
+            src="/joana-retrato.jpg"
+            alt="Retrato de Joana Domingues"
+            width={480}
+            height={542}
+            priority
+            sizes="(max-width: 1024px) 70vw, 340px"
+            className="mx-auto h-auto w-[min(70vw,340px)] object-cover"
           />
           <p className="text-left text-[clamp(1.25rem,2.1vw,2rem)] font-bold uppercase leading-[1.15] tracking-[-0.01em] lg:pb-6 lg:text-right">
             Where
@@ -358,10 +363,13 @@ export default function HomePage() {
       {/* ----------------------------------------------------------- contact */}
       <section id="contact" className="bg-paper pb-20 lg:pb-28">
         <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-stretch gap-8 px-6 lg:grid-cols-2 lg:px-10">
-          <ImageSlot
-            label="Mockup do portátil"
-            ratio="4 / 3"
-            className="h-full w-full"
+          <Image
+            src="/mockup-portatil.webp"
+            alt="Portátil a mostrar a identidade do estúdio"
+            width={679}
+            height={580}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="h-full w-full object-cover"
           />
           <div className="bg-lilac p-8 lg:p-12">
             <SectionLabel>Get in touch</SectionLabel>

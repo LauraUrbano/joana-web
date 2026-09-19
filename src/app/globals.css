@@ -7,10 +7,10 @@
   --brand-light: #a7a5e6;
   --brand-ink: #fefdff;
 
-  /* Paleta da /home. Estimada a olho do print do Figma -- ainda por
-     confirmar por amostragem quando houver as imagens em ficheiro. */
-  --paper: #f2ede6;
-  --paper-warm: #efe9e1;
+  /* Paleta da /home. O creme foi amostrado da faixa do mockup do portátil
+     (valor uniforme, #EEE8DF). Os restantes ainda são estimados do print. */
+  --paper: #eee8df;
+  --paper-warm: #e7e0d5;
   --ink: #1a1818;
   --lilac: #c9bcf0;
   --lilac-soft: #bfb2ea;
