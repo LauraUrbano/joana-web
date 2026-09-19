@@ -7,13 +7,15 @@
   --brand-light: #a7a5e6;
   --brand-ink: #fefdff;
 
-  /* Paleta da /home. O creme foi amostrado da faixa do mockup do portátil
-     (valor uniforme, #EEE8DF). Os restantes ainda são estimados do print. */
-  --paper: #eee8df;
-  --paper-warm: #e7e0d5;
-  --ink: #1a1818;
-  --lilac: #c9bcf0;
-  --lilac-soft: #bfb2ea;
+  /* Paleta da /home, amostrada da captura do hero do Figma. O creme tem
+     desvio zero em três zonas distantes, por isso é o valor da página.
+     (A faixa do mockup do portátil dava #EEE8DF, mas esse era o fundo
+     daquele ficheiro, não o da página.) O amarelo continua por medir. */
+  --paper: #f5f0e8;
+  --paper-warm: #ede7dc;
+  --ink: #161410;
+  --lilac: #c6b9de;
+  --lilac-soft: #cbbde8;
   --butter: #f4ef93;
 }
 

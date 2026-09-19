@@ -45,7 +45,7 @@ export default function HomePage() {
     <div className="min-h-dvh overflow-x-clip bg-paper text-ink">
       {/* ---------------------------------------------------------------- nav */}
       <header className="sticky top-0 z-50 bg-ink text-paper">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-3 lg:px-10">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-3 lg:min-h-[3.43vw] lg:px-10">
           <a
             href="#top"
             className="text-[0.6875rem] font-bold uppercase tracking-[0.14em]"
@@ -73,12 +73,12 @@ export default function HomePage() {
       </header>
 
       {/* -------------------------------------------------------------- hero */}
-      <section id="top" className="bg-paper pb-0 pt-6 lg:pt-8">
-        <h1 className="overflow-hidden whitespace-nowrap px-[1.5%] text-center text-[10.3vw] font-bold uppercase leading-[0.9] tracking-[-0.02em] text-lilac-soft">
+      <section id="top" className="bg-paper">
+        <h1 className="overflow-hidden whitespace-nowrap px-[1.5%] pt-[2.03vw] text-center text-[10.3vw] font-bold uppercase leading-[0.9] tracking-[-0.02em] text-lilac-soft">
           Joana Domingues
         </h1>
 
-        <div className="mx-auto mt-8 grid max-w-[1600px] grid-cols-1 items-end gap-8 px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-10">
+        <div className="mt-[3.1vw] grid grid-cols-1 items-end gap-8 px-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-0 lg:px-[7.4%]">
           <div className="hidden lg:block" />
           <Image
             src="/joana-retrato.jpg"
@@ -86,29 +86,32 @@ export default function HomePage() {
             width={480}
             height={542}
             priority
-            sizes="(max-width: 1024px) 70vw, 340px"
-            className="mx-auto h-auto w-[min(70vw,340px)] object-cover"
+            sizes="(max-width: 1024px) 70vw, 29vw"
+            className="mx-auto h-auto w-[70vw] object-cover lg:w-[28.76vw]"
           />
-          <p className="text-left text-[clamp(1.25rem,2.1vw,2rem)] font-bold uppercase leading-[1.15] tracking-[-0.01em] lg:pb-6 lg:text-right">
+          {/* "meets" é serifado itálico no design, na mesma cor do resto. */}
+          <p className="text-left text-[clamp(1.25rem,2.49vw,2.5rem)] font-bold uppercase leading-[1.29] tracking-[-0.01em] lg:mb-[8.8vw] lg:text-right">
             Where
             <br />
-            <span className="text-ink">Design</span>{" "}
-            <span className="opacity-45">meets</span>
+            Design{" "}
+            <span className="font-serif font-normal italic tracking-normal">
+              Meets
+            </span>
             <br />
             Research
           </p>
         </div>
 
-        <div className="mx-auto mt-10 flex max-w-[1600px] flex-col gap-4 border-t border-ink/10 px-6 py-5 md:flex-row md:items-center md:justify-between lg:px-10">
-          <span className="w-fit rounded-full bg-lilac px-4 py-1.5 text-[0.625rem] font-bold uppercase tracking-[0.12em]">
-            Lisboa, Portugal
+        <div className="mt-[5.85vw] flex flex-col gap-4 border-t border-ink/15 px-6 py-[0.78vw] md:flex-row md:items-center md:justify-between lg:px-[7.4%]">
+          <span className="w-fit rounded-full bg-lilac px-[1.5vw] py-[0.5vw] font-serif text-[clamp(0.8125rem,1.15vw,1.4rem)] italic text-paper">
+            Est. 2012 · Portugal
           </span>
-          <p className="text-[0.6875rem] uppercase tracking-[0.1em] opacity-55">
-            Branding, design digital e investigação académica
+          <p className="text-[clamp(0.6875rem,0.95vw,1.15rem)] opacity-60">
+            branding, digital design and academic research combined.
           </p>
           <a
             href="#work"
-            className="flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.12em] transition-opacity hover:opacity-60"
+            className="flex w-fit items-center gap-2 border-b border-ink pb-1 text-[clamp(0.6875rem,0.95vw,1.15rem)] font-bold uppercase tracking-[0.1em] transition-opacity hover:opacity-60"
           >
             View selected work <Arrow />
           </a>
@@ -147,7 +150,7 @@ export default function HomePage() {
 
       {/* ----------------------------------------------------------- explore */}
       <section className="relative overflow-hidden bg-butter">
-        <div className="mx-auto max-w-[1600px] px-6 py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-[1600px] px-6 lg:px-10 py-[clamp(3.5rem,7.5vw,11rem)]">
           <div className="relative mx-auto max-w-[620px] text-center">
             <p className="text-[clamp(1.5rem,2.6vw,2.25rem)] leading-[1.2] tracking-[-0.01em]">
               <span className="font-bold">Explore</span>{" "}
@@ -199,7 +202,7 @@ export default function HomePage() {
 
       {/* -------------------------------------------------------------- work */}
       <section id="work" className="bg-paper-warm">
-        <div className="mx-auto max-w-[1600px] px-6 py-20 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-[1600px] px-6 lg:px-10 py-[clamp(3.5rem,7vw,10rem)]">
           <SectionLabel>Selected work</SectionLabel>
           <ul className="mt-8">
             {WORKS.map((w) => (
@@ -245,7 +248,7 @@ export default function HomePage() {
 
       {/* ------------------------------------------------------------ método */}
       <section className="bg-lilac">
-        <div className="mx-auto max-w-[1600px] px-6 py-20 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-[1600px] px-6 lg:px-10 py-[clamp(3.5rem,7vw,10rem)]">
           <SectionLabel>How we work</SectionLabel>
           <h2 className="mt-5 text-[clamp(2rem,4.4vw,3.75rem)] font-bold uppercase leading-[1.05] tracking-[-0.02em]">
             How I work
@@ -279,7 +282,7 @@ export default function HomePage() {
 
       {/* ---------------------------------------------------------- research */}
       <section id="research" className="bg-white">
-        <div className="mx-auto max-w-[1600px] px-6 py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-[1600px] px-6 lg:px-10 py-[clamp(3.5rem,7.5vw,11rem)]">
           <SectionLabel>Research & practice</SectionLabel>
           <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[1.2fr_1fr]">
             <h2 className="text-[clamp(2.25rem,5.2vw,4.5rem)] font-bold uppercase leading-[1.04] tracking-[-0.025em]">
@@ -322,7 +325,7 @@ export default function HomePage() {
 
       {/* ------------------------------------------------------------- about */}
       <section id="about" className="bg-paper">
-        <div className="mx-auto max-w-[1600px] px-6 py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-[1600px] px-6 lg:px-10 py-[clamp(3.5rem,7.5vw,11rem)]">
           <div className="mx-auto max-w-[520px]">
             <SectionLabel>About</SectionLabel>
             <h2 className="mt-5 text-[clamp(2rem,3.6vw,3rem)] leading-[1.12] tracking-[-0.015em]">
