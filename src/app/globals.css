@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
+/* Cores medidas a partir do ficheiro do Figma (amostragem do gradiente). */
 :root {
-  --brand-deep: #665aed;
-  --brand-base: #8a7af6;
-  --brand-light: #bdb4ff;
+  --brand-deep: #786bff;
+  --brand-base: #8a84f9;
+  --brand-light: #a7a5e6;
+  --brand-ink: #fefdff;
 }
 
 @theme inline {
   --color-brand-deep: var(--brand-deep);
   --color-brand-base: var(--brand-base);
   --color-brand-light: var(--brand-light);
-  --font-sans: var(--font-inter);
+  --color-brand-ink: var(--brand-ink);
+  --font-sans: var(--font-instrument-sans);
 }
 
 html,
@@ -19,6 +22,7 @@ body {
 }
 
 body {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-instrument-sans), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
 }

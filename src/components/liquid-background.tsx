@@ -75,12 +75,16 @@ void main() {
   float glow = 1.0 - smoothstep(0.05, 0.8, length(c));
   m = clamp(m * 0.62 + glow * 0.50 + 0.06, 0.0, 1.0);
 
-  vec3 deep  = vec3(0.400, 0.333, 0.930);
-  vec3 base  = vec3(0.541, 0.478, 0.965);
-  vec3 light = vec3(0.741, 0.706, 0.998);
+  // Rampa retirada do ficheiro do Figma. Os percentis de m foram emparelhados
+  // com os percentis de cor da referencia, o que da estas tres paragens.
+  // Nota: o tom claro dessatura (o azul desce) -- nao e branco sobre roxo.
+  vec3 cA = vec3(0.471, 0.419, 1.000); // #786BFF
+  vec3 cB = vec3(0.574, 0.559, 0.955); // #928FF4
+  vec3 cC = vec3(0.654, 0.645, 0.904); // #A7A5E6
 
-  vec3 col = mix(deep, base, smoothstep(0.0, 0.55, m));
-  col = mix(col, light, smoothstep(0.58, 1.08, m));
+  // m fica entre ~0.08 e ~0.68, por isso a rampa e esticada nessa gama.
+  float k = clamp((m - 0.08) / 0.60, 0.0, 1.0);
+  vec3 col = k < 0.5 ? mix(cA, cB, k * 2.0) : mix(cB, cC, (k - 0.5) * 2.0);
 
   // Dither para evitar banding nos degradés.
   float d = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
