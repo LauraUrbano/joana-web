@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  --brand-deep: #665aed;
+  --brand-base: #8a7af6;
+  --brand-light: #bdb4ff;
+}
+
+@theme inline {
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-base: var(--brand-base);
+  --color-brand-light: var(--brand-light);
+  --font-sans: var(--font-inter);
+}
+
+html,
+body {
+  background-color: var(--brand-base);
+}
+
+body {
+  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
