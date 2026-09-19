@@ -6,6 +6,15 @@
   --brand-base: #8a84f9;
   --brand-light: #a7a5e6;
   --brand-ink: #fefdff;
+
+  /* Paleta da /home. Estimada a olho do print do Figma -- ainda por
+     confirmar por amostragem quando houver as imagens em ficheiro. */
+  --paper: #f2ede6;
+  --paper-warm: #efe9e1;
+  --ink: #1a1818;
+  --lilac: #c9bcf0;
+  --lilac-soft: #bfb2ea;
+  --butter: #f4ef93;
 }
 
 @theme inline {
@@ -13,12 +22,20 @@
   --color-brand-base: var(--brand-base);
   --color-brand-light: var(--brand-light);
   --color-brand-ink: var(--brand-ink);
+  --color-paper: var(--paper);
+  --color-paper-warm: var(--paper-warm);
+  --color-ink: var(--ink);
+  --color-lilac: var(--lilac);
+  --color-lilac-soft: var(--lilac-soft);
+  --color-butter: var(--butter);
   --font-sans: var(--font-instrument-sans);
+  --font-serif: var(--font-instrument-serif);
 }
 
+/* Neutro: cada página pinta o seu próprio fundo a cobrir a viewport. */
 html,
 body {
-  background-color: var(--brand-base);
+  background-color: var(--paper);
 }
 
 body {
