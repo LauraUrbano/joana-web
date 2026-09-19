@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: "Joana Domingues — Design Studio",
   description:
     "Branding, design digital e investigação académica. Estúdio de design em Portugal.",
+  // Enquanto a entrada do site for a página "em breve", esta é um rascunho:
+  // fica fora dos motores de busca para ninguém aterrar aqui por engano.
+  // Quando for para publicar, apaga-se este bloco.
+  robots: { index: false, follow: false },
 };
 
 const NAV = [
