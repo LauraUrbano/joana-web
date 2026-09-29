@@ -24,11 +24,12 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
+// `href` só nos projetos que já têm página; os outros ficam na lista.
 const WORKS = [
-  { n: "01", title: "Rukom", kind: "sans", meta: "Digital design · Branding", year: "2025" },
-  { n: "02", title: "Segmento Urbano", kind: "serif", meta: "Brand identity · Visual identity", year: "2024" },
-  { n: "03", title: "Carla Rocha", kind: "sans", meta: "Branding · Art direction", year: "2024" },
-  { n: "04", title: "International Conference on Degrowth 2027", kind: "serif", meta: "Identity · Conference", year: "2023" },
+  { n: "01", title: "Rukom", kind: "sans", meta: "Digital design · Branding", year: "2025", href: "" },
+  { n: "02", title: "Segmento Urbano", kind: "serif", meta: "Brand identity · Visual identity", year: "2024", href: "/projetos/segmento-urbano" },
+  { n: "03", title: "Carla Rocha", kind: "sans", meta: "Branding · Art direction", year: "2024", href: "" },
+  { n: "04", title: "International Conference on Degrowth 2027", kind: "serif", meta: "Identity · Conference", year: "2023", href: "" },
 ] as const;
 
 const METHOD = [
@@ -212,7 +213,8 @@ export default function HomePage() {
             {WORKS.map((w) => (
               <li key={w.n} className="border-t border-ink/15 last:border-b">
                 <a
-                  href="#work"
+                  href={w.href || "#work"}
+                  aria-disabled={w.href ? undefined : true}
                   className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 py-6 transition-opacity hover:opacity-60"
                 >
                   <span className="text-[0.625rem] tabular-nums opacity-40">
@@ -230,6 +232,11 @@ export default function HomePage() {
                     </span>
                     <span className="mt-1 block text-[0.625rem] uppercase tracking-[0.12em] opacity-45">
                       {w.meta}
+                      {w.href ? (
+                        <em className="ml-2 font-serif not-italic opacity-100">
+                          — ver o caso
+                        </em>
+                      ) : null}
                     </span>
                   </span>
                   <span className="flex items-center gap-5">

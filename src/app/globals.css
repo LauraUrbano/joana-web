@@ -45,3 +45,63 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ---------------------------------------------------------------------------
+   Página de projeto.
+   A assinatura tipográfica do estúdio -- metade grotesca, metade serifada --
+   passa a ser ritmo: a metade serifada chega um tempo depois. O estado em
+   repouso é visível; o `data-pre` é posto por JavaScript só no que está fora
+   do ecrã, para a página se ler inteira sem scroll e sem script.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-split] [data-late] {
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  [data-split][data-pre] [data-late] {
+    opacity: 0;
+    transform: translateY(0.32em);
+  }
+}
+
+/* A faixa das peças anda na horizontal enquanto se desce. Só em ecrãs largos:
+   em telemóvel fica uma faixa arrastável com o dedo, que é melhor ali. */
+@media (min-width: 980px) and (prefers-reduced-motion: no-preference) {
+  [data-lat][data-lat-jack] [data-lat-stick] {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  [data-lat][data-lat-jack] [data-lat-track] {
+    overflow: visible;
+    padding-bottom: 0;
+    will-change: transform;
+  }
+}
+
+/* O nome do projeto seguinte, em contorno, que se enche ao passar por cima.
+   Ecoa a assinatura grande do rodapé da /home. */
+.nextmark {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+  background: linear-gradient(var(--lilac), var(--lilac)) no-repeat left center /
+    0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: background-size 0.55s cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+a:hover .nextmark,
+a:focus-visible .nextmark {
+  background-size: 100% 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nextmark {
+    transition: none;
+    background-size: 100% 100%;
+  }
+}

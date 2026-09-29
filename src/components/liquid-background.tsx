@@ -20,6 +20,9 @@ precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
+uniform vec3 u_cA;
+uniform vec3 u_cB;
+uniform vec3 u_cC;
 
 vec2 hash2(vec2 p) {
   p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
@@ -75,16 +78,11 @@ void main() {
   float glow = 1.0 - smoothstep(0.05, 0.8, length(c));
   m = clamp(m * 0.62 + glow * 0.50 + 0.06, 0.0, 1.0);
 
-  // Rampa retirada do ficheiro do Figma. Os percentis de m foram emparelhados
-  // com os percentis de cor da referencia, o que da estas tres paragens.
-  // Nota: o tom claro dessatura (o azul desce) -- nao e branco sobre roxo.
-  vec3 cA = vec3(0.471, 0.419, 1.000); // #786BFF
-  vec3 cB = vec3(0.574, 0.559, 0.955); // #928FF4
-  vec3 cC = vec3(0.654, 0.645, 0.904); // #A7A5E6
-
   // m fica entre ~0.08 e ~0.68, por isso a rampa e esticada nessa gama.
+  // As tres paragens vem de fora (ver BRAND_RAMP): a pagina "em breve" usa a
+  // rampa roxa medida do Figma, e cada projeto pode trazer a sua.
   float k = clamp((m - 0.08) / 0.60, 0.0, 1.0);
-  vec3 col = k < 0.5 ? mix(cA, cB, k * 2.0) : mix(cB, cC, (k - 0.5) * 2.0);
+  vec3 col = k < 0.5 ? mix(u_cA, u_cB, k * 2.0) : mix(u_cB, u_cC, (k - 0.5) * 2.0);
 
   // Dither para evitar banding nos degradés.
   float d = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
@@ -93,6 +91,21 @@ void main() {
   gl_FragColor = vec4(col, 1.0);
 }
 `;
+
+/** Rampa da marca, medida do ficheiro do Figma da página "em breve". */
+export const BRAND_RAMP = ["#786bff", "#928ff4", "#a7a5e6"] as const;
+
+export type Ramp = readonly [string, string, string];
+
+/** "#rrggbb" -> [0..1, 0..1, 0..1] para o uniform do shader. */
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) as [
+    number,
+    number,
+    number,
+  ];
+}
 
 function compile(gl: WebGLRenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
@@ -106,8 +119,15 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
   return shader;
 }
 
-export default function LiquidBackground() {
+export default function LiquidBackground({
+  ramp = BRAND_RAMP,
+}: {
+  /** Três paragens em hex, do tom mais escuro ao mais claro. */
+  ramp?: Ramp;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // A rampa entra como string para o efeito não correr a cada render.
+  const rampKey = ramp.join("|");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -146,6 +166,12 @@ export default function LiquidBackground() {
 
     const uResolution = gl.getUniformLocation(program, "u_resolution");
     const uTime = gl.getUniformLocation(program, "u_time");
+
+    const stops = rampKey.split("|").map(hexToRgb);
+    (["u_cA", "u_cB", "u_cC"] as const).forEach((name, i) => {
+      const stop = stops[i] ?? hexToRgb(BRAND_RAMP[i]);
+      gl.uniform3f(gl.getUniformLocation(program, name), ...stop);
+    });
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -225,7 +251,7 @@ export default function LiquidBackground() {
       reduceMotion.removeEventListener("change", onMotionChange);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, []);
+  }, [rampKey]);
 
   return (
     <canvas
