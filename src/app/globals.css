@@ -140,3 +140,55 @@ a:focus-visible .nextmark {
     transform: translateY(1.5rem);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Capítulos: blocos que ficam fixos enquanto se percorrem.
+
+   Medido no gravity-design.de: o conteúdo fica parado a maior parte do
+   percurso e troca em cerca de 4% dele. Daí a transição curta -- é a troca
+   rápida que faz isto ler-se como blocos, e não como uma página corrida.
+
+   O `data-vivo` só existe depois de o script correr. Sem JavaScript, ou com
+   movimento reduzido, tudo fica visível: a página nunca esconde conteúdo à
+   espera de um observador.
+   --------------------------------------------------------------------------- */
+
+/* Painéis que se substituem: um por passo. */
+[data-vivo] [data-quando] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.42s ease,
+    transform 0.42s cubic-bezier(0.2, 0.75, 0.2, 1),
+    visibility 0s linear 0.42s;
+}
+[data-vivo][data-passo="0"] [data-quando="0"],
+[data-vivo][data-passo="1"] [data-quando="1"],
+[data-vivo][data-passo="2"] [data-quando="2"],
+[data-vivo][data-passo="3"] [data-quando="3"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+/* Painéis que se acumulam: aparecem e ficam. */
+[data-vivo] [data-desde] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+[data-vivo][data-passo="0"] [data-desde="0"],
+[data-vivo][data-passo="1"] [data-desde="0"],
+[data-vivo][data-passo="1"] [data-desde="1"],
+[data-vivo][data-passo="2"] [data-desde="0"],
+[data-vivo][data-passo="2"] [data-desde="1"],
+[data-vivo][data-passo="2"] [data-desde="2"] {
+  opacity: 1;
+  transform: none;
+}

@@ -40,7 +40,7 @@ export type Peca = {
   h: number;
 };
 
-type Estado = { x: number; y: number; s: number; o: number };
+type Estado = { x: number; y: number; z: number; s: number; o: number; b: number };
 
 const TAU = Math.PI * 2;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -100,7 +100,7 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
     let visivel = true;
     let ultimo = performance.now();
 
-    const estados: Estado[] = pecas.map(() => ({ x: 0, y: 0, s: 1, o: 1 }));
+    const estados: Estado[] = pecas.map(() => ({ x: 0, y: 0, z: 0, s: 1, o: 1, b: 0 }));
     let iniciado = false;
 
     const passo = (agora: number) => {
@@ -121,47 +121,59 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
       const sel = activoRef.current;
       const cx = r.width / 2;
       const cy = r.height * 0.54;
-      const rx = r.width * (r.width < 760 ? 0.3 : 0.33);
-      const ry = r.height * (r.width < 760 ? 0.21 : 0.24);
+      // Carrossel em 3D: os cartões andam num círculo no plano XZ e a
+      // perspectiva do palco trata do tamanho. É o que o site de referência
+      // faz -- perspective no palco, matrix3d em cada cartão -- em vez de
+      // fingir profundidade com escala.
+      const raio = r.width * (r.width < 760 ? 0.34 : 0.4);
+      const persp = r.width * 1.26;
 
       for (let i = 0; i < n; i++) {
         const a = (i / n) * TAU + alvo;
-        const prof = (Math.sin(a) + 1) / 2; // 0 atrás, 1 à frente
-        let tx = cx + Math.cos(a) * rx;
-        let ty = cy + Math.sin(a) * ry * 0.55;
-        let ts = 0.58 + prof * 0.42;
-        let to = 0.82 + prof * 0.18;
+        let tx = cx + Math.cos(a) * raio;
+        let tz = Math.sin(a) * raio;
+        let ty = cy + Math.sin(a * 2) * r.height * 0.045;
+        let to = 1;
+        let tb = Math.max(0, -tz / raio) * 4.5; // desfoque de quem está atrás
+        let ts = 1;
 
         if (sel !== null) {
           if (sel === i) {
             tx = cx;
             ty = r.height * 0.5;
+            tz = 0;
+            tb = 0;
             const el = refs.current[i];
-            const alturaAlvo = r.height * 0.56;
-            ts = el ? alturaAlvo / Math.max(el.offsetHeight, 1) : 1.6;
-            to = 1;
+            ts = el ? (r.height * 0.56) / Math.max(el.offsetHeight, 1) : 1.6;
           } else {
-            to = 0.1;
-            ts *= 0.82;
+            to = 0.12;
+            tb = 6;
+            tz = Math.min(tz, -raio * 0.5);
           }
         }
 
         const e = estados[i];
-        const k = iniciado ? 1 - Math.pow(0.0001, dt) : 1; // suave, e exacto à entrada
+        const k = iniciado ? 1 - Math.pow(0.0001, dt) : 1;
         e.x = lerp(e.x, tx, k);
         e.y = lerp(e.y, ty, k);
+        e.z = lerp(e.z, tz, k);
         e.s = lerp(e.s, ts, k);
         e.o = lerp(e.o, to, k);
+        e.b = lerp(e.b, tb, k);
 
         const el = refs.current[i];
         if (el) {
-          el.style.transform = `translate3d(${e.x - el.offsetWidth / 2}px, ${
-            e.y - el.offsetHeight / 2
-          }px, 0) scale(${e.s.toFixed(3)})`;
+          el.style.transform =
+            `translate3d(${(e.x - el.offsetWidth / 2).toFixed(1)}px, ` +
+            `${(e.y - el.offsetHeight / 2).toFixed(1)}px, ${e.z.toFixed(1)}px)` +
+            (sel === i ? ` scale(${e.s.toFixed(3)})` : "");
           el.style.opacity = e.o.toFixed(3);
-          el.style.zIndex = String(sel === i ? 50 : Math.round(prof * 20));
+          el.style.filter = e.b > 0.15 ? `blur(${e.b.toFixed(2)}px)` : "";
+          el.style.zIndex = String(sel === i ? 50 : Math.round(20 + e.z / 40));
         }
       }
+      // A perspectiva vive no palco, como na referência.
+      cena.style.perspective = `${persp.toFixed(0)}px`;
       iniciado = true;
       raf = requestAnimationFrame(passo);
     };

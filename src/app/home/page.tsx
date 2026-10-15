@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import HomeMotion from "@/components/home/motion";
+import Capitulo from "@/components/home/capitulo";
 import Orbita, { type Peca } from "@/components/home/orbita";
 
 /**
@@ -63,6 +64,44 @@ const PERCURSOS = [
     titulo: "Estou a escrever",
     corpo: "Um livro em desenvolvimento, ainda a encontrar a sua forma.",
     links: [{ label: "Brevemente", href: "#percursos" }],
+  },
+] as const;
+
+/**
+ * O que o lado direito do capítulo "Designer" atravessa. A nota da Joana no
+ * Figma: "o lado esq mantém-se, o lado dir faz scroll, por cada novo título
+ * fica por baixo de 'designer', roda apenas o texto".
+ * O texto é o dela, incluindo os clientes reais.
+ */
+const CAMPOS = [
+  {
+    titulo: null,
+    paragrafos: [
+      "Sou designer de comunicação há mais de 14 anos e trabalho por conta própria há 9.",
+      "Ao longo deste percurso, tenho trabalhado com diferentes marcas, criado dezenas de identidades visuais e desenvolvido projetos de branding e comunicação digital.",
+      "Entre projetar, investigar e escrever, vou descobrindo novas formas de pensar e fazer design. É nesse movimento constante que a minha prática acontece e continua a evoluir.",
+    ],
+  },
+  {
+    titulo: "Comunicação institucional",
+    paragrafos: [
+      "Desenvolvi projetos de comunicação para entidades como a Presidência da República Portuguesa, as Repúblicas de Moçambique e de Cabo Verde, o Ministério da Educação, Portugal Digital, Test Beds, Sonae, Galp Distribuição, Grupo Renascença, Central de Cervejas, Grupo Lactogal, Hotéis Vila Baleira, Valorpneu e os municípios de Évora e Arraiolos, entre outras.",
+      "Contextos muito diferentes, com uma exigência comum: comunicar com clareza, respeitando a identidade, o protocolo e a responsabilidade de cada instituição.",
+    ],
+  },
+  {
+    titulo: "Comunicação comercial",
+    paragrafos: [
+      "Desenvolvi projetos de comunicação comercial e de eventos para organizações como a Sonae, Galp, CTT, Lactogal, Fosun, Grupo Delta, Lidl, BCG, Grupo Central de Cervejas, Carla Rocha Comunicação, Grupo Ferpinta, Hotéis Vila Baleira, Habitat Invest, Grupo RE/MAX, Axians e TAP, entre outras, incluindo a Conferência Decrescimento 2027.",
+      "Esta experiência permitiu-me trabalhar com diferentes escalas, setores e necessidades de comunicação, mantendo a consistência da mensagem e da identidade de cada marca.",
+    ],
+  },
+  {
+    titulo: "Branding e arquitetura de marca",
+    paragrafos: [
+      "Construir marcas é mais do que criar uma identidade visual. Trabalhei em projetos de branding, comunicação, publicações internas e campanhas para organizações como a H/Advisors CV&A, do grupo Havas, Lusíadas Saúde, Hotéis Vila Baleira, KPMG, Impresa, Legalworks, CTT e Segmento Urbano.",
+      "Paralelamente, criei dezenas de marcas para pequenas e médias empresas, com identidades pensadas para cada negócio, que fazem sentido para quem as constrói e funcionam para além da sua expressão visual.",
+    ],
   },
 ] as const;
 
@@ -167,8 +206,10 @@ export default function HomePage() {
       </header>
 
       {/* ========================================================== designer */}
-      {/* A nota da Joana: o lado esquerdo mantém-se, o direito faz scroll. */}
-      <section className="relative isolate bg-mauve" id="sobre">
+      {/* A nota da Joana: o lado esquerdo mantém-se, o direito roda. O bloco
+          fica fixo enquanto se percorrem cinco ecrãs, e o texto troca em
+          quatro passos -- a bio, e depois os três campos. */}
+      <Capitulo id="sobre" ecras={5} passos={4} className="relative isolate bg-mauve">
         <Image
           src="/home/fundo-designer.jpg"
           alt=""
@@ -177,87 +218,93 @@ export default function HomePage() {
           className="-z-10 object-cover"
         />
         <div
-          className={`grid gap-y-10 py-[clamp(3rem,8.3vw,9rem)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,6.8vw,7rem)] ${gutter}`}
+          className={`grid h-full items-center gap-y-8 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,6.8vw,7rem)] ${gutter}`}
         >
-          <h2 className="self-start font-serif text-[clamp(3rem,8.39vw,8.75rem)] leading-[0.95] text-paper-soft lg:sticky lg:top-[12vh]">
-            Designer
-          </h2>
-
-          <div className="flex flex-col gap-[1.1em] text-paper">
-            <p className="font-serif text-[clamp(1.4rem,2.52vw,2.65rem)] leading-tight">
-              Sou designer de comunicação há mais de 14 anos e trabalho por
-              conta própria há 9.
-            </p>
-            <div className="flex flex-col gap-[0.9em] font-body text-[clamp(1rem,1.86vw,1.95rem)] leading-snug">
-              <p>
-                Ao longo deste percurso, tenho trabalhado com diferentes marcas,
-                criado dezenas de identidades visuais e desenvolvido projetos de{" "}
-                <em>branding</em> e comunicação digital.
-              </p>
-              <p>
-                Gosto de resolver problemas e encontrar formas de comunicar
-                melhor. Foi também essa vontade de compreender o que está por
-                detrás das decisões de design que me levou ao doutoramento, onde
-                investigo como a inteligência artificial está a reconfigurar o
-                papel do designer.
-              </p>
-              <p>
-                Entre projetar, investigar e escrever, vou descobrindo novas
-                formas de pensar e fazer design. É nesse movimento constante que
-                a minha prática acontece e continua a evoluir.
-              </p>
+          <div>
+            <h2 className="font-serif text-[clamp(2.5rem,8.39vw,8.75rem)] leading-[0.95] text-paper-soft">
+              Designer
+            </h2>
+            {/* O título de cada campo fica por baixo de "Designer". */}
+            <div className="relative mt-[clamp(0.75rem,1.5vw,1.5rem)] min-h-[clamp(1.5rem,2.6vw,2.75rem)]">
+              {CAMPOS.map((c, i) => (
+                <p
+                  key={c.titulo ?? "bio"}
+                  data-quando={i}
+                  className={`${CAPS} text-paper/85`}
+                >
+                  {c.titulo}
+                </p>
+              ))}
             </div>
           </div>
+
+          <div className="relative min-h-[clamp(14rem,28vw,24rem)]">
+            {CAMPOS.map((c, i) => (
+              <div
+                key={c.titulo ?? "bio"}
+                data-quando={i}
+                className="flex flex-col gap-[0.8em] font-body text-[clamp(0.95rem,1.7vw,1.8rem)] leading-snug text-paper"
+              >
+                {c.paragrafos.map((t) => (
+                  <p key={t.slice(0, 24)}>{t}</p>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
+      </Capitulo>
 
       {/* ========================================================== projetos */}
       <Orbita pecas={PECAS} />
 
       {/* ========================================================= percursos */}
-      <section className={`bg-sand py-[clamp(3rem,8.3vw,9rem)] ${gutter}`} id="percursos">
-        <h2 className="font-serif text-[clamp(2rem,8.09vw,8.4rem)] leading-[0.95] text-clay">
-          Outras, escrevo para <em>compreender</em> melhor aquilo que faço.
-        </h2>
+      {/* "À medida que vamos fazendo scroll vão aparecendo os tópicos 1, 2 e 3."
+          Acumulam-se: aparecem e ficam. */}
+      <Capitulo id="percursos" ecras={4} passos={3} className="bg-sand">
+        <div
+          className={`flex h-full flex-col justify-center py-[clamp(2rem,5vw,5rem)] ${gutter}`}
+        >
+          <h2 className="font-serif text-[clamp(1.75rem,6.4vw,6.6rem)] leading-[0.95] text-clay">
+            Outras, escrevo para <em>compreender</em> melhor aquilo que faço.
+          </h2>
 
-        <ul className="mt-[clamp(2.5rem,7vw,7.5rem)]">
-          {PERCURSOS.map((p) => (
-            <li
-              key={p.n}
-              data-reveal
-              className="border-t border-clay/70 py-[clamp(1.25rem,2.4vw,2.5rem)]"
-            >
-              <div className="grid gap-x-[clamp(1rem,3vw,3.5rem)] gap-y-4 md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.6fr)_auto] md:items-start">
-                <span
-                  className={`font-sans text-[clamp(0.875rem,1.44vw,1.5rem)] tracking-[0.075em] text-clay`}
-                >
-                  {p.n}
-                </span>
-                <h3 className="font-serif text-[clamp(1.5rem,3.95vw,4.1rem)] uppercase leading-[0.86] text-clay">
-                  {p.titulo}
-                </h3>
-                <div className="text-clay">
-                  <p className="font-body text-[clamp(1rem,1.92vw,2rem)] leading-snug">
-                    {p.corpo}
-                  </p>
-                  <p className="mt-[clamp(0.75rem,1.5vw,1.5rem)] flex flex-wrap gap-x-6 gap-y-2">
-                    {p.links.map((l) => (
-                      <a
-                        key={l.label}
-                        href={l.href}
-                        className={`${CAPS} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
-                      >
-                        {l.label} <Seta />
-                      </a>
-                    ))}
-                  </p>
+          <ul className="mt-[clamp(1.5rem,4vw,4rem)]">
+            {PERCURSOS.map((p, i) => (
+              <li
+                key={p.n}
+                data-desde={i}
+                className="border-t border-clay/70 py-[clamp(0.8rem,1.7vw,1.9rem)]"
+              >
+                <div className="grid gap-x-[clamp(1rem,3vw,3.5rem)] gap-y-3 md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.6fr)_auto] md:items-start">
+                  <span className="font-sans text-[clamp(0.875rem,1.44vw,1.5rem)] tracking-[0.075em] text-clay">
+                    {p.n}
+                  </span>
+                  <h3 className="font-serif text-[clamp(1.4rem,3.4vw,3.5rem)] uppercase leading-[0.86] text-clay">
+                    {p.titulo}
+                  </h3>
+                  <div className="text-clay">
+                    <p className="font-body text-[clamp(0.95rem,1.6vw,1.7rem)] leading-snug">
+                      {p.corpo}
+                    </p>
+                    <p className="mt-[clamp(0.5rem,1.2vw,1.2rem)] flex flex-wrap gap-x-6 gap-y-2">
+                      {p.links.map((l) => (
+                        <a
+                          key={l.label}
+                          href={l.href}
+                          className={`${CAPS} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
+                        >
+                          {l.label} <Seta />
+                        </a>
+                      ))}
+                    </p>
+                  </div>
+                  <Seta className="hidden text-[clamp(1.25rem,2.2vw,2.3rem)] text-clay md:block" />
                 </div>
-                <Seta className="hidden text-[clamp(1.25rem,2.2vw,2.3rem)] text-clay md:block" />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Capitulo>
 
       {/* ========================================================= conversar */}
       <section className="relative isolate bg-olive" id="conversar">
