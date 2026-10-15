@@ -17,6 +17,16 @@
   --lilac: #c6b9de;
   --lilac-soft: #cbbde8;
   --butter: #f4ef93;
+
+  /* Identidade nova da /home, amostrada do ficheiro do Figma de outubro.
+     As faixas são fotográficas; estes são os tons planos por baixo delas,
+     medidos pela cor dominante de cada faixa no export. */
+  --mauve: #ad969d; /* faixa "Designer"      -- 95% da faixa */
+  --sand: #d8ccbe; /* faixa creme           -- 94% da faixa */
+  --clay: #975c42; /* display sobre o creme */
+  --olive: #656545; /* faixa "Vamos conversar" */
+  --olive-deep: #4c523b; /* rodapé                -- 90% da faixa */
+  --paper-soft: #ede8df; /* texto creme do "Designer" */
 }
 
 @theme inline {
@@ -30,8 +40,15 @@
   --color-lilac: var(--lilac);
   --color-lilac-soft: var(--lilac-soft);
   --color-butter: var(--butter);
+  --color-mauve: var(--mauve);
+  --color-sand: var(--sand);
+  --color-clay: var(--clay);
+  --color-olive: var(--olive);
+  --color-olive-deep: var(--olive-deep);
+  --color-paper-soft: var(--paper-soft);
   --font-sans: var(--font-instrument-sans);
   --font-serif: var(--font-instrument-serif);
+  --font-body: var(--font-eb-garamond);
 }
 
 /* Neutro: cada página pinta o seu próprio fundo a cobrir a viewport. */
