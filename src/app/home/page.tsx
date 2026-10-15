@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
+import HomeMotion from "@/components/home/motion";
+
 /**
  * Home do estúdio.
  *
@@ -83,6 +85,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-dvh overflow-x-clip bg-sand">
+      <HomeMotion />
       {/* =============================================================== capa */}
       <header className="relative isolate bg-mauve">
         <Image
@@ -196,15 +199,24 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================== projetos */}
-      <section className="relative isolate bg-mauve" id="projetos">
-        <Image
-          src="/home/projetos-composicao.jpg"
-          alt="Composição com peças de vários projetos do estúdio"
-          width={1585}
-          height={992}
-          sizes="100vw"
-          className="h-auto w-full"
-        />
+      <section
+        className="relative isolate cursor-grab overflow-hidden bg-mauve active:cursor-grabbing"
+        id="projetos"
+        data-orbit
+        style={{ touchAction: "pan-y" }}
+      >
+        {/* O plano roda; o recorte da secção esconde os cantos da fotografia. */}
+        <div data-orbit-plane className="origin-center will-change-transform">
+          <Image
+            src="/home/projetos-composicao.jpg"
+            alt="Composição com peças de vários projetos do estúdio"
+            width={1585}
+            height={992}
+            sizes="100vw"
+            className="h-auto w-full select-none"
+            draggable={false}
+          />
+        </div>
         <div
           className={`pointer-events-none absolute inset-0 flex items-start pt-[clamp(2rem,8.4vw,9rem)] ${gutter}`}
         >
@@ -222,7 +234,11 @@ export default function HomePage() {
 
         <ul className="mt-[clamp(2.5rem,7vw,7.5rem)]">
           {PERCURSOS.map((p) => (
-            <li key={p.n} className="border-t border-clay/70 py-[clamp(1.25rem,2.4vw,2.5rem)]">
+            <li
+              key={p.n}
+              data-reveal
+              className="border-t border-clay/70 py-[clamp(1.25rem,2.4vw,2.5rem)]"
+            >
               <div className="grid gap-x-[clamp(1rem,3vw,3.5rem)] gap-y-4 md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.6fr)_auto] md:items-start">
                 <span
                   className={`font-sans text-[clamp(0.875rem,1.44vw,1.5rem)] tracking-[0.075em] text-clay`}

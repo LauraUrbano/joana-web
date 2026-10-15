@@ -122,3 +122,21 @@ a:focus-visible .nextmark {
     background-size: 100% 100%;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Home: os tópicos 01/02/03 vão aparecendo à medida que se desce, como na
+   nota da Joana. O estado em repouso é visível; o `data-pre` é posto por
+   JavaScript só no que está fora do ecrã, para a página se ler inteira sem
+   scroll e sem script.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  [data-reveal][data-pre] {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
