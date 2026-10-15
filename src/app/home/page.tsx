@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import HomeMotion from "@/components/home/motion";
 import Capitulo from "@/components/home/capitulo";
+import HeroFoco from "@/components/home/hero-foco";
 import Orbita, { type Peca } from "@/components/home/orbita";
 
 /**
@@ -142,14 +143,7 @@ export default function HomePage() {
       {/* Fica fixo: o capítulo seguinte sobe por cima dele como uma cortina,
           que é o que a referência faz na passagem do hero para a segunda secção. */}
       <header className="sticky top-0 z-0 h-svh overflow-hidden bg-mauve">
-        <Image
-          src="/home/retrato-hero.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[60%_center]"
-        />
+        <HeroFoco />
 
         <div
           className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}

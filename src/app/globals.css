@@ -200,3 +200,24 @@ a:focus-visible .nextmark {
   transform: none;
   filter: none;
 }
+
+/* ---------------------------------------------------------------------------
+   Hero: o foco perde-se à medida que o capítulo seguinte sobe por cima.
+
+   Nada anima sozinho -- medi o site de referência parado e o hero dele não
+   mexe nada. O movimento é todo conduzido pelo scroll, e aqui está motivado
+   pela transição: o hero recua, desfoca e afasta-se, como uma câmara a mudar
+   de plano. A escala nunca desce abaixo de 1.05 para a fotografia não
+   descolar das margens.
+   --------------------------------------------------------------------------- */
+[data-hero-foco] {
+  transform: translate3d(0, calc(var(--foco, 0) * 3vh), 0)
+    scale(calc(1.1 - var(--foco, 0) * 0.05));
+  transform-origin: 60% 50%;
+  will-change: transform;
+}
+/* A cópia desfocada aparece por cima da nítida. Regra em CSS e não em classe
+   utilitária: a classe de opacidade zero ganhava ao valor da variável. */
+[data-hero-foco] [data-desfocado] {
+  opacity: var(--foco, 0);
+}
