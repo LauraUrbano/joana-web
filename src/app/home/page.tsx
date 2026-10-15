@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import HomeMotion from "@/components/home/motion";
+import Orbita, { type Peca } from "@/components/home/orbita";
 
 /**
  * Home do estúdio.
@@ -66,6 +67,18 @@ const PERCURSOS = [
 ] as const;
 
 const REDES = ["LinkedIn", "Substack", "Instagram", "WhatsApp"];
+
+/**
+ * Peças da cena de projetos. As imagens são recortes da composição do Figma;
+ * os títulos foram lidos dos próprios mockups e os tipos de trabalho são
+ * provisórios, à espera dos seis projetos reais.
+ */
+const PECAS: Peca[] = [
+  { id: "solar", titulo: "Solar", tipo: "Identidade · Embalagem", src: "/home/projetos/solar.jpg", w: 416, h: 485 },
+  { id: "boa-companhia", titulo: "In Boa Companhia", tipo: "Editorial · Publicação", src: "/home/projetos/boa-companhia.jpg", w: 342, h: 340 },
+  { id: "terra", titulo: "Terra", tipo: "Website · Design digital", src: "/home/projetos/terra.jpg", w: 411, h: 385 },
+  { id: "cuidar", titulo: "Cuidar é um Lugar", tipo: "Identidade · Embalagem", src: "/home/projetos/cuidar.jpg", w: 245, h: 224 },
+];
 
 /** Maiúsculas espaçadas do sistema: navegação, etiquetas e ligações. */
 const CAPS =
@@ -199,32 +212,7 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================== projetos */}
-      <section
-        className="relative isolate cursor-grab overflow-hidden bg-mauve active:cursor-grabbing"
-        id="projetos"
-        data-orbit
-        style={{ touchAction: "pan-y" }}
-      >
-        {/* O plano roda; o recorte da secção esconde os cantos da fotografia. */}
-        <div data-orbit-plane className="origin-center will-change-transform">
-          <Image
-            src="/home/projetos-composicao.jpg"
-            alt="Composição com peças de vários projetos do estúdio"
-            width={1585}
-            height={992}
-            sizes="100vw"
-            className="h-auto w-full select-none"
-            draggable={false}
-          />
-        </div>
-        <div
-          className={`pointer-events-none absolute inset-0 flex items-start pt-[clamp(2rem,8.4vw,9rem)] ${gutter}`}
-        >
-          <h2 className="font-serif text-[clamp(2.25rem,8.09vw,8.4rem)] leading-[0.95] text-paper">
-            Há coisas que <em>faço</em>.
-          </h2>
-        </div>
-      </section>
+      <Orbita pecas={PECAS} />
 
       {/* ========================================================= percursos */}
       <section className={`bg-sand py-[clamp(3rem,8.3vw,9rem)] ${gutter}`} id="percursos">
