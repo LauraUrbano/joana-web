@@ -61,6 +61,7 @@ function useMovimentoReduzido() {
 }
 
 export default function Orbita({ pecas }: { pecas: Peca[] }) {
+  const moldura = useRef<HTMLElement>(null);
   const palco = useRef<HTMLDivElement>(null);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const [activo, setActivo] = useState<number | null>(null);
@@ -88,7 +89,8 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
   useEffect(() => {
     if (reduz) return;
     const cena = palco.current;
-    if (!cena) return;
+    const quadro = moldura.current;
+    if (!cena || !quadro) return;
 
     const n = pecas.length;
     let theta = 0; // onde a órbita está
@@ -108,15 +110,19 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
       ultimo = agora;
 
       const r = cena.getBoundingClientRect();
-      // Quanto da cena já foi percorrido: soma à rotação, para descer a página
-      // fazer a órbita avançar.
+      // O progresso mede-se na MOLDURA, não no palco: o palco é sticky, o seu
+      // top fica colado a zero enquanto está fixo, e media sempre progresso 0.
+      const q = quadro.getBoundingClientRect();
       const progresso = Math.min(
-        Math.max(-r.top / Math.max(r.height - window.innerHeight, 1), 0),
+        Math.max(-q.top / Math.max(q.height - window.innerHeight, 1), 0),
         1
       );
 
-      if (!arrastando) theta += dt * 0.055; // gravita sempre, devagar
-      const alvo = theta + alvoArrasto + progresso * 1.15;
+      // Gravita sempre, e o scroll faz a composição dar quase duas voltas ao
+      // longo do capítulo. Antes eram 1.15 rad no total -- 66 graus, menos de
+      // um passo de cartão, e por isso não se via andar.
+      if (!arrastando) theta += dt * 0.13;
+      const alvo = theta + alvoArrasto + progresso * TAU * 1.75;
 
       const sel = activoRef.current;
       const cx = r.width / 2;
@@ -237,8 +243,9 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
 
   return (
     <section
+      ref={moldura}
       id="projetos"
-      className={reduz ? "relative bg-mauve" : "relative h-[280vh] bg-mauve"}
+      className={reduz ? "relative z-10 bg-mauve" : "relative z-10 h-[300vh] bg-mauve"}
     >
       <div
         ref={palco}

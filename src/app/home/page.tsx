@@ -139,7 +139,9 @@ export default function HomePage() {
     <div className="min-h-dvh overflow-x-clip bg-sand">
       <HomeMotion />
       {/* =============================================================== capa */}
-      <header className="relative isolate bg-mauve">
+      {/* Fica fixo: o capítulo seguinte sobe por cima dele como uma cortina,
+          que é o que a referência faz na passagem do hero para a segunda secção. */}
+      <header className="sticky top-0 z-0 h-svh overflow-hidden bg-mauve">
         <Image
           src="/home/retrato-hero.jpg"
           alt=""
@@ -150,7 +152,7 @@ export default function HomePage() {
         />
 
         <div
-          className={`flex min-h-[clamp(34rem,62.7vw,65rem)] flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}
+          className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}
         >
           <nav className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper">
             {NAV.map((i) => (
@@ -209,7 +211,12 @@ export default function HomePage() {
       {/* A nota da Joana: o lado esquerdo mantém-se, o direito roda. O bloco
           fica fixo enquanto se percorrem cinco ecrãs, e o texto troca em
           quatro passos -- a bio, e depois os três campos. */}
-      <Capitulo id="sobre" ecras={5} passos={4} className="relative isolate bg-mauve">
+      <Capitulo
+        id="sobre"
+        ecras={5}
+        passos={4}
+        className="relative isolate z-10 bg-mauve"
+      >
         <Image
           src="/home/fundo-designer.jpg"
           alt=""
@@ -218,19 +225,21 @@ export default function HomePage() {
           className="-z-10 object-cover"
         />
         <div
-          className={`grid h-full items-center gap-y-8 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,6.8vw,7rem)] ${gutter}`}
+          className={`grid h-full items-center gap-y-6 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,5vw,5rem)] ${gutter}`}
         >
           <div>
-            <h2 className="font-serif text-[clamp(2.5rem,8.39vw,8.75rem)] leading-[0.95] text-paper-soft">
+            <h2 className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft">
               Designer
             </h2>
-            {/* O título de cada campo fica por baixo de "Designer". */}
-            <div className="relative mt-[clamp(0.75rem,1.5vw,1.5rem)] min-h-[clamp(1.5rem,2.6vw,2.75rem)]">
+            {/* O título do campo fica por baixo de "Designer" e à mesma
+                escala -- 140px numa moldura de 1669 no ficheiro. É a troca
+                deste título que faz a mudança ler-se. */}
+            <div className="relative mt-[0.12em] min-h-[clamp(2.4rem,14vw,14.6rem)]">
               {CAMPOS.map((c, i) => (
                 <p
                   key={c.titulo ?? "bio"}
                   data-quando={i}
-                  className={`${CAPS} text-paper/85`}
+                  className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft/70"
                 >
                   {c.titulo}
                 </p>
@@ -238,12 +247,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative min-h-[clamp(14rem,28vw,24rem)]">
+          <div className="relative min-h-[clamp(13rem,26vw,22rem)]">
             {CAMPOS.map((c, i) => (
               <div
                 key={c.titulo ?? "bio"}
                 data-quando={i}
-                className="flex flex-col gap-[0.8em] font-body text-[clamp(0.95rem,1.7vw,1.8rem)] leading-snug text-paper"
+                className="flex flex-col gap-[0.7em] font-body text-[clamp(0.9rem,1.5vw,1.6rem)] leading-snug text-paper"
               >
                 {c.paragrafos.map((t) => (
                   <p key={t.slice(0, 24)}>{t}</p>
@@ -260,7 +269,7 @@ export default function HomePage() {
       {/* ========================================================= percursos */}
       {/* "À medida que vamos fazendo scroll vão aparecendo os tópicos 1, 2 e 3."
           Acumulam-se: aparecem e ficam. */}
-      <Capitulo id="percursos" ecras={4} passos={3} className="bg-sand">
+      <Capitulo id="percursos" ecras={4} passos={3} className="relative z-10 bg-sand">
         <div
           className={`flex h-full flex-col justify-center py-[clamp(2rem,5vw,5rem)] ${gutter}`}
         >

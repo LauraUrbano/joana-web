@@ -159,11 +159,15 @@ a:focus-visible .nextmark {
   inset: 0;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(1.25rem);
+  /* Movimento generoso e desfoque: a troca tem de se notar. Com 1.25rem e só
+     opacidade passava despercebida. */
+  transform: translateY(2.75rem);
+  filter: blur(6px);
   transition:
-    opacity 0.42s ease,
-    transform 0.42s cubic-bezier(0.2, 0.75, 0.2, 1),
-    visibility 0s linear 0.42s;
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.16, 0.84, 0.24, 1),
+    filter 0.5s ease,
+    visibility 0s linear 0.5s;
 }
 [data-vivo][data-passo="0"] [data-quando="0"],
 [data-vivo][data-passo="1"] [data-quando="1"],
@@ -172,16 +176,19 @@ a:focus-visible .nextmark {
   opacity: 1;
   visibility: visible;
   transform: none;
+  filter: none;
   transition-delay: 0s;
 }
 
 /* Painéis que se acumulam: aparecem e ficam. */
 [data-vivo] [data-desde] {
   opacity: 0;
-  transform: translateY(1.5rem);
+  transform: translateY(3rem);
+  filter: blur(5px);
   transition:
-    opacity 0.5s ease,
-    transform 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.16, 0.84, 0.24, 1),
+    filter 0.55s ease;
 }
 [data-vivo][data-passo="0"] [data-desde="0"],
 [data-vivo][data-passo="1"] [data-desde="0"],
@@ -191,4 +198,5 @@ a:focus-visible .nextmark {
 [data-vivo][data-passo="2"] [data-desde="2"] {
   opacity: 1;
   transform: none;
+  filter: none;
 }
