@@ -222,6 +222,68 @@ a:focus-visible .nextmark {
   opacity: var(--foco, 0);
 }
 
+/* A deriva: camada de dentro do retrato. Vinte e seis segundos a ir e a vir,
+   quase impercetível -- a fotografia dela já é sobre movimento, isto é só para
+   a imagem não ficar parada à espera do primeiro scroll. Camada separada da do
+   scroll porque um elemento só tem um `transform`. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes deriva {
+    from {
+      transform: translate3d(-1.2%, -0.8%, 0) scale(1.03);
+    }
+    to {
+      transform: translate3d(1.2%, 0.8%, 0) scale(1.06);
+    }
+  }
+
+  [data-hero-deriva] {
+    animation: deriva 26s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+    will-change: transform;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   A passagem do hero para o capítulo seguinte.
+
+   Era simples demais: a cortina subia e o hero desfocava, tudo ao mesmo
+   tempo. Agora as camadas saem a ritmos diferentes -- a navegação primeiro, a
+   marca a subir, a frase de baixo a afundar-se com a cortina -- e o hero
+   também recua para a sombra em vez de só desfocar.
+
+   Tudo lê o mesmo `--foco`, de 0 a 1 ao longo do primeiro ecrã, que é
+   exactamente o tempo que a cortina demora a subir. Uma só medição para as
+   duas pontas: não se podem desencontrar.
+   --------------------------------------------------------------------------- */
+[data-hero-veu] {
+  opacity: calc(var(--foco, 0) * 0.5);
+}
+
+[data-hero-saida] {
+  will-change: opacity, transform;
+}
+/* A navegação vai-se depressa: desaparecida a 45% do percurso. */
+[data-hero-saida="0"] {
+  opacity: clamp(0, calc(1 - var(--foco, 0) * 2.2), 1);
+  transform: translate3d(0, calc(var(--foco, 0) * -2.5rem), 0);
+}
+/* A marca sobe e some a 74%. */
+[data-hero-saida="1"] {
+  opacity: clamp(0, calc(1 - var(--foco, 0) * 1.35), 1);
+  transform: translate3d(0, calc(var(--foco, 0) * -5vh), 0);
+}
+/* A frase de baixo afunda-se, como se a cortina a empurrasse. */
+[data-hero-saida="2"] {
+  opacity: clamp(0, calc(1 - var(--foco, 0) * 1.15), 1);
+  transform: translate3d(0, calc(var(--foco, 0) * 3.5vh), 0);
+}
+
+/* O bordo da cortina: uma faixa de luz que apanha o topo do capítulo enquanto
+   ele sobe. A parábola `4p(1-p)` vale 1 a meio da subida e 0 nas duas pontas,
+   por isso a faixa acende a meio e está apagada quando o bloco assenta. */
+[data-cortina] {
+  opacity: calc(4 * var(--foco, 0) * (1 - var(--foco, 0)));
+}
+
 /* ---------------------------------------------------------------------------
    Página de espera: uma entrada discreta, só ao carregar.
 

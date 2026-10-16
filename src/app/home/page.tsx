@@ -157,11 +157,24 @@ export default function HomePage() {
             que é o que a referência faz na passagem do hero para a segunda secção. */}
         <header className="sticky top-0 z-0 h-svh overflow-hidden bg-mauve">
           <HeroFoco />
+          {/* O hero não desaparece só por desfocar: também recua para a
+              sombra, enquanto a cortina sobe. */}
+          <div
+            aria-hidden="true"
+            data-hero-veu
+            className="absolute inset-0 -z-[5] bg-[#1d1418]"
+          />
 
           <div
             className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}
           >
-            <nav className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper">
+            {/* A saída não é um bloco só: a navegação vai-se primeiro, a marca
+              sobe, e a frase de baixo afunda-se com a cortina. É isso que faz
+              a passagem ler-se como um gesto e não como um corte. */}
+          <nav
+            data-hero-saida="0"
+            className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper"
+          >
               {NAV.map((i) => (
                 <a
                   key={i.label}
@@ -179,7 +192,7 @@ export default function HomePage() {
               </a>
             </nav>
 
-            <div className="flex flex-1 items-center">
+            <div className="flex flex-1 items-center" data-hero-saida="1">
               <div className="flex w-full flex-wrap items-center justify-between gap-y-8">
                 <h1>
                   <Image
@@ -203,7 +216,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="text-paper">
+            <div className="text-paper" data-hero-saida="2">
               <p className="font-serif text-[clamp(1.5rem,3.18vw,3.3rem)] leading-tight">
                 Entre o fazer e o pensar.
               </p>
@@ -230,6 +243,13 @@ export default function HomePage() {
             fill
             sizes="100vw"
             className="-z-10 object-cover"
+          />
+          {/* O bordo da cortina: uma faixa de luz que apanha o topo deste
+              bloco enquanto ele sobe, e some quando ele chega. */}
+          <div
+            aria-hidden="true"
+            data-cortina
+            className="absolute inset-x-0 top-0 h-[clamp(4rem,9vh,9rem)] bg-gradient-to-b from-paper-soft/55 via-paper-soft/15 to-transparent"
           />
           <div
             className={`grid h-full items-center gap-y-6 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,5vw,5rem)] ${gutter}`}

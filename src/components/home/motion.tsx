@@ -10,13 +10,16 @@ import Lenis from "lenis";
  * enviou, através de atributos `data-*`. A página lê-se inteira sem
  * JavaScript, e nada fica escondido à espera de um observador.
  *
- * Duas coisas, tiradas do gravity-design.de e das notas da Joana no Figma:
+ * Três coisas, tiradas do gravity-design.de e das notas da Joana no Figma:
  *
  *  1. Scroll suave (Lenis). É o que faz a navegação sentir-se contínua em vez
  *     de aos saltos -- o site de referência usa a mesma biblioteca.
  *  2. Os tópicos 01/02/03 vão aparecendo à medida que se desce, que é
  *     literalmente a nota dela: "à medida que vamos fazendo scroll vão
  *     aparecendo os tópicos 1, 2 e 3".
+ *  3. O progresso do primeiro ecrã, em `--foco`, de 0 a 1. É o que conduz a
+ *     saída do hero e a chegada da cortina -- uma só medição para as duas
+ *     pontas da passagem, por isso não se podem desencontrar.
  *
  * A órbita dos projetos vive no seu próprio componente (./orbita.tsx), porque
  * precisa de estado e de marcação próprias.
@@ -73,6 +76,34 @@ export default function HomeMotion() {
       limpar.push(() => {
         window.clearTimeout(rede);
         io.disconnect();
+      });
+    }
+
+    /* --- 3. o progresso do primeiro ecrã -------------------------------- */
+    // Vive na raiz do documento para o hero e o capítulo seguinte lerem o
+    // mesmo número: a saída de um e a chegada do outro são o mesmo gesto.
+    if (!reduz.matches) {
+      const raiz = document.documentElement;
+      let raf = 0;
+      let pendente = false;
+      const medir = () => {
+        pendente = false;
+        const p = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
+        raiz.style.setProperty("--foco", p.toFixed(4));
+      };
+      const agendar = () => {
+        if (pendente) return;
+        pendente = true;
+        raf = requestAnimationFrame(medir);
+      };
+      medir();
+      window.addEventListener("scroll", agendar, { passive: true });
+      window.addEventListener("resize", agendar);
+      limpar.push(() => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("scroll", agendar);
+        window.removeEventListener("resize", agendar);
+        raiz.style.removeProperty("--foco");
       });
     }
 
