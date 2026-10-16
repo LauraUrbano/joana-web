@@ -11,6 +11,8 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import TiraProjetos from "./tira-projetos";
+
 /**
  * Cena de projetos.
  *
@@ -304,14 +306,35 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
     <section
       ref={moldura}
       id="projetos"
-      className={reduz ? "relative z-10 bg-mauve" : "relative z-10 h-[300vh] bg-mauve"}
+      className={
+        reduz
+          ? "relative z-10 bg-mauve"
+          : "relative z-10 bg-mauve md:h-[300vh]"
+      }
     >
+      {/* Telemóvel: a tira que se arrasta de lado, como a Joana mostrou. A
+          órbita em três dimensões é para ecrã grande -- num telemóvel não há
+          rato para a rodar nem espaço para a profundidade se ler. */}
+      <div className="relative isolate overflow-hidden py-[clamp(3rem,12vw,6rem)] md:hidden">
+        <Image
+          src="/home/projetos/fundo-cena.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="-z-10 object-cover"
+        />
+        <h2 className="mb-[clamp(1.75rem,7vw,3rem)] max-w-[11ch] px-[22px] font-serif text-[clamp(2.25rem,11vw,3.5rem)] leading-[0.95] text-paper">
+          Há coisas que <em>faço</em>.
+        </h2>
+        <TiraProjetos pecas={pecas} />
+      </div>
+
       <div
         ref={palco}
         className={
           reduz
-            ? "relative overflow-hidden"
-            : "sticky top-0 h-dvh overflow-hidden"
+            ? "relative hidden overflow-hidden md:block"
+            : "hidden md:sticky md:top-0 md:block md:h-dvh md:overflow-hidden"
         }
         style={reduz ? undefined : { touchAction: "pan-y" }}
       >
