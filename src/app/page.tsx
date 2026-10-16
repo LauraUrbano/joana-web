@@ -53,6 +53,18 @@ export default function EmBreve() {
             url: SITIO,
             image: `${SITIO}/opengraph-image.jpg`,
             knowsLanguage: ["pt-PT", "en"],
+            // O iD do ORCID é o identificador forte de um investigador: é
+            // por aqui que os motores de busca ligam a pessoa ao trabalho.
+            identifier: {
+              "@type": "PropertyValue",
+              propertyID: "ORCID",
+              value: "https://orcid.org/0009-0006-0013-609X",
+            },
+            sameAs: [
+              "https://orcid.org/0009-0006-0013-609X",
+              "https://www.cienciavitae.pt/pt/2E16-8DC8-2D22",
+              "https://www.linkedin.com/in/jcmdomingues/",
+            ],
             description:
               "Designer de comunicação há mais de 14 anos. Identidades visuais, branding e comunicação digital, investigação e escrita.",
           }),
@@ -113,6 +125,8 @@ export default function EmBreve() {
               <a
                 key={r.nome}
                 href={r.href}
+                target="_blank"
+                rel="noopener noreferrer me"
                 className={`${CAPS} text-paper transition-opacity hover:opacity-70`}
               >
                 {r.nome}

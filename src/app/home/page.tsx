@@ -59,8 +59,21 @@ const PERCURSOS = [
       "A minha investigação sobre design, agência projetual e inteligência artificial generativa.",
     links: [
       { label: "Saber mais", href: "#percursos" },
-      { label: "ORCID", href: "#percursos" },
-      { label: "Ciência Vitae", href: "#percursos" },
+      // Os dois perfis de investigação dela. Vieram da Joana; limpei-os:
+      // o do ORCID vinha do painel dela (orcid.org/my-orcid?orcid=...), que
+      // só abre a quem tem sessão iniciada -- o público é o iD directo. O do
+      // Ciência Vitae vinha com uma barra a mais. Confirmei o ORCID na API
+      // pública: o registo é mesmo dela.
+      {
+        label: "ORCID",
+        href: "https://orcid.org/0009-0006-0013-609X",
+        externo: true,
+      },
+      {
+        label: "Ciência Vitae",
+        href: "https://www.cienciavitae.pt/pt/2E16-8DC8-2D22",
+        externo: true,
+      },
     ],
   },
   {
@@ -338,15 +351,23 @@ export default function HomePage() {
                       {p.corpo}
                     </p>
                     <p className="mt-[clamp(0.5rem,1.2vw,1.2rem)] flex flex-wrap gap-x-6 gap-y-2">
-                      {p.links.map((l) => (
-                        <a
-                          key={l.label}
-                          href={l.href}
-                          className={`${CAPS} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
-                        >
-                          {l.label} <Seta />
-                        </a>
-                      ))}
+                      {p.links.map((l) => {
+                        const externo = "externo" in l && l.externo;
+                        return (
+                          <a
+                            key={l.label}
+                            href={l.href}
+                            // Os perfis de investigação abrem à parte: são
+                            // sítios de terceiros e quem está a ler não deve
+                            // perder o lugar na página.
+                            target={externo ? "_blank" : undefined}
+                            rel={externo ? "noopener noreferrer me" : undefined}
+                            className={`${CAPS} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
+                          >
+                            {l.label} <Seta />
+                          </a>
+                        );
+                      })}
                     </p>
                   </div>
                   <Seta className="hidden text-[clamp(1.25rem,2.2vw,2.3rem)] text-clay md:block" />
@@ -400,6 +421,8 @@ export default function HomePage() {
                 <a
                   key={r.nome}
                   href={r.href}
+                  target="_blank"
+                  rel="noopener noreferrer me"
                   className={`${CAPS} opacity-70 transition-opacity hover:opacity-100`}
                 >
                   {r.nome}
