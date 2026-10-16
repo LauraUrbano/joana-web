@@ -140,122 +140,128 @@ export default function HomePage() {
     <div className="min-h-dvh overflow-x-clip bg-sand">
       <HomeMotion />
       {/* =============================================================== capa */}
-      {/* Fica fixo: o capítulo seguinte sobe por cima dele como uma cortina,
-          que é o que a referência faz na passagem do hero para a segunda secção. */}
-      <header className="sticky top-0 z-0 h-svh overflow-hidden bg-mauve">
-        <HeroFoco />
+      {/* Hero e primeiro capítulo partilham esta moldura: é ela que limita
+          até onde o hero fica colado. Sem ela, o hero ficava sticky dentro
+          do envolvente da página inteira e aparecia por trás do rodapé, que
+          é estático e por isso pinta por baixo de elementos posicionados. */}
+      <div className="relative">
+        {/* Fica fixo: o capítulo seguinte sobe por cima dele como uma cortina,
+            que é o que a referência faz na passagem do hero para a segunda secção. */}
+        <header className="sticky top-0 z-0 h-svh overflow-hidden bg-mauve">
+          <HeroFoco />
 
-        <div
-          className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}
-        >
-          <nav className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper">
-            {NAV.map((i) => (
+          <div
+            className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}
+          >
+            <nav className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper">
+              {NAV.map((i) => (
+                <a
+                  key={i.label}
+                  href={i.href}
+                  className={`${CAPS} opacity-85 transition-opacity hover:opacity-100`}
+                >
+                  {i.label}
+                </a>
+              ))}
               <a
-                key={i.label}
-                href={i.href}
-                className={`${CAPS} opacity-85 transition-opacity hover:opacity-100`}
+                href="#conversar"
+                className={`${CAPS} flex items-center gap-3 border-b border-paper pb-0.5`}
               >
-                {i.label}
+                Entrar em contacto <Seta />
               </a>
-            ))}
-            <a
-              href="#conversar"
-              className={`${CAPS} flex items-center gap-3 border-b border-paper pb-0.5`}
-            >
-              Entrar em contacto <Seta />
-            </a>
-          </nav>
+            </nav>
 
-          <div className="flex flex-1 items-center">
-            <div className="flex w-full flex-wrap items-center justify-between gap-y-8">
-              <h1>
+            <div className="flex flex-1 items-center">
+              <div className="flex w-full flex-wrap items-center justify-between gap-y-8">
+                <h1>
+                  <Image
+                    src="/home/marca-joana-domingues.png"
+                    alt="Joana Domingues"
+                    width={527}
+                    height={195}
+                    priority
+                    sizes="(max-width: 1024px) 78vw, 50vw"
+                    className="h-auto w-[clamp(13rem,49.8vw,52rem)]"
+                  />
+                </h1>
                 <Image
-                  src="/home/marca-joana-domingues.png"
-                  alt="Joana Domingues"
-                  width={527}
-                  height={195}
-                  priority
-                  sizes="(max-width: 1024px) 78vw, 50vw"
-                  className="h-auto w-[clamp(13rem,49.8vw,52rem)]"
+                  src="/home/marca-design.png"
+                  alt="Design"
+                  width={191}
+                  height={34}
+                  sizes="(max-width: 1024px) 30vw, 14vw"
+                  className="h-auto w-[clamp(6rem,13.5vw,14rem)]"
                 />
-              </h1>
-              <Image
-                src="/home/marca-design.png"
-                alt="Design"
-                width={191}
-                height={34}
-                sizes="(max-width: 1024px) 30vw, 14vw"
-                className="h-auto w-[clamp(6rem,13.5vw,14rem)]"
-              />
+              </div>
+            </div>
+
+            <div className="text-paper">
+              <p className="font-serif text-[clamp(1.5rem,3.18vw,3.3rem)] leading-tight">
+                Entre o fazer e o pensar.
+              </p>
+              <p className="font-body text-[clamp(1rem,1.8vw,1.9rem)] italic leading-snug opacity-95">
+                Design de comunicação, investigação e escrita.
+              </p>
             </div>
           </div>
+        </header>
 
-          <div className="text-paper">
-            <p className="font-serif text-[clamp(1.5rem,3.18vw,3.3rem)] leading-tight">
-              Entre o fazer e o pensar.
-            </p>
-            <p className="font-body text-[clamp(1rem,1.8vw,1.9rem)] italic leading-snug opacity-95">
-              Design de comunicação, investigação e escrita.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      {/* ========================================================== designer */}
-      {/* A nota da Joana: o lado esquerdo mantém-se, o direito roda. O bloco
-          fica fixo enquanto se percorrem cinco ecrãs, e o texto troca em
-          quatro passos -- a bio, e depois os três campos. */}
-      <Capitulo
-        id="sobre"
-        ecras={5}
-        passos={4}
-        className="relative isolate z-10 bg-mauve"
-      >
-        <Image
-          src="/home/fundo-designer.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-        <div
-          className={`grid h-full items-center gap-y-6 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,5vw,5rem)] ${gutter}`}
+        {/* ========================================================== designer */}
+        {/* A nota da Joana: o lado esquerdo mantém-se, o direito roda. O bloco
+            fica fixo enquanto se percorrem cinco ecrãs, e o texto troca em
+            quatro passos -- a bio, e depois os três campos. */}
+        <Capitulo
+          id="sobre"
+          ecras={5}
+          passos={4}
+          className="relative isolate z-10 bg-mauve"
         >
-          <div>
-            <h2 className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft">
-              Designer
-            </h2>
-            {/* O título do campo fica por baixo de "Designer" e à mesma
-                escala -- 140px numa moldura de 1669 no ficheiro. É a troca
-                deste título que faz a mudança ler-se. */}
-            <div className="relative mt-[0.12em] min-h-[clamp(2.4rem,14vw,14.6rem)]">
+          <Image
+            src="/home/fundo-designer.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="-z-10 object-cover"
+          />
+          <div
+            className={`grid h-full items-center gap-y-6 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,5vw,5rem)] ${gutter}`}
+          >
+            <div>
+              <h2 className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft">
+                Designer
+              </h2>
+              {/* O título do campo fica por baixo de "Designer" e à mesma
+                  escala -- 140px numa moldura de 1669 no ficheiro. É a troca
+                  deste título que faz a mudança ler-se. */}
+              <div className="relative mt-[0.12em] min-h-[clamp(2.4rem,14vw,14.6rem)]">
+                {CAMPOS.map((c, i) => (
+                  <p
+                    key={c.titulo ?? "bio"}
+                    data-quando={i}
+                    className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft/70"
+                  >
+                    {c.titulo}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative min-h-[clamp(13rem,26vw,22rem)]">
               {CAMPOS.map((c, i) => (
-                <p
+                <div
                   key={c.titulo ?? "bio"}
                   data-quando={i}
-                  className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft/70"
+                  className="flex flex-col gap-[0.7em] font-body text-[clamp(0.9rem,1.5vw,1.6rem)] leading-snug text-paper"
                 >
-                  {c.titulo}
-                </p>
+                  {c.paragrafos.map((t) => (
+                    <p key={t.slice(0, 24)}>{t}</p>
+                  ))}
+                </div>
               ))}
             </div>
           </div>
-
-          <div className="relative min-h-[clamp(13rem,26vw,22rem)]">
-            {CAMPOS.map((c, i) => (
-              <div
-                key={c.titulo ?? "bio"}
-                data-quando={i}
-                className="flex flex-col gap-[0.7em] font-body text-[clamp(0.9rem,1.5vw,1.6rem)] leading-snug text-paper"
-              >
-                {c.paragrafos.map((t) => (
-                  <p key={t.slice(0, 24)}>{t}</p>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Capitulo>
+        </Capitulo>
+      </div>
 
       {/* ========================================================== projetos */}
       <Orbita pecas={PECAS} />
