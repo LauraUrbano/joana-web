@@ -309,3 +309,144 @@ a:focus-visible .nextmark {
     animation-delay: calc(var(--atraso, 0) * 1s);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   O cursor do estúdio.
+
+   Um ponto sem atraso e um anel que vem atrás. Fui ver a referência antes de
+   desenhar isto: o gravity-design.de não tem cursor personalizado nenhum, por
+   isso este sai da linguagem dela e não de uma imitação.
+
+   A cor é o creme da marca com uma sombra de tinta à volta: assim lê-se tanto
+   sobre a malva e a azeitona como sobre a areia, que são os quatro fundos da
+   página. Nada aqui apanha o rato -- é tudo `pointer-events: none` --, e o
+   cursor nativo só desaparece depois de este estar no ecrã.
+   --------------------------------------------------------------------------- */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :root[data-cursor-vivo],
+  :root[data-cursor-vivo] * {
+    cursor: none;
+  }
+
+  [data-cursor-ponto],
+  [data-cursor-anel] {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2147483000;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform;
+  }
+  :root[data-cursor-vivo] [data-cursor-ponto],
+  :root[data-cursor-vivo] [data-cursor-anel] {
+    opacity: 1;
+  }
+  [data-cursor-ponto][data-fora],
+  [data-cursor-anel][data-fora] {
+    opacity: 0 !important;
+  }
+
+  [data-cursor-ponto] {
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background: var(--color-paper);
+    box-shadow: 0 0 0 1px rgb(22 20 16 / 0.45);
+    transition: width 0.3s, height 0.3s, opacity 0.3s;
+  }
+  /* Sobre uma ligação o ponto encolhe: quem manda passa a ser o anel. */
+  [data-cursor-ponto][data-sobre="ligacao"] {
+    width: 0.18rem;
+    height: 0.18rem;
+  }
+  /* Quando o anel abre com uma palavra lá dentro, o ponto sai da frente --
+     senão fica em cima das letras. Precisa da mesma especificidade da regra
+     que o acende, senão perde para ela. */
+  :root[data-cursor-vivo] [data-cursor-ponto][data-sobre="arrastar"] {
+    opacity: 0;
+  }
+
+  [data-cursor-anel] {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 1px solid rgb(245 240 232 / 0.9);
+    border-radius: 50%;
+    /* Creme entre dois fios de tinta: assim o anel lê-se tanto sobre a malva
+       e a azeitona como sobre a areia, onde o creme sozinho desaparecia. */
+    box-shadow:
+      0 0 0 1px rgb(22 20 16 / 0.38),
+      inset 0 0 0 1px rgb(22 20 16 / 0.22);
+    transition:
+      width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+      height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.38s,
+      opacity 0.3s;
+  }
+  [data-cursor-anel][data-sobre="ligacao"] {
+    width: 3.4rem;
+    height: 3.4rem;
+    background: rgb(245 240 232 / 0.12);
+  }
+  /* Na cena dos projetos o anel abre e diz o que há para fazer: é a nota da
+     Joana no Figma -- "como se estivessem sempre em movimento, a gravitar,
+     mas pode-se rodar". */
+  [data-cursor-anel][data-sobre="arrastar"] {
+    width: 5.6rem;
+    height: 5.6rem;
+    background: rgb(245 240 232 / 0.1);
+  }
+  [data-cursor-anel][data-premido] {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  [data-cursor-nota] {
+    font-family: var(--font-sans), sans-serif;
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-paper);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  [data-cursor-anel][data-sobre="arrastar"] [data-cursor-nota] {
+    opacity: 0.9;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   A barra de scroll.
+
+   Também não vem da referência -- aquele site esconde a barra e não a desenha.
+   Esta é a da Joana: estreita, sem setas, o puxador em barro sobre a areia,
+   que são duas cores da paleta dela. `scrollbar-color` trata dos browsers
+   novos e do Firefox; as regras `::-webkit-scrollbar` tratam dos restantes,
+   e uma não anula a outra.
+   --------------------------------------------------------------------------- */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-clay) var(--color-paper-warm);
+}
+
+::-webkit-scrollbar {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper-warm);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-clay);
+  border: 2px solid var(--color-paper-warm);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-corner {
+  background: var(--color-paper-warm);
+}

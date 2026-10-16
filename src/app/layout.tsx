@@ -4,6 +4,8 @@ import {
   Instrument_Sans,
   Instrument_Serif,
 } from "next/font/google";
+import Cursor from "@/components/cursor";
+
 import "./globals.css";
 
 // Tipo de letra do design (Figma). É variável: o eixo de peso vai até 700,
@@ -54,7 +56,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-PT"
       className={`${instrumentSans.variable} ${instrumentSerif.variable} ${ebGaramond.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <Cursor />
+      </body>
     </html>
   );
 }
