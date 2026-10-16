@@ -5,6 +5,7 @@ import HomeMotion from "@/components/home/motion";
 import Capitulo from "@/components/home/capitulo";
 import HeroFoco from "@/components/home/hero-foco";
 import Orbita, { type Peca } from "@/components/home/orbita";
+import { EM_PREPARACAO } from "@/lib/projetos";
 import { REDES } from "@/lib/redes";
 
 /**
@@ -107,18 +108,25 @@ const CAMPOS = [
   },
 ] as const;
 
-
 /**
  * Peças da cena de projetos. As imagens são recortes da composição do Figma;
  * os títulos foram lidos dos próprios mockups e os tipos de trabalho são
  * provisórios, à espera dos seis projetos reais.
+ *
+ * Vêm de `EM_PREPARACAO` para a cena e as páginas não divergirem, e cada uma
+ * leva para a sua página. Quando um projeto passar a ter caso de estudo
+ * escrito, muda-se para `PROJETOS` e acrescenta-se aqui a entrada da cena --
+ * a ligação `/projetos/<slug>` continua a mesma.
  */
-const PECAS: Peca[] = [
-  { id: "solar", titulo: "Solar", tipo: "Identidade · Embalagem", src: "/home/projetos/solar.jpg", w: 416, h: 485 },
-  { id: "boa-companhia", titulo: "In Boa Companhia", tipo: "Editorial · Publicação", src: "/home/projetos/boa-companhia.jpg", w: 342, h: 340 },
-  { id: "terra", titulo: "Terra", tipo: "Website · Design digital", src: "/home/projetos/terra.jpg", w: 411, h: 385 },
-  { id: "cuidar", titulo: "Cuidar é um Lugar", tipo: "Identidade · Embalagem", src: "/home/projetos/cuidar.jpg", w: 245, h: 224 },
-];
+const PECAS: Peca[] = EM_PREPARACAO.map((p) => ({
+  id: p.slug,
+  titulo: p.titulo,
+  tipo: p.tipo,
+  src: p.src,
+  w: p.w,
+  h: p.h,
+  href: `/projetos/${p.slug}`,
+}));
 
 /** Maiúsculas espaçadas do sistema: navegação, etiquetas e ligações. */
 const CAPS =

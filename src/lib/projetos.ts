@@ -139,3 +139,62 @@ export const PROJETOS: Projeto[] = [
 export function getProjeto(slug: string) {
   return PROJETOS.find((p) => p.slug === slug);
 }
+
+/**
+ * Peças que já estão na cena da home mas ainda não têm caso de estudo escrito.
+ *
+ * A Joana pediu que se pudesse clicar para ir para a página do projeto; só que
+ * os seis projetos reais ainda não chegaram, e inventar-lhe casos de estudo
+ * seria pôr no site texto que não é dela. Por isso cada uma destas peças tem
+ * mesmo uma página -- com o que se sabe de verdade: a peça, o título e o tipo
+ * de trabalho -- e diz com todas as letras que o caso está em preparação.
+ *
+ * Quando o caso chegar, passa para `PROJETOS` e sai daqui. A ligação não muda.
+ */
+export type Preparacao = {
+  slug: string;
+  titulo: string;
+  tipo: string;
+  src: string;
+  w: number;
+  h: number;
+};
+
+export const EM_PREPARACAO: Preparacao[] = [
+  {
+    slug: "solar",
+    titulo: "Solar",
+    tipo: "Identidade · Embalagem",
+    src: "/home/projetos/solar.jpg",
+    w: 416,
+    h: 485,
+  },
+  {
+    slug: "boa-companhia",
+    titulo: "In Boa Companhia",
+    tipo: "Editorial · Publicação",
+    src: "/home/projetos/boa-companhia.jpg",
+    w: 342,
+    h: 340,
+  },
+  {
+    slug: "terra",
+    titulo: "Terra",
+    tipo: "Website · Design digital",
+    src: "/home/projetos/terra.jpg",
+    w: 411,
+    h: 385,
+  },
+  {
+    slug: "cuidar",
+    titulo: "Cuidar é um Lugar",
+    tipo: "Identidade · Embalagem",
+    src: "/home/projetos/cuidar.jpg",
+    w: 245,
+    h: 224,
+  },
+];
+
+export function getPreparacao(slug: string) {
+  return EM_PREPARACAO.find((p) => p.slug === slug);
+}

@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -38,6 +40,8 @@ export type Peca = {
   src: string;
   w: number;
   h: number;
+  /** Página do projeto. Com ela, o cartão aberto leva lá. */
+  href?: string;
 };
 
 type Estado = { x: number; y: number; z: number; s: number; o: number; b: number };
@@ -64,6 +68,10 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
   const moldura = useRef<HTMLElement>(null);
   const palco = useRef<HTMLDivElement>(null);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
+  // Um arrasto acaba num `pointerup` que o browser também conta como clique.
+  // Sem isto, rodar a composição abria -- e agora navegava -- um projeto.
+  const arrastou = useRef(false);
+  const router = useRouter();
   const [activo, setActivo] = useState<number | null>(null);
   const activoRef = useRef<number | null>(null);
   const reduz = useMovimentoReduzido();
@@ -199,6 +207,7 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
     const aoPremir = (e: PointerEvent) => {
       if (activoRef.current !== null) return;
       arrastando = true;
+      arrastou.current = false;
       xInicio = e.clientX;
       thetaInicio = alvoArrasto;
       cena.dataset.arrastando = "";
@@ -206,6 +215,7 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
     const aoMover = (e: PointerEvent) => {
       if (!arrastando) return;
       const d = (e.clientX - xInicio) / Math.max(cena.clientWidth, 1);
+      if (Math.abs(e.clientX - xInicio) > 6) arrastou.current = true;
       alvoArrasto = thetaInicio + d * TAU * 0.6;
     };
     const aoLargar = () => {
@@ -295,12 +305,27 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
                 ref={(el) => {
                   refs.current[i] = el;
                 }}
-                onClick={() => setActivo(activo === i ? null : i)}
-                aria-pressed={activo === i}
+                onClick={() => {
+                  // Rodar a composição também dispara clique: ignora-se.
+                  if (arrastou.current) return;
+                  // Primeiro clique abre; com a peça já aberta, o clique leva
+                  // para a página do projeto, que foi o que a Joana pediu.
+                  // Para voltar à composição há o fundo, o Escape e o "fechar"
+                  // da legenda.
+                  if (activo === i && p.href) router.push(p.href);
+                  else setActivo(activo === i ? null : i);
+                }}
+                aria-label={
+                  activo === i && p.href
+                    ? `Ver o projeto ${p.titulo}`
+                    : `Abrir ${p.titulo}`
+                }
                 className={
                   reduz
                     ? "block w-full text-left"
-                    : "absolute left-0 top-0 block w-[clamp(9rem,22vw,26rem)] origin-center will-change-transform"
+                    : `absolute left-0 top-0 block w-[clamp(9rem,22vw,26rem)] origin-center will-change-transform ${
+                        activo === i && p.href ? "cursor-pointer" : ""
+                      }`
                 }
               >
                 <Image
@@ -343,6 +368,37 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
           <p className="font-sans text-[clamp(0.5625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] text-paper/75">
             {seleccionada?.tipo ?? " "}
           </p>
+
+          {/* A legenda em si não apanha o rato -- senão tapava a cena --, por
+              isso só estas duas coisas é que o apanham. O "ver o projeto" é
+              uma ligação a sério: abre em separador novo, copia-se, indexa-se.
+              O "fechar" existe porque o clique no cartão deixou de fechar. */}
+          <div
+            className={`mt-[clamp(0.5rem,1.4vw,1.4rem)] flex flex-wrap items-center justify-center gap-x-[clamp(1.25rem,3vw,3rem)] gap-y-2 ${
+              seleccionada ? "pointer-events-auto" : "pointer-events-none"
+            }`}
+          >
+            {seleccionada?.href && (
+              <Link
+                href={seleccionada.href}
+                className="flex items-center gap-3 border-b border-paper pb-0.5 font-sans text-[clamp(0.5625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] text-paper transition-opacity hover:opacity-70"
+              >
+                Ver o projeto
+                <span aria-hidden="true" className="inline-block -rotate-45">
+                  →
+                </span>
+              </Link>
+            )}
+            {seleccionada && (
+              <button
+                type="button"
+                onClick={fechar}
+                className="font-sans text-[clamp(0.5625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] text-paper/70 transition-opacity hover:opacity-100"
+              >
+                Fechar
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Fechar: cobre a cena por trás do cartão aberto. */}

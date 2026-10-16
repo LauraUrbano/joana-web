@@ -6,11 +6,17 @@ import { notFound } from "next/navigation";
 import LiquidBackground from "@/components/liquid-background";
 import { Arrow, Pill, SectionLabel } from "@/components/home/primitives";
 import { GridArt, Swatches } from "@/components/projeto/bits";
+import EmPreparacao from "@/components/projeto/em-preparacao";
 import CaseMotion from "@/components/projeto/motion";
-import { PROJETOS, getProjeto } from "@/lib/projetos";
+import {
+  EM_PREPARACAO,
+  PROJETOS,
+  getPreparacao,
+  getProjeto,
+} from "@/lib/projetos";
 
 export function generateStaticParams() {
-  return PROJETOS.map((p) => ({ slug: p.slug }));
+  return [...PROJETOS, ...EM_PREPARACAO].map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata(
@@ -18,7 +24,15 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const projeto = getProjeto(slug);
-  if (!projeto) return { title: "Projeto — Joana Domingues" };
+  if (!projeto) {
+    const peca = getPreparacao(slug);
+    return {
+      title: peca
+        ? `${peca.titulo} — Joana Domingues`
+        : "Projeto — Joana Domingues",
+      robots: { index: false, follow: false },
+    };
+  }
   return {
     title: `${projeto.nome.sans} ${projeto.nome.serif} — Joana Domingues`,
     description: projeto.premissa,
@@ -57,7 +71,13 @@ function Split({
 export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) {
   const { slug } = await props.params;
   const projeto = getProjeto(slug);
-  if (!projeto) notFound();
+  if (!projeto) {
+    // Peça sem caso escrito: mostra-se o que se sabe, em vez de 404 ou de
+    // texto inventado. Ver a nota em `EM_PREPARACAO`.
+    const peca = getPreparacao(slug);
+    if (!peca) notFound();
+    return <EmPreparacao peca={peca} />;
+  }
 
   const { secoes: s, ramp } = projeto;
   const banda = "py-[clamp(3.5rem,7.5vw,11rem)] px-[clamp(1rem,7.4vw,9rem)]";
