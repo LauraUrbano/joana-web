@@ -127,6 +127,7 @@ const PECAS: Peca[] = EM_PREPARACAO.map((p) => ({
   w: p.w,
   h: p.h,
   href: `/projetos/${p.slug}`,
+  imagens: p.imagens,
 }));
 
 /** Maiúsculas espaçadas do sistema: navegação, etiquetas e ligações. */

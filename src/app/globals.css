@@ -527,3 +527,24 @@ html {
 ::-webkit-scrollbar-corner {
   background: var(--color-paper-warm);
 }
+
+/* ---------------------------------------------------------------------------
+   O relógio da imagem, na tira de projetos em telemóvel.
+
+   Enche no tempo que cada imagem fica -- 4,5 segundos, que é a nota da Joana
+   no Figma. Recomeça sozinho a cada imagem porque o elemento é remontado.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes relogio {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  [data-relogio] {
+    animation: relogio 4.5s linear both;
+  }
+}

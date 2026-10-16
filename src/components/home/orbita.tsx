@@ -44,6 +44,8 @@ export type Peca = {
   h: number;
   /** Página do projeto. Com ela, o cartão aberto leva lá. */
   href?: string;
+  /** As imagens do projeto, para a passagem automática dentro da peça. */
+  imagens?: string[];
 };
 
 type Estado = { x: number; y: number; z: number; s: number; o: number; b: number };

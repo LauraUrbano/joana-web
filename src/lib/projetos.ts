@@ -158,7 +158,19 @@ export type Preparacao = {
   src: string;
   w: number;
   h: number;
+  /**
+   * As imagens do projeto, para a passagem automática que ela pediu: "as
+   * imagens desse projeto vão alternando, por exemplo, a cada 4-5 segundos".
+   * Estas são de simulação -- recortes da composição do Figma --, para se ver
+   * o comportamento antes das imagens reais chegarem. Ver o LEIA-ME em
+   * public/home/projetos/simulacao/.
+   */
+  imagens: string[];
 };
+
+/** Atalho: as quatro imagens de simulação de um projeto. */
+const simulacao = (slug: string) =>
+  [1, 2, 3, 4].map((n) => `/home/projetos/simulacao/${slug}-${n}.jpg`);
 
 export const EM_PREPARACAO: Preparacao[] = [
   {
@@ -168,6 +180,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     src: "/home/projetos/solar.jpg",
     w: 416,
     h: 485,
+    imagens: simulacao("solar"),
   },
   {
     slug: "boa-companhia",
@@ -176,6 +189,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     src: "/home/projetos/boa-companhia.jpg",
     w: 342,
     h: 340,
+    imagens: simulacao("boa-companhia"),
   },
   {
     slug: "terra",
@@ -184,6 +198,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     src: "/home/projetos/terra.jpg",
     w: 411,
     h: 385,
+    imagens: simulacao("terra"),
   },
   {
     slug: "cuidar",
@@ -192,6 +207,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     src: "/home/projetos/cuidar.jpg",
     w: 245,
     h: 224,
+    imagens: simulacao("cuidar"),
   },
 ];
 
