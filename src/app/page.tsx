@@ -1,67 +1,117 @@
-import LiquidBackground from "@/components/liquid-background";
+import Image from "next/image";
+import type { CSSProperties } from "react";
+
+import { REDES } from "@/lib/redes";
 
 /**
- * Página temporária do estúdio.
+ * A página de espera: por agora, é esta a entrada do site.
  *
- * As medidas vêm do ficheiro do Figma, numa moldura de 1851 x 1072:
- *   headline  282px / entrelinha 219px / espacejamento -2.8px  -> 15.23vw
- *   nome       60px / entrelinha  57px / espacejamento  +2px
- *   estúdio    60px / entrelinha  50px / espacejamento -2.8px
- * O "in" e o "studio" têm opacidade própria (spans no ficheiro original).
+ * Vem da moldura "Underconstruction" do ficheiro do Figma (1851 x 1047), e as
+ * medidas abaixo foram lidas do próprio desenho, em percentagem da moldura
+ * para a página acompanhar qualquer largura:
+ *
+ *   marca        x 184 (9.94%)  largura 831 (44.9%)   tinta 274..579
+ *   "design"     x 1381         largura 225 (12.16%)  tinta 428..453
+ *   "Soon"       x 234 (12.64%) 53px serifado itálico, linha de base 901
+ *   redes        14px, espacejamento 2.52px (0.18em), linha de base 895
+ *
+ * As duas linhas de baixo partilham a linha de base, como no ficheiro. E a
+ * marca fica centrada no espaço que sobra por cima delas: medido, o centro da
+ * tinta cai a 40,7% da altura, que é exactamente o centro desse espaço -- daí
+ * não haver aqui nenhum afastamento no topo.
  */
-export default function Home() {
+export default function EmBreve() {
   return (
-    <main className="relative flex min-h-dvh w-full flex-col overflow-hidden bg-brand-base">
-      {/* Gradiente estático: base do design e fallback caso não haja WebGL. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 90% at 50% 45%, #a7a5e6 0%, #928ff4 38%, #857ef9 62%, #786bff 100%)",
-        }}
+    <main className="relative isolate flex min-h-svh flex-col justify-between overflow-hidden bg-olive">
+      {/* A mesma parede de azeitona com sombras de folhas que fecha a /home.
+          No ficheiro a imagem está desenhada a 2045 x 1151 numa moldura de
+          1851 x 1047, deslocada (-82, -28): ou seja, um pouco mais aproximada
+          do que o `object-cover` dá por si. Daí a escala e o desvio -- medido,
+          aproxima o enquadramento do ficheiro em 19%. */}
+      <Image
+        src="/home/fundo-azeitona.jpg"
+        alt=""
+        fill
+        priority
+        sizes="(max-width: 1024px) 1600px, 110vw"
+        className="-z-10 -translate-x-[0.35%] -translate-y-[1.9%] scale-[1.0993] object-cover"
       />
-      <LiquidBackground />
 
-      <div className="relative flex min-h-dvh w-full flex-col justify-between pb-[11vh] pt-[2vh]">
-        <h1 className="sr-only">Joana Domingues — Design Studio</h1>
+      <h1 className="sr-only">Joana Domingues Design — em breve</h1>
 
+      {/* ============================================================== marca */}
+      <div className={`flex flex-1 items-center ${GUTTER}`}>
+        <div className="flex w-full flex-wrap items-center justify-between gap-y-[clamp(1.5rem,4vw,4rem)]">
+          {/* A marca avança 2,7% para fora da margem das linhas de baixo, como
+              no ficheiro: a tinta começa aos 184 e o "Soon" aos 234. */}
+          <Image
+            src="/home/marca-joana-domingues.png"
+            alt="Joana Domingues"
+            width={527}
+            height={195}
+            priority
+            sizes="(max-width: 1024px) 72vw, 45vw"
+            data-entrada
+            className="-ml-[2.7vw] h-auto w-[clamp(17rem,44.9vw,52rem)]"
+          />
+          {/* O "design" fica 15px abaixo do centro da marca, como no
+              ficheiro. Deslocado por `top` e não por `transform`: a animação
+              de entrada escreve `transform`, e apagava-o. */}
+          <Image
+            src="/home/marca-design.png"
+            alt="Design"
+            width={191}
+            height={34}
+            sizes="(max-width: 1024px) 28vw, 13vw"
+            data-entrada
+            style={{ "--atraso": 0.12 } as CSSProperties}
+            className="relative top-[0.81vw] h-auto w-[clamp(5rem,12.16vw,14rem)]"
+          />
+        </div>
+      </div>
+
+      {/* ========================================================== a espera */}
+      <div
+        className={`flex flex-wrap items-baseline justify-between gap-x-[clamp(1.5rem,4vw,4rem)] gap-y-[clamp(1rem,2vw,2rem)] pb-[12.4svh] ${GUTTER}`}
+      >
         <p
-          aria-hidden="true"
-          className="select-none text-[length:var(--headline)] font-bold uppercase leading-[0.7766] tracking-[-0.0099em] text-white/40 [--headline:18.8vw] sm:[--headline:15.23vw]"
+          data-entrada
+          style={{ "--atraso": 0.24 } as CSSProperties}
+          className="font-serif text-[clamp(1.5rem,2.86vw,3.1rem)] italic leading-[1.2] text-white"
         >
-          Website
-          <br />
-          <span className="text-white/80">In</span>
-          <br className="sm:hidden" /> Progress
+          Soon
         </p>
 
-        <div className="flex flex-col items-end pr-6 text-right sm:pr-[14%] lg:pr-[30.6%]">
-          <p className="text-[clamp(1.75rem,3.24vw,3.75rem)] font-bold uppercase leading-[0.95] tracking-[0.0333em] text-brand-ink">
-            Joana
-            <br />
-            Domingues
-          </p>
-          <p
-            aria-hidden="true"
-            className="mt-[0.8vw] select-none text-[clamp(1.75rem,3.24vw,3.75rem)] font-bold uppercase leading-[0.8333] tracking-[-0.0467em] text-white/[0.22]"
-          >
-            Design
-            <br />
-            <span className="text-white/[0.35]">Studio</span>
-          </p>
-        </div>
-
-        <div className="flex items-end justify-between gap-4 pl-[7.2%] pr-6 text-[clamp(0.6875rem,1.62vw,1.875rem)] font-bold uppercase tracking-[0.02em] text-brand-ink sm:pr-[14%] lg:pr-[30.9%]">
-          <p>Brevemente</p>
-          <a
-            href="mailto:jcm@linear.com.pt"
-            className="transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            jcm@linear.com.pt
-          </a>
-        </div>
+        <nav
+          aria-label="Redes"
+          data-entrada
+          style={{ "--atraso": 0.32 } as CSSProperties}
+          className="flex flex-wrap gap-x-[clamp(1.5rem,6.75vw,7rem)] gap-y-3"
+        >
+          {REDES.map((r) =>
+            r.href ? (
+              <a
+                key={r.nome}
+                href={r.href}
+                className={`${CAPS} text-paper transition-opacity hover:opacity-70`}
+              >
+                {r.nome}
+              </a>
+            ) : (
+              <span key={r.nome} className={`${CAPS} text-paper`}>
+                {r.nome}
+              </span>
+            )
+          )}
+        </nav>
       </div>
     </main>
   );
 }
+
+/** Margem lateral: 234/1851 do ficheiro, onde começam o "Soon" e as redes. */
+const GUTTER = "px-[clamp(1.25rem,12.7vw,14.5rem)]";
+
+/** Caixa alta das redes: 14px numa moldura de 1851, espacejamento 0,18em. */
+const CAPS =
+  "font-sans text-[clamp(0.625rem,0.76vw,1rem)] font-semibold uppercase tracking-[0.18em]";

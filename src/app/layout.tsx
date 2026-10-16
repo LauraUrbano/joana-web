@@ -35,7 +35,7 @@ const ebGaramond = EB_Garamond({
 export const metadata: Metadata = {
   title: "Joana Domingues — Design Studio",
   description:
-    "Website em construção. Brevemente por aqui. Para já, fale connosco em jcm@linear.com.pt.",
+    "Design de comunicação, investigação e escrita. O site está em construção — brevemente por aqui.",
   openGraph: {
     title: "Joana Domingues — Design Studio",
     description: "Website em construção. Brevemente.",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#8a84f9",
+  themeColor: "#656545",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

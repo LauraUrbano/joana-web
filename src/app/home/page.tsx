@@ -5,6 +5,7 @@ import HomeMotion from "@/components/home/motion";
 import Capitulo from "@/components/home/capitulo";
 import HeroFoco from "@/components/home/hero-foco";
 import Orbita, { type Peca } from "@/components/home/orbita";
+import { REDES } from "@/lib/redes";
 
 /**
  * Home do estúdio.
@@ -106,7 +107,6 @@ const CAMPOS = [
   },
 ] as const;
 
-const REDES = ["LinkedIn", "Substack", "Instagram", "WhatsApp"];
 
 /**
  * Peças da cena de projetos. As imagens são recortes da composição do Figma;
@@ -353,15 +353,21 @@ export default function HomePage() {
             className="h-auto w-[clamp(7rem,13.8vw,14.5rem)]"
           />
           <nav className="flex flex-wrap gap-x-[clamp(1.5rem,3.2vw,3.5rem)] gap-y-3">
-            {REDES.map((r) => (
-              <a
-                key={r}
-                href="#conversar"
-                className={`${CAPS} opacity-70 transition-opacity hover:opacity-100`}
-              >
-                {r}
-              </a>
-            ))}
+            {REDES.map((r) =>
+              r.href ? (
+                <a
+                  key={r.nome}
+                  href={r.href}
+                  className={`${CAPS} opacity-70 transition-opacity hover:opacity-100`}
+                >
+                  {r.nome}
+                </a>
+              ) : (
+                <span key={r.nome} className={`${CAPS} opacity-70`}>
+                  {r.nome}
+                </span>
+              )
+            )}
           </nav>
         </div>
         <div className="mt-[clamp(2.5rem,5vw,5rem)] flex flex-wrap justify-between gap-y-2 border-t border-paper/20 pt-5 font-body text-[clamp(0.75rem,1vw,1rem)] opacity-70">
