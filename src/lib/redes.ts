@@ -12,11 +12,11 @@
 export type Rede = { nome: string; href: string | null };
 
 export const REDES: Rede[] = [
-  // Este endereço não veio por mensagem: está publicado pela própria Joana no
-  // perfil público dela no ORCID, que ela mandou. Se não for para usar, é
-  // pôr `null` outra vez.
   { nome: "LinkedIn", href: "https://www.linkedin.com/in/jcmdomingues/" },
-  { nome: "Substack", href: null },
-  { nome: "Instagram", href: null },
+  { nome: "Substack", href: "https://substack.com/@joanadomingues" },
+  {
+    nome: "Instagram",
+    href: "https://www.instagram.com/joanadomingues.design/",
+  },
   { nome: "WhatsApp", href: null },
 ];

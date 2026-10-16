@@ -64,6 +64,8 @@ export default function EmBreve() {
               "https://orcid.org/0009-0006-0013-609X",
               "https://www.cienciavitae.pt/pt/2E16-8DC8-2D22",
               "https://www.linkedin.com/in/jcmdomingues/",
+              "https://substack.com/@joanadomingues",
+              "https://www.instagram.com/joanadomingues.design/",
             ],
             description:
               "Designer de comunicação há mais de 14 anos. Identidades visuais, branding e comunicação digital, investigação e escrita.",

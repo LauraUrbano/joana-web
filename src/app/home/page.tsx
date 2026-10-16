@@ -50,7 +50,16 @@ const PERCURSOS = [
     titulo: "Escrevo",
     corpo:
       "Artigos de opinião, ideias em desenvolvimento e outras coisas que preciso de pôr em palavras.",
-    links: [{ label: "Artigos", href: "#percursos" }],
+    // O Substack dela é exactamente isto -- "Escrevo sobre Design, tecnologia,
+    // IA e as perguntas que surgem quando uma profissão se transforma". Era a
+    // única ligação morta que restava nesta linha.
+    links: [
+      {
+        label: "Artigos",
+        href: "https://substack.com/@joanadomingues",
+        externo: true,
+      },
+    ],
   },
   {
     n: "02",
@@ -58,7 +67,8 @@ const PERCURSOS = [
     corpo:
       "A minha investigação sobre design, agência projetual e inteligência artificial generativa.",
     links: [
-      { label: "Saber mais", href: "#percursos" },
+      // O "saber mais" saiu a pedido dela: não levava a lado nenhum e os dois
+      // perfis a seguir já são o "saber mais".
       // Os dois perfis de investigação dela. Vieram da Joana; limpei-os:
       // o do ORCID vinha do painel dela (orcid.org/my-orcid?orcid=...), que
       // só abre a quem tem sessão iniciada -- o público é o iD directo. O do
