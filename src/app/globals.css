@@ -217,28 +217,83 @@ a:focus-visible .nextmark {
   will-change: transform;
 }
 /* A cópia desfocada aparece por cima da nítida. Regra em CSS e não em classe
-   utilitária: a classe de opacidade zero ganhava ao valor da variável. */
-[data-hero-foco] [data-desfocado] {
-  opacity: var(--foco, 0);
+   utilitária: a classe de opacidade zero ganhava ao valor da variável.
+
+   São duas coisas a pedir desfoque, e fica a maior das duas: o scroll, em
+   `--foco`, e a respiração da fotografia, em `--respira`. Uma propriedade
+   personalizada só se anima se for registada com `@property` -- sem isso o
+   browser trata-a como texto e salta de um valor para o outro. */
+@property --respira {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
 }
 
-/* A deriva: camada de dentro do retrato. Vinte e seis segundos a ir e a vir,
-   quase impercetível -- a fotografia dela já é sobre movimento, isto é só para
-   a imagem não ficar parada à espera do primeiro scroll. Camada separada da do
-   scroll porque um elemento só tem um `transform`. */
+[data-hero-foco] [data-desfocado] {
+  opacity: max(var(--foco, 0), var(--respira, 0));
+}
+
+/* A deriva do retrato, e a respiração do desfoque.
+
+   À primeira tentativa fiz isto demasiado discreto -- vinte e seis segundos e
+   um pixel por segundo, que é o mesmo que estar parado. A Joana disse duas
+   vezes que o hero continuava igual, e tinha razão. Agora:
+
+     deriva    14s a ir e a vir, 3% de curso -- uns doze pixéis por segundo a
+               1440, que já se vê sem dar nas vistas;
+     paralaxe  o retrato anda até 26px com o rato e o texto anda ao contrário,
+               a um terço: é a profundidade que faz o hero parecer presente;
+     chegada   o retrato entra fora de foco e resolve-se em 1,8s;
+     respira   depois disso, o desfoque sobe até 0,2 e volta a zero a cada 9s,
+               o que faz o rasto de luz da fotografia cintilar.
+
+   As duas animações de `--respira` vivem no mesmo elemento: a primeira com
+   preenchimento `both` para segurar o fim, a segunda a arrancar quando ela
+   acaba. Cada camada é separada porque um elemento só tem um `transform`. */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes deriva {
     from {
-      transform: translate3d(-1.2%, -0.8%, 0) scale(1.03);
+      transform: translate3d(-3%, -1.8%, 0) scale(1.04);
     }
     to {
-      transform: translate3d(1.2%, 0.8%, 0) scale(1.06);
+      transform: translate3d(3%, 1.8%, 0) scale(1.1);
+    }
+  }
+
+  @keyframes chegada {
+    from {
+      --respira: 1;
+    }
+    to {
+      --respira: 0;
+    }
+  }
+
+  @keyframes respira {
+    0%,
+    100% {
+      --respira: 0;
+    }
+    50% {
+      --respira: 0.16;
     }
   }
 
   [data-hero-deriva] {
-    animation: deriva 26s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+    animation: deriva 14s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
     will-change: transform;
+  }
+
+  /* O paralaxe do rato: o retrato leva o deslocamento todo. */
+  [data-hero-paralaxe] {
+    transform: translate3d(var(--par-x, 0px), var(--par-y, 0px), 0);
+    will-change: transform;
+  }
+
+  [data-hero-foco] [data-desfocado] {
+    animation:
+      chegada 1.8s cubic-bezier(0.33, 1, 0.68, 1) both,
+      respira 9s 1.8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 }
 
@@ -261,20 +316,42 @@ a:focus-visible .nextmark {
 [data-hero-saida] {
   will-change: opacity, transform;
 }
+
+/* A entrada do conteúdo, ao carregar. Preenchimento só para trás: durante o
+   atraso segura o estado inicial, e no fim devolve o elemento às regras de
+   saída acima, em vez de ficar a ganhar-lhes para sempre. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-entrada-cena] {
+    animation: entrada 1.15s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: calc(var(--atraso, 0) * 1s);
+  }
+}
 /* A navegação vai-se depressa: desaparecida a 45% do percurso. */
 [data-hero-saida="0"] {
   opacity: clamp(0, calc(1 - var(--foco, 0) * 2.2), 1);
-  transform: translate3d(0, calc(var(--foco, 0) * -2.5rem), 0);
+  transform: translate3d(
+    calc(var(--par-x, 0px) * -0.22),
+    calc(var(--foco, 0) * -2.5rem + var(--par-y, 0px) * -0.22),
+    0
+  );
 }
 /* A marca sobe e some a 74%. */
 [data-hero-saida="1"] {
   opacity: clamp(0, calc(1 - var(--foco, 0) * 1.35), 1);
-  transform: translate3d(0, calc(var(--foco, 0) * -5vh), 0);
+  transform: translate3d(
+    calc(var(--par-x, 0px) * -0.35),
+    calc(var(--foco, 0) * -5vh + var(--par-y, 0px) * -0.35),
+    0
+  );
 }
 /* A frase de baixo afunda-se, como se a cortina a empurrasse. */
 [data-hero-saida="2"] {
   opacity: clamp(0, calc(1 - var(--foco, 0) * 1.15), 1);
-  transform: translate3d(0, calc(var(--foco, 0) * 3.5vh), 0);
+  transform: translate3d(
+    calc(var(--par-x, 0px) * -0.28),
+    calc(var(--foco, 0) * 3.5vh + var(--par-y, 0px) * -0.28),
+    0
+  );
 }
 
 /* O bordo da cortina: uma faixa de luz que apanha o topo do capítulo enquanto

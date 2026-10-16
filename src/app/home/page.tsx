@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 import HomeMotion from "@/components/home/motion";
 import Capitulo from "@/components/home/capitulo";
@@ -173,6 +174,8 @@ export default function HomePage() {
               a passagem ler-se como um gesto e não como um corte. */}
           <nav
             data-hero-saida="0"
+            data-entrada-cena
+            style={{ "--atraso": 0.45 } as CSSProperties}
             className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper"
           >
               {NAV.map((i) => (
@@ -192,7 +195,12 @@ export default function HomePage() {
               </a>
             </nav>
 
-            <div className="flex flex-1 items-center" data-hero-saida="1">
+            <div
+              className="flex flex-1 items-center"
+              data-hero-saida="1"
+              data-entrada-cena
+              style={{ "--atraso": 0.18 } as CSSProperties}
+            >
               <div className="flex w-full flex-wrap items-center justify-between gap-y-8">
                 <h1>
                   <Image
@@ -216,7 +224,12 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="text-paper" data-hero-saida="2">
+            <div
+              className="text-paper"
+              data-hero-saida="2"
+              data-entrada-cena
+              style={{ "--atraso": 0.32 } as CSSProperties}
+            >
               <p className="font-serif text-[clamp(1.5rem,3.18vw,3.3rem)] leading-tight">
                 Entre o fazer e o pensar.
               </p>
