@@ -88,7 +88,8 @@ const PERCURSOS = [
   },
   {
     n: "03",
-    titulo: "Estou a escrever",
+    // A Joana trocou: era "Estou a escrever".
+    titulo: "Um livro em curso",
     corpo: "Um livro em desenvolvimento, ainda a encontrar a sua forma.",
     links: [{ label: "Brevemente", href: "#percursos" }],
   },
@@ -447,7 +448,20 @@ export default function HomePage() {
         </div>
         <div className="mt-[clamp(2.5rem,5vw,5rem)] flex flex-wrap justify-between gap-y-2 border-t border-paper/20 pt-5 font-body text-[clamp(0.75rem,1vw,1rem)] opacity-70">
           <p>© 2026 Joana Domingues Design</p>
-          <p>Aviso legal e Política de Privacidade</p>
+          <p className="flex flex-wrap gap-x-6 gap-y-2">
+            <a
+              href="/aviso-legal"
+              className="transition-opacity hover:opacity-100"
+            >
+              Aviso legal
+            </a>
+            <a
+              href="/politica-de-privacidade"
+              className="transition-opacity hover:opacity-100"
+            >
+              Política de Privacidade
+            </a>
+          </p>
         </div>
       </footer>
     </div>

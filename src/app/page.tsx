@@ -141,6 +141,28 @@ export default function EmBreve() {
           )}
         </nav>
       </div>
+
+      {/* As páginas legais têm de ser alcançáveis a partir da entrada: esta é
+          a única página que o público vê, e as ligações do rodapé vivem na
+          /home, que ainda é rascunho. Vai no espaço que já sobra por baixo da
+          linha do "Soon", por isso não mexe nas medidas do ficheiro. */}
+      <nav
+        aria-label="Informação legal"
+        className={`absolute inset-x-0 bottom-[clamp(0.9rem,3.2svh,2.4rem)] flex flex-wrap gap-x-[clamp(1.25rem,3vw,3rem)] gap-y-2 ${GUTTER}`}
+      >
+        <a
+          href="/aviso-legal"
+          className={`${CAPS} text-paper/55 transition-opacity hover:text-paper`}
+        >
+          Aviso legal
+        </a>
+        <a
+          href="/politica-de-privacidade"
+          className={`${CAPS} text-paper/55 transition-opacity hover:text-paper`}
+        >
+          Política de Privacidade
+        </a>
+      </nav>
     </main>
   );
 }
