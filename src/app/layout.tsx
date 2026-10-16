@@ -5,6 +5,7 @@ import {
   Instrument_Serif,
 } from "next/font/google";
 import Cursor from "@/components/cursor";
+import { SITIO } from "@/lib/sitio";
 
 import "./globals.css";
 
@@ -34,15 +35,35 @@ const ebGaramond = EB_Garamond({
   display: "swap",
 });
 
+const TITULO = "Joana Domingues Design — Comunicação, investigação e escrita";
+const DESCRICAO =
+  "Design de comunicação, investigação e escrita. Mais de 14 anos a construir identidades e a comunicar marcas. O novo site está a chegar.";
+
 export const metadata: Metadata = {
-  title: "Joana Domingues — Design Studio",
-  description:
-    "Design de comunicação, investigação e escrita. O site está em construção — brevemente por aqui.",
+  // Base dos endereços absolutos: sem isto, a imagem de partilha e o canónico
+  // saem relativos e nenhuma rede os consegue ir buscar.
+  metadataBase: new URL(SITIO),
+  title: TITULO,
+  description: DESCRICAO,
+  applicationName: "Joana Domingues Design",
+  authors: [{ name: "Joana Domingues" }],
+  creator: "Joana Domingues",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Joana Domingues — Design Studio",
-    description: "Website em construção. Brevemente.",
     type: "website",
     locale: "pt_PT",
+    url: "/",
+    siteName: "Joana Domingues Design",
+    title: TITULO,
+    description: DESCRICAO,
+  },
+  // A imagem em si é o ficheiro opengraph-image.jpg que está ao lado deste:
+  // o Next encontra-o sozinho e escreve as etiquetas, incluindo as medidas.
+  // Sem `twitter:image` próprio, o X usa a do Open Graph.
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: DESCRICAO,
   },
 };
 

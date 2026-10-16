@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 
 import { REDES } from "@/lib/redes";
+import { SITIO } from "@/lib/sitio";
 
 /**
  * A página de espera: por agora, é esta a entrada do site.
@@ -38,6 +39,25 @@ export default function EmBreve() {
       />
 
       <h1 className="sr-only">Joana Domingues Design — em breve</h1>
+
+      {/* Quem é, para os motores de busca. O mínimo e só o que é verdade: os
+          perfis dela entram em `sameAs` quando os endereços chegarem. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Joana Domingues",
+            jobTitle: "Designer de comunicação",
+            url: SITIO,
+            image: `${SITIO}/opengraph-image.jpg`,
+            knowsLanguage: ["pt-PT", "en"],
+            description:
+              "Designer de comunicação há mais de 14 anos. Identidades visuais, branding e comunicação digital, investigação e escrita.",
+          }),
+        }}
+      />
 
       {/* ============================================================== marca */}
       <div className={`flex flex-1 items-center ${GUTTER}`}>
