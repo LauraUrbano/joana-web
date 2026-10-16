@@ -68,6 +68,7 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
   const moldura = useRef<HTMLElement>(null);
   const palco = useRef<HTMLDivElement>(null);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
+  const guias = useRef<(HTMLSpanElement | null)[]>([]);
   // Um arrasto acaba num `pointerup` que o browser também conta como clique.
   // Sem isto, rodar a composição abria -- e agora navegava -- um projeto.
   const arrastou = useRef(false);
@@ -110,8 +111,17 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
     let visivel = true;
     let ultimo = performance.now();
 
-    const estados: Estado[] = pecas.map(() => ({ x: 0, y: 0, z: 0, s: 1, o: 1, b: 0 }));
+    const estados: Estado[] = pecas.map(() => ({ x: 0, y: 0, z: 0, s: 1, o: 0, b: 0 }));
     let iniciado = false;
+    // A captura: quando a cena entra no ecrã pela primeira vez, as peças vêm
+    // de fora e espiralam para a órbita. Medi isto no gravity-design.de, que é
+    // o exemplo que a Joana deu: lá os corpos entram a 447 e 526px do centro,
+    // o raio cai para 94 e 132 em 2,2 segundos, e as linhas de trajetória
+    // estão desenhadas só enquanto eles ainda andam -- apagam-se quando
+    // assentam. A diferença é o fim: lá tudo pára aos 7 segundos, aqui
+    // continua a gravitar, porque a nota dela diz "sempre em movimento".
+    let tEntrada = 0;
+    const DUR_ENTRADA = 2400;
 
     const passo = (agora: number) => {
       const dt = Math.min((agora - ultimo) / 1000, 0.05);
@@ -126,10 +136,16 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
         1
       );
 
+      // Quanto da captura já passou, de 0 a 1, com travagem no fim.
+      const bruto = tEntrada === 0 ? 0 : Math.min((agora - tEntrada) / DUR_ENTRADA, 1);
+      const ent = 1 - Math.pow(1 - bruto, 2.4);
+      const fora = Math.pow(1 - ent, 1.7); // 1 no início da entrada, 0 no fim
+
       // Gravita sempre, e o scroll faz a composição dar quase duas voltas ao
       // longo do capítulo. Antes eram 1.15 rad no total -- 66 graus, menos de
-      // um passo de cartão, e por isso não se via andar.
-      if (!arrastando) theta += dt * 0.13;
+      // um passo de cartão, e por isso não se via andar. Durante a captura
+      // roda muito mais depressa, como no exemplo, e vai travando.
+      if (!arrastando) theta += dt * (0.13 + 3.4 * fora);
       const alvo = theta + alvoArrasto + progresso * TAU * 1.75;
 
       const sel = activoRef.current;
@@ -142,13 +158,44 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
       const raio = r.width * (r.width < 760 ? 0.34 : 0.4);
       const persp = r.width * 1.26;
 
+      // Durante a captura as peças chegam de longe: afastadas no eixo Z, e por
+      // isso pequenas e desfocadas, e um pouco mais abertas em X. Afastar em
+      // vez de aproximar é deliberado -- vindas para a frente passariam pelo
+      // plano da câmara e explodiam no ecrã. E chegam fora de foco, que é a
+      // linguagem das fotografias dela.
+      const recuo = raio * 2.4 * fora;
+      const abertura = 1 + 0.9 * fora;
+
+      // As linhas de trajetória. No exemplo são círculos no plano do ecrã, não
+      // deitados no plano da órbita: tentei deitados e ficam quase de perfil,
+      // uma linha invisível. Assim lêem-se como anéis à volta da composição,
+      // que é o que lá se vê. Desenham a órbita de destino -- é para lá que as
+      // peças vão -- e apagam-se quando elas assentam.
+      const opGuia = Math.pow(1 - ent, 0.85) * 0.5;
+      for (let k = 0; k < 2; k++) {
+        const g = guias.current[k];
+        if (!g) continue;
+        if (opGuia < 0.004) {
+          if (g.style.opacity !== "0") g.style.opacity = "0";
+          continue;
+        }
+        const rg = raio * (k === 0 ? 0.52 : 0.74) * (1 + 0.5 * fora);
+        g.style.width = `${(rg * 2).toFixed(0)}px`;
+        g.style.height = `${(rg * 2).toFixed(0)}px`;
+        g.style.transform =
+          `translate3d(${(cx - rg).toFixed(1)}px, ${(cy - rg).toFixed(1)}px, 0)`;
+        g.style.opacity = opGuia.toFixed(3);
+      }
+
       for (let i = 0; i < n; i++) {
         const a = (i / n) * TAU + alvo;
-        let tx = cx + Math.cos(a) * raio;
-        let tz = Math.sin(a) * raio;
+        let tx = cx + Math.cos(a) * raio * abertura;
+        let tz = Math.sin(a) * raio - recuo;
         let ty = cy + Math.sin(a * 2) * r.height * 0.045;
-        let to = 1;
-        let tb = Math.max(0, -tz / raio) * 4.5; // desfoque de quem está atrás
+        let to = Math.min(ent * 1.7, 1);
+        // Desfoque por profundidade. Travado aos 9px: durante a captura o
+        // recuo levava isto a 15 e as peças chegavam como manchas.
+        let tb = Math.min(Math.max(0, -tz / raio) * 4.5, 9);
         let ts = 1;
 
         if (sel !== null) {
@@ -231,8 +278,10 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
     const olho = new IntersectionObserver(
       ([e]) => {
         visivel = e.isIntersecting;
-        if (visivel) arrancar();
-        else parar();
+        if (visivel) {
+          if (tEntrada === 0) tEntrada = performance.now();
+          arrancar();
+        } else parar();
       },
       { rootMargin: "10% 0px" }
     );
@@ -280,6 +329,23 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
           className="absolute inset-0 -z-[5] bg-[#2b2328] transition-opacity duration-700"
           style={{ opacity: activo === null ? 0 : 0.55 }}
         />
+
+        {/* As linhas de trajetória da captura. São círculos deitados no plano
+            da órbita -- `rotateX(90deg)` dentro do palco, que já tem a
+            perspectiva --, por isso vêem-se como elipses sem ter de calcular
+            nenhuma. Filhas directas do palco: a perspectiva só se aplica aos
+            filhos directos. */}
+        {!reduz &&
+          [0, 1].map((k) => (
+            <span
+              key={k}
+              aria-hidden="true"
+              ref={(el) => {
+                guias.current[k] = el;
+              }}
+              className="pointer-events-none absolute left-0 top-0 z-0 rounded-full border border-paper opacity-0"
+            />
+          ))}
 
         <h2
           className={`pointer-events-none absolute left-[clamp(1.25rem,6.8vw,7.5rem)] top-[clamp(2rem,8.4vw,9rem)] z-40 max-w-[min(90vw,38rem)] font-serif text-[clamp(2.25rem,8.09vw,8.4rem)] leading-[0.95] text-paper transition-opacity duration-500 ${
