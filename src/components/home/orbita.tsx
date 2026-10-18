@@ -424,7 +424,7 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
                   alt={`${p.titulo} — ${p.tipo}`}
                   width={p.w}
                   height={p.h}
-                  sizes="(max-width: 760px) 45vw, 20vw"
+                  sizes="(max-width: 760px) 45vw, 26rem"
                   draggable={false}
                   className="h-auto w-full select-none shadow-[0_1.5rem_3rem_-1rem_rgba(43,35,40,0.45)]"
                 />

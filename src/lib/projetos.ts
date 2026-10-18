@@ -62,15 +62,20 @@ export function getProjeto(slug: string) {
 }
 
 /**
- * Peças que já estão na cena da home mas ainda não têm caso de estudo escrito.
+ * Os seis projetos, com as fotografias e os textos dela.
  *
- * A Joana pediu que se pudesse clicar para ir para a página do projeto; só que
- * os seis projetos reais ainda não chegaram, e inventar-lhe casos de estudo
- * seria pôr no site texto que não é dela. Por isso cada uma destas peças tem
- * mesmo uma página -- com o que se sabe de verdade: a peça, o título e o tipo
- * de trabalho -- e diz com todas as letras que o caso está em preparação.
+ * Estiveram aqui quatro peças de preenchimento -- recortes de mockups da
+ * composição do Figma, a que eu tinha chamado Solar, In Boa Companhia, Terra e
+ * Cuidar é um Lugar por ser o que se lia nos próprios mockups. Saíram: a Joana
+ * mandou os seis projetos reais, com imagens e âmbito, que era o que a nota
+ * dela no Figma pedia ("vamos colocar apenas 6 projetos").
  *
- * Quando o caso chegar, passa para `PROJETOS` e sai daqui. A ligação não muda.
+ * Ainda não têm caso de estudo escrito, por isso a página de cada um mostra o
+ * que se sabe de verdade -- as imagens, o título, o tipo, o ano e o âmbito nas
+ * palavras dela. Quando um caso for escrito, passa para `PROJETOS` e sai
+ * daqui; a ligação `/projetos/<slug>` não muda.
+ *
+ * A ordem é a da lista que ela mandou, com a Sonae no fim, que veio depois.
  */
 export type Preparacao = {
   slug: string;
@@ -93,65 +98,13 @@ export type Preparacao = {
   /**
    * As imagens do projeto, para a passagem automática que ela pediu: "as
    * imagens desse projeto vão alternando, por exemplo, a cada 4-5 segundos".
-   * Estas são de simulação -- recortes da composição do Figma --, para se ver
-   * o comportamento antes das imagens reais chegarem. Ver o LEIA-ME em
-   * public/home/projetos/simulacao/.
+   * A primeira é a mesma do `src`, para a peça não mudar de imagem no
+   * instante em que a apresentação começa.
    */
   imagens?: string[];
 };
 
-/** Atalho: as quatro imagens de simulação de um projeto. */
-const simulacao = (slug: string) =>
-  [1, 2, 3, 4].map((n) => `/home/projetos/simulacao/${slug}-${n}.jpg`);
-
 export const EM_PREPARACAO: Preparacao[] = [
-  {
-    slug: "solar",
-    titulo: "Solar",
-    tipo: "Identidade · Embalagem",
-    naCena: true,
-    src: "/home/projetos/solar.jpg",
-    w: 416,
-    h: 485,
-    imagens: simulacao("solar"),
-  },
-  {
-    slug: "boa-companhia",
-    titulo: "In Boa Companhia",
-    tipo: "Editorial · Publicação",
-    naCena: true,
-    src: "/home/projetos/boa-companhia.jpg",
-    w: 342,
-    h: 340,
-    imagens: simulacao("boa-companhia"),
-  },
-  {
-    slug: "terra",
-    titulo: "Terra",
-    tipo: "Website · Design digital",
-    naCena: true,
-    src: "/home/projetos/terra.jpg",
-    w: 411,
-    h: 385,
-    imagens: simulacao("terra"),
-  },
-  {
-    slug: "cuidar",
-    titulo: "Cuidar é um Lugar",
-    tipo: "Identidade · Embalagem",
-    naCena: true,
-    src: "/home/projetos/cuidar.jpg",
-    w: 245,
-    h: 224,
-    imagens: simulacao("cuidar"),
-  },
-
-  /* ------------------------------------------------------------------ *
-   * Os projetos reais, nas palavras e nos anos que a Joana mandou.
-   * Ainda sem fotografias -- a pasta do Drive dela está vazia vista daqui --,
-   * por isso têm página própria mas ficam fora da cena. Quando as imagens
-   * chegarem, é pôr `naCena: true`, `src` e `imagens`.
-   * ------------------------------------------------------------------ */
   {
     slug: "authentic-studio-pilates",
     titulo: "Authentic Studio Pilates",
@@ -159,6 +112,17 @@ export const EM_PREPARACAO: Preparacao[] = [
     ano: "2024",
     descricao:
       "Criação de marca e identidade visual, com desenvolvimento de elementos de comunicação para o espaço, incluindo decoração e lonas.",
+    naCena: true,
+    src: "/home/projetos/authentic-studio-pilates/1.webp",
+    w: 1024,
+    h: 1123,
+    imagens: [
+      "/home/projetos/authentic-studio-pilates/1.webp",
+      "/home/projetos/authentic-studio-pilates/2.webp",
+      "/home/projetos/authentic-studio-pilates/3.webp",
+      "/home/projetos/authentic-studio-pilates/4.webp",
+      "/home/projetos/authentic-studio-pilates/5.webp",
+    ],
   },
   {
     slug: "carla-rocha",
@@ -167,6 +131,16 @@ export const EM_PREPARACAO: Preparacao[] = [
     ano: "2025",
     descricao:
       "Desenvolvimento de webapp com loja online e plataforma de cursos online. Desenvolvimento de materiais de marca e comunicação interna, pastas corporativas e imagem gráfica para webinars.",
+    naCena: true,
+    src: "/home/projetos/carla-rocha/1.webp",
+    w: 1174,
+    h: 1340,
+    imagens: [
+      "/home/projetos/carla-rocha/1.webp",
+      "/home/projetos/carla-rocha/2.webp",
+      "/home/projetos/carla-rocha/3.webp",
+      "/home/projetos/carla-rocha/4.webp",
+    ],
   },
   {
     slug: "segmento-urbano",
@@ -175,6 +149,17 @@ export const EM_PREPARACAO: Preparacao[] = [
     ano: "2026",
     descricao:
       "Desenvolvimento de branding e criação de imagem para evento.",
+    naCena: true,
+    src: "/home/projetos/segmento-urbano/1.webp",
+    w: 1271,
+    h: 1335,
+    imagens: [
+      "/home/projetos/segmento-urbano/1.webp",
+      "/home/projetos/segmento-urbano/2.webp",
+      "/home/projetos/segmento-urbano/3.webp",
+      "/home/projetos/segmento-urbano/4.webp",
+      "/home/projetos/segmento-urbano/5.webp",
+    ],
   },
   {
     slug: "testbeds",
@@ -183,6 +168,18 @@ export const EM_PREPARACAO: Preparacao[] = [
     ano: "2023",
     descricao:
       "Desenvolvimento de identidade visual para evento, com execução em tempo recorde.",
+    naCena: true,
+    src: "/home/projetos/testbeds/1.webp",
+    w: 1400,
+    h: 1050,
+    imagens: [
+      "/home/projetos/testbeds/1.webp",
+      "/home/projetos/testbeds/2.webp",
+      "/home/projetos/testbeds/3.webp",
+      "/home/projetos/testbeds/4.webp",
+      "/home/projetos/testbeds/5.webp",
+      "/home/projetos/testbeds/6.webp",
+    ],
   },
   {
     slug: "hoteis-vila-baleira",
@@ -191,6 +188,35 @@ export const EM_PREPARACAO: Preparacao[] = [
     ano: "2024",
     descricao:
       "Criação de marca e arquitetura de marca, identidade visual e desenvolvimento de comunicação comercial, institucional e interna. Criação de materiais para eventos internos de grande escala, incluindo a Rota do Atum, o Paddle e a Latin Week.",
+    naCena: true,
+    src: "/home/projetos/hoteis-vila-baleira/1.webp",
+    w: 1400,
+    h: 933,
+    imagens: [
+      "/home/projetos/hoteis-vila-baleira/1.webp",
+      "/home/projetos/hoteis-vila-baleira/2.webp",
+      "/home/projetos/hoteis-vila-baleira/3.webp",
+      "/home/projetos/hoteis-vila-baleira/4.webp",
+    ],
+  },
+  {
+    slug: "sonae",
+    titulo: "Sonae — Education Innovators Forum",
+    tipo: "Identidade de evento · Comunicação",
+    ano: "2023",
+    naCena: true,
+    src: "/home/projetos/sonae/1.webp",
+    w: 1400,
+    h: 1050,
+    imagens: [
+      "/home/projetos/sonae/1.webp",
+      "/home/projetos/sonae/2.webp",
+      "/home/projetos/sonae/3.webp",
+      "/home/projetos/sonae/4.webp",
+      "/home/projetos/sonae/5.webp",
+      "/home/projetos/sonae/6.webp",
+      "/home/projetos/sonae/7.webp",
+    ],
   },
 ];
 
