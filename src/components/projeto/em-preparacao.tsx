@@ -10,9 +10,15 @@ import type { Preparacao } from "@/lib/projetos";
  * palavras dela, e as fotografias todas. É uma ficha, não um caso de estudo --
  * não há aqui narrativa nenhuma inventada por mim.
  *
- * Primeiro o texto, depois as imagens em coluna e grandes: numa página de
+ * Primeiro o texto, depois o trabalho em coluna e grande: numa página de
  * portfólio é o trabalho que tem de falar, e uma grelha de miniaturas obriga a
  * clicar para ver seja o que for.
+ *
+ * É aqui que vivem os vídeos. Na cena da home ficam só imagens -- pedido da
+ * Joana, e também o que faz sentido: a órbita tem seis peças a girar e a
+ * passar imagens sozinhas, e meter vídeo ali seria ruído em cima de ruído.
+ * A ordem é a capa, depois o vídeo, depois o resto: a marca, a marca em
+ * movimento, e por fim as aplicações.
  *
  * Quando um caso for escrito, o projeto passa para `PROJETOS` e a ligação
  * continua a mesma.
@@ -24,6 +30,7 @@ export default function EmPreparacao({ peca }: { peca: Preparacao }) {
     : peca.src
       ? [peca.src]
       : [];
+  const videos = peca.videos ?? [];
 
   return (
     <main className={`min-h-dvh bg-sand text-clay ${gutter}`}>
@@ -69,20 +76,46 @@ export default function EmPreparacao({ peca }: { peca: Preparacao }) {
         </a>
       </header>
 
-      {imagens.length > 0 && (
+      {(imagens.length > 0 || videos.length > 0) && (
         <div className="mx-auto mt-[clamp(3rem,7vw,7rem)] flex max-w-[68rem] flex-col gap-[clamp(1.5rem,3.5vw,3.5rem)] pb-[clamp(4rem,9vw,10rem)]">
-          {imagens.map((src, i) => (
+          {imagens.slice(0, 1).map((src) => (
             <Image
               key={src}
               src={src}
-              alt={
-                i === 0
-                  ? `${peca.titulo} — ${peca.tipo}`
-                  : `${peca.titulo}, imagem ${i + 1}`
-              }
+              alt={`${peca.titulo} — ${peca.tipo}`}
               width={1400}
               height={1050}
-              priority={i === 0}
+              priority
+              sizes="(max-width: 1024px) 92vw, 68rem"
+              className="h-auto w-full"
+            />
+          ))}
+
+          {/* Sem arranque automático e só com os metadados: o vídeo é
+              pesado ao pé de uma fotografia, e ninguém pediu para ele
+              começar sozinho. A imagem de cartaz é um fotograma dele, por
+              isso vê-se logo o que é sem descarregar nada. */}
+          {videos.map((v) => (
+            <video
+              key={v.src}
+              src={v.src}
+              poster={v.poster}
+              width={v.w}
+              height={v.h}
+              controls
+              playsInline
+              preload="metadata"
+              className="h-auto w-full"
+            />
+          ))}
+
+          {imagens.slice(1).map((src, i) => (
+            <Image
+              key={src}
+              src={src}
+              alt={`${peca.titulo}, imagem ${i + 2}`}
+              width={1400}
+              height={1050}
               sizes="(max-width: 1024px) 92vw, 68rem"
               className="h-auto w-full"
             />

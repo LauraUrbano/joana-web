@@ -102,6 +102,11 @@ export type Preparacao = {
    * instante em que a apresentação começa.
    */
   imagens?: string[];
+  /**
+   * Vídeos do projeto. Só aparecem na página de detalhe, nunca na cena da
+   * home -- é o que a Joana pediu: na home só imagens.
+   */
+  videos?: { src: string; poster: string; w: number; h: number }[];
 };
 
 export const EM_PREPARACAO: Preparacao[] = [
@@ -169,6 +174,14 @@ export const EM_PREPARACAO: Preparacao[] = [
     descricao:
       "Desenvolvimento de identidade visual para evento, com execução em tempo recorde.",
     naCena: true,
+    videos: [
+      {
+        src: "/home/projetos/testbeds/video.mp4",
+        poster: "/home/projetos/testbeds/video-poster.webp",
+        w: 1600,
+        h: 900,
+      },
+    ],
     src: "/home/projetos/testbeds/1.webp",
     w: 1400,
     h: 1050,
@@ -189,6 +202,14 @@ export const EM_PREPARACAO: Preparacao[] = [
     descricao:
       "Criação de marca e arquitetura de marca, identidade visual e desenvolvimento de comunicação comercial, institucional e interna. Criação de materiais para eventos internos de grande escala, incluindo a Rota do Atum, o Paddle e a Latin Week.",
     naCena: true,
+    videos: [
+      {
+        src: "/home/projetos/hoteis-vila-baleira/video.mp4",
+        poster: "/home/projetos/hoteis-vila-baleira/video-poster.webp",
+        w: 1920,
+        h: 1080,
+      },
+    ],
     src: "/home/projetos/hoteis-vila-baleira/1.webp",
     w: 1400,
     h: 933,
