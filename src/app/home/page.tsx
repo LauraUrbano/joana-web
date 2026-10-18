@@ -229,21 +229,21 @@ export default function HomePage() {
               <div className="flex w-full flex-wrap items-center justify-between gap-y-8">
                 <h1>
                   <Image
-                    src="/home/marca-joana-domingues.png"
+                    src="/home/marca-joana-domingues.svg"
                     alt="Joana Domingues"
                     width={527}
-                    height={195}
+                    height={194}
                     priority
-                    sizes="(max-width: 1024px) 78vw, 50vw"
+                    unoptimized
                     className="h-auto w-[clamp(13rem,49.8vw,52rem)]"
                   />
                 </h1>
                 <Image
-                  src="/home/marca-design.png"
+                  src="/home/marca-design.svg"
                   alt="Design"
                   width={191}
-                  height={34}
-                  sizes="(max-width: 1024px) 30vw, 14vw"
+                  height={33}
+                  unoptimized
                   className="h-auto w-[clamp(6rem,13.5vw,14rem)]"
                 />
               </div>
@@ -421,8 +421,8 @@ export default function HomePage() {
           <Image
             src="/home/marca-rodape.svg"
             alt="Joana Domingues Design"
-            width={231}
-            height={131}
+            width={527}
+            height={306}
             unoptimized
             className="h-auto w-[clamp(7rem,13.8vw,14.5rem)]"
           />

@@ -79,12 +79,12 @@ export default function EmBreve() {
           {/* A marca avança 2,7% para fora da margem das linhas de baixo, como
               no ficheiro: a tinta começa aos 184 e o "Soon" aos 234. */}
           <Image
-            src="/home/marca-joana-domingues.png"
+            src="/home/marca-joana-domingues.svg"
             alt="Joana Domingues"
             width={527}
-            height={195}
+            height={194}
             priority
-            sizes="(max-width: 1024px) 72vw, 45vw"
+            unoptimized
             data-entrada
             className="-ml-[2.7vw] h-auto w-[clamp(17rem,44.9vw,52rem)]"
           />
@@ -92,11 +92,11 @@ export default function EmBreve() {
               ficheiro. Deslocado por `top` e não por `transform`: a animação
               de entrada escreve `transform`, e apagava-o. */}
           <Image
-            src="/home/marca-design.png"
+            src="/home/marca-design.svg"
             alt="Design"
             width={191}
-            height={34}
-            sizes="(max-width: 1024px) 28vw, 13vw"
+            height={33}
+            unoptimized
             data-entrada
             style={{ "--atraso": 0.12 } as CSSProperties}
             className="relative top-[0.81vw] h-auto w-[clamp(5rem,12.16vw,14rem)]"
