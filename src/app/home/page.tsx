@@ -139,20 +139,22 @@ const CAMPOS = [
  * provisórios, à espera dos seis projetos reais.
  *
  * Vêm de `EM_PREPARACAO` para a cena e as páginas não divergirem, e cada uma
- * leva para a sua página. Quando um projeto passar a ter caso de estudo
- * escrito, muda-se para `PROJETOS` e acrescenta-se aqui a entrada da cena --
- * a ligação `/projetos/<slug>` continua a mesma.
+ * leva para a sua página. Só entram as que estão marcadas com `naCena` e têm
+ * imagem: os projetos reais que a Joana mandou ainda não têm fotografias, e um
+ * cartão vazio numa órbita de fotografias seria um buraco, não uma peça.
  */
-const PECAS: Peca[] = EM_PREPARACAO.map((p) => ({
-  id: p.slug,
-  titulo: p.titulo,
-  tipo: p.tipo,
-  src: p.src,
-  w: p.w,
-  h: p.h,
-  href: `/projetos/${p.slug}`,
-  imagens: p.imagens,
-}));
+const PECAS: Peca[] = EM_PREPARACAO.filter((p) => p.naCena && p.src).map(
+  (p) => ({
+    id: p.slug,
+    titulo: p.titulo,
+    tipo: p.tipo,
+    src: p.src as string,
+    w: p.w as number,
+    h: p.h as number,
+    href: `/projetos/${p.slug}`,
+    imagens: p.imagens,
+  })
+);
 
 /** Maiúsculas espaçadas do sistema: navegação, etiquetas e ligações. */
 const CAPS =

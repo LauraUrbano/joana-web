@@ -45,96 +45,17 @@ export type Projeto = {
   seguinte: { nome: string; ambito: string; slug?: string };
 };
 
-export const PROJETOS: Projeto[] = [
-  {
-    slug: "segmento-urbano",
-    indice: "Projeto 02",
-    nome: { sans: "Segmento", serif: "Urbano" },
-    ambito: "Identidade · Sinalética · Digital",
-    ano: "2024",
-    premissa: "Uma leitura da cidade feita por quem a atravessa todos os dias.",
-    // Lilás escurecido → creme da página → amarelo. Tudo da paleta do estúdio.
-    ramp: ["#ab99cf", "#ddd2c6", "#f4ef93"],
-    ficha: [
-      { termo: "Cliente", valor: "Câmara Municipal de Matosinhos" },
-      { termo: "Ano", valor: "2024 — 2025" },
-      { termo: "Âmbito", valor: "Identidade, sinalética e plataforma de consulta" },
-      { termo: "Equipa", valor: "Joana Domingues com Atelier Fluvial" },
-      { termo: "Reconhecimento", valor: "Prémio Nacional de Design, menção" },
-    ],
-    secoes: {
-      premissa: {
-        sans: "A cidade não se lê",
-        serif: "de fora.",
-        corpo: [
-          "O município tinha sete planos de mobilidade, cada um com a sua nomenclatura, e nenhum legível para quem apanha o autocarro. O trabalho começou por aí: não por um logótipo, mas por descobrir que nome é que as pessoas dão às coisas.",
-          "Percorremos quatro freguesias a registar o vocabulário real — as paragens têm alcunhas, os percursos têm atalhos que nenhum mapa mostra. Esse levantamento passou a ser a base do sistema, e não uma nota de rodapé.",
-        ],
-      },
-      sistema: {
-        sans: "Um alfabeto para",
-        serif: "dezessete percursos.",
-        intro:
-          "Cada peça do sistema tem de funcionar num poste à chuva e num ecrã de cinco polegadas. O par tipográfico do estúdio resolve as duas: o grotesco carrega a informação que tem de ser lida de longe, o serifado carrega o que é dito na primeira pessoa.",
-        espécime: {
-          alto: "Rua da Praia",
-          baixo: "quatro minutos",
-          nota: "Instrument Sans 700 · Instrument Serif itálico",
-          corpo:
-            "O grotesco para o que se lê em movimento. O serifado para o tempo, a distância e tudo o que é dito na voz de quem informa.",
-        },
-        paleta: {
-          titulo: "Lilás e sinal",
-          corpo:
-            "O lilás é o da identidade do estúdio, escurecido para aguentar a chuva e o contraluz. O amarelo é o único sinal, reservado ao que exige decisão: mudar de linha, sair, atravessar.",
-          valores: ["#AB99CF", "#C6B9DE", "#DDD2C6", "#F4EF93", "#F5F0E8"],
-        },
-        grelha: {
-          titulo: "Sete colunas",
-          corpo:
-            "Uma coluna por plano de mobilidade herdado. A grelha guarda a memória do problema que veio resolver.",
-          colunas: 7,
-          sinal: 4,
-        },
-      },
-      pecas: {
-        sans: "Do poste",
-        serif: "ao bolso.",
-        lista: [
-          { titulo: "Sinalética de paragem", nota: "Poste · esmalte" },
-          { titulo: "Mapa de percursos", nota: "Impressão · 700 × 1000" },
-          { titulo: "Títulos de transporte", nota: "Cartão · série de sete" },
-          { titulo: "Aplicação de consulta", nota: "iOS · Android" },
-          { titulo: "Manual de nomenclatura", nota: "96 páginas" },
-        ],
-      },
-      resultado: {
-        sans: "Sete planos,",
-        serif: "uma língua.",
-        numeros: [
-          {
-            valor: "7",
-            unidade: "→ 1",
-            corpo:
-              "Planos de mobilidade fundidos numa só nomenclatura, adotada pelos sete operadores da rede.",
-          },
-          {
-            valor: "412",
-            corpo:
-              "Paragens renomeadas a partir do levantamento de campo, com o nome que as pessoas já usavam.",
-          },
-          {
-            valor: "1",
-            unidade: "de 4",
-            corpo:
-              "Pedidos de informação ao balcão que deixaram de existir no primeiro ano após a instalação.",
-          },
-        ],
-      },
-    },
-    seguinte: { nome: "Carla Rocha", ambito: "Branding · Direção de arte · 2024" },
-  },
-];
+/**
+ * Vazio de propósito.
+ *
+ * Aqui esteve um caso de estudo do Segmento Urbano escrito por mim --
+ * Câmara Municipal de Matosinhos, sete planos de mobilidade, 412 paragens
+ * renomeadas. Nada disso aconteceu: era texto de preenchimento meu sobre um
+ * cliente real dela, e saiu assim que a Joana mandou a descrição verdadeira,
+ * que está agora em EM_PREPARACAO. O tipo e a página ficam de pé à espera do
+ * primeiro caso escrito por ela.
+ */
+export const PROJETOS: Projeto[] = [];
 
 export function getProjeto(slug: string) {
   return PROJETOS.find((p) => p.slug === slug);
@@ -155,9 +76,20 @@ export type Preparacao = {
   slug: string;
   titulo: string;
   tipo: string;
-  src: string;
-  w: number;
-  h: number;
+  /** O ano do trabalho, como ela o deu. */
+  ano?: string;
+  /** O âmbito, nas palavras dela. */
+  descricao?: string;
+  /**
+   * Se entra na cena de projetos da home. Só entram as que têm imagem: um
+   * cartão sem imagem numa órbita de fotografias não é uma peça, é um buraco.
+   * As outras têm página própria e entram na cena assim que as fotografias
+   * chegarem -- é virar esta marca e acrescentar as imagens.
+   */
+  naCena?: boolean;
+  src?: string;
+  w?: number;
+  h?: number;
   /**
    * As imagens do projeto, para a passagem automática que ela pediu: "as
    * imagens desse projeto vão alternando, por exemplo, a cada 4-5 segundos".
@@ -165,7 +97,7 @@ export type Preparacao = {
    * o comportamento antes das imagens reais chegarem. Ver o LEIA-ME em
    * public/home/projetos/simulacao/.
    */
-  imagens: string[];
+  imagens?: string[];
 };
 
 /** Atalho: as quatro imagens de simulação de um projeto. */
@@ -177,6 +109,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     slug: "solar",
     titulo: "Solar",
     tipo: "Identidade · Embalagem",
+    naCena: true,
     src: "/home/projetos/solar.jpg",
     w: 416,
     h: 485,
@@ -186,6 +119,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     slug: "boa-companhia",
     titulo: "In Boa Companhia",
     tipo: "Editorial · Publicação",
+    naCena: true,
     src: "/home/projetos/boa-companhia.jpg",
     w: 342,
     h: 340,
@@ -195,6 +129,7 @@ export const EM_PREPARACAO: Preparacao[] = [
     slug: "terra",
     titulo: "Terra",
     tipo: "Website · Design digital",
+    naCena: true,
     src: "/home/projetos/terra.jpg",
     w: 411,
     h: 385,
@@ -204,10 +139,58 @@ export const EM_PREPARACAO: Preparacao[] = [
     slug: "cuidar",
     titulo: "Cuidar é um Lugar",
     tipo: "Identidade · Embalagem",
+    naCena: true,
     src: "/home/projetos/cuidar.jpg",
     w: 245,
     h: 224,
     imagens: simulacao("cuidar"),
+  },
+
+  /* ------------------------------------------------------------------ *
+   * Os projetos reais, nas palavras e nos anos que a Joana mandou.
+   * Ainda sem fotografias -- a pasta do Drive dela está vazia vista daqui --,
+   * por isso têm página própria mas ficam fora da cena. Quando as imagens
+   * chegarem, é pôr `naCena: true`, `src` e `imagens`.
+   * ------------------------------------------------------------------ */
+  {
+    slug: "authentic-studio-pilates",
+    titulo: "Authentic Studio Pilates",
+    tipo: "Marca · Identidade visual",
+    ano: "2024",
+    descricao:
+      "Criação de marca e identidade visual, com desenvolvimento de elementos de comunicação para o espaço, incluindo decoração e lonas.",
+  },
+  {
+    slug: "carla-rocha",
+    titulo: "Carla Rocha — Communication Training",
+    tipo: "Webapp · Marca · Comunicação",
+    ano: "2025",
+    descricao:
+      "Desenvolvimento de webapp com loja online e plataforma de cursos online. Desenvolvimento de materiais de marca e comunicação interna, pastas corporativas e imagem gráfica para webinars.",
+  },
+  {
+    slug: "segmento-urbano",
+    titulo: "Segmento Urbano",
+    tipo: "Branding · Evento",
+    ano: "2026",
+    descricao:
+      "Desenvolvimento de branding e criação de imagem para evento.",
+  },
+  {
+    slug: "testbeds",
+    titulo: "Testbeds",
+    tipo: "Identidade visual · Evento",
+    ano: "2023",
+    descricao:
+      "Desenvolvimento de identidade visual para evento, com execução em tempo recorde.",
+  },
+  {
+    slug: "hoteis-vila-baleira",
+    titulo: "Hotéis Vila Baleira",
+    tipo: "Marca · Arquitetura de marca · Comunicação",
+    ano: "2024",
+    descricao:
+      "Criação de marca e arquitetura de marca, identidade visual e desenvolvimento de comunicação comercial, institucional e interna. Criação de materiais para eventos internos de grande escala, incluindo a Rota do Atum, o Paddle e a Latin Week.",
   },
 ];
 
