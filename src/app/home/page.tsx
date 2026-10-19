@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 
 import HomeMotion from "@/components/home/motion";
 import Capitulo from "@/components/home/capitulo";
+import MenuTelemovel from "@/components/home/menu-telemovel";
 import HeroFoco from "@/components/home/hero-foco";
 import Orbita, { type Peca } from "@/components/home/orbita";
 import { EM_PREPARACAO } from "@/lib/projetos";
@@ -163,7 +164,7 @@ const PECAS: Peca[] = EM_PREPARACAO.filter((p) => p.naCena && p.src).map(
 
 /** Maiúsculas espaçadas do sistema: navegação, etiquetas e ligações. */
 const CAPS =
-  "font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em]";
+  "font-sans text-[min(3.23vw,14px)] md:text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em]";
 
 /* Área de toque. O texto em caixa alta tem 15px de altura e o dedo precisa de
    24 (WCAG 2.2 AA); são 5px acima e abaixo, que é enchimento a sério e não uma
@@ -174,22 +175,35 @@ const ALVO_CIMA = "pt-2";
 
 
 /**
- * A escala desta secção no telemóvel, tirada da moldura de 681 do ficheiro.
+ * A escala do telemóvel, tirada da moldura de 681 do ficheiro.
  *
  * O ficheiro tem duas molduras -- 681 para o estreito e 1669 para o largo -- e
  * usa os mesmos tamanhos absolutos nas duas: 85px no título da secção, 66 no
  * título da linha, 32 no corpo, 24 no número, 22 nas ligações. A 681 isso é
  * muito maior em proporção, e era essa a nota da Joana: "no mobile, tentar
  * seguir mais este layout (mais por causa dos espaçamentos e tamanho do
- * título)".
+ * título)", e a que ela deixou no próprio ficheiro: "uniformizar tamanho de
+ * titulos; corpo de texto e tamanho de botões". Por isso isto é uma escala só,
+ * usada em todas as secções, e não um arranjo por secção.
  *
  * Cada medida é a fracção da moldura (85/681 = 12,48vw, e por aí fora),
  * travada no valor que atinge aos 440px -- acima disso o telemóvel acabou e
  * não vale a pena continuar a crescer até ao `md`.
  */
 const TEL = {
-  /* 85/681 */
+  /* 85/681, o título de qualquer secção */
   titulo: "text-[min(12.48vw,55px)] md:text-[clamp(1.75rem,6.4vw,6.6rem)]",
+  /* o mesmo 85/681, onde o lado largo tem outra medida */
+  tituloDesigner:
+    "text-[min(12.48vw,55px)] md:text-[clamp(2.25rem,8.39vw,8.75rem)]",
+  tituloConversar:
+    "text-[min(12.48vw,55px)] md:text-[clamp(2rem,6.53vw,6.8rem)]",
+  /* 53/681 e 30/681: a frase do hero */
+  frase: "text-[min(7.78vw,34px)] md:text-[clamp(1.5rem,3.18vw,3.3rem)]",
+  fraseSegunda: "text-[min(4.4vw,19px)] md:text-[clamp(1rem,1.8vw,1.9rem)]",
+  /* 31/681, o corpo do capítulo "Designer" */
+  corpoDesigner: "text-[min(4.7vw,21px)] md:text-[clamp(0.9rem,1.5vw,1.6rem)]",
+  corpoConversar: "text-[min(4.7vw,21px)] md:text-[clamp(1rem,1.92vw,2rem)]",
   /* 98/681: do fundo do título ao primeiro risco */
   aposTitulo: "mt-[min(14.4vw,63px)] md:mt-[clamp(1.5rem,4vw,4rem)]",
   /* 32/681 por cima, 31/681 por baixo */
@@ -209,12 +223,7 @@ const TEL = {
   corpo: "text-[min(4.7vw,21px)] md:text-[clamp(0.95rem,1.6vw,1.7rem)]",
   /* 86/681: do parágrafo às ligações */
   antesDasLigacoes: "mt-[min(12.6vw,56px)] md:mt-[clamp(0.5rem,1.2vw,1.2rem)]",
-  /* 22/681 */
-  ligacao: "text-[min(3.23vw,14px)] md:text-[clamp(0.625rem,0.84vw,1rem)]",
 } as const;
-
-/** Como o CAPS, mas na escala do telemóvel desta secção. */
-const CAPS_PERCURSOS = `font-sans ${TEL.ligacao} font-semibold uppercase tracking-[0.18em]`;
 
 /** Seta a 45°, como no ficheiro. */
 function Seta({ className = "" }: { className?: string }) {
@@ -259,23 +268,30 @@ export default function HomePage() {
             data-hero-saida="0"
             data-entrada-cena
             style={{ "--atraso": 0.45 } as CSSProperties}
-            className="flex flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 text-paper"
+            className="flex items-start justify-end text-paper"
           >
-              {NAV.map((i) => (
+              {/* No telemóvel o ficheiro não tem esta fila: tem um menu. As
+                  ligações vão num invólucro em vez de levarem `hidden` cada
+                  uma, porque o `hidden` e o `flex` são os dois `display` e
+                  quem ganha é a ordem na folha de estilo. */}
+              <div className="hidden flex-wrap items-center justify-end gap-x-[clamp(1rem,2.8vw,3rem)] gap-y-3 md:flex">
+                {NAV.map((i) => (
+                  <a
+                    key={i.label}
+                    href={i.href}
+                    className={`${CAPS} ${ALVO} opacity-85 transition-opacity hover:opacity-100`}
+                  >
+                    {i.label}
+                  </a>
+                ))}
                 <a
-                  key={i.label}
-                  href={i.href}
-                  className={`${CAPS} ${ALVO} opacity-85 transition-opacity hover:opacity-100`}
+                  href="#conversar"
+                  className={`${CAPS} ${ALVO_CIMA} flex items-center gap-3 border-b border-paper pb-0.5`}
                 >
-                  {i.label}
+                  Entrar em contacto <Seta />
                 </a>
-              ))}
-              <a
-                href="#conversar"
-                className={`${CAPS} ${ALVO_CIMA} flex items-center gap-3 border-b border-paper pb-0.5`}
-              >
-                Entrar em contacto <Seta />
-              </a>
+              </div>
+              <MenuTelemovel destinos={[...NAV]} redes={[...REDES]} />
             </nav>
 
             <div
@@ -284,7 +300,10 @@ export default function HomePage() {
               data-entrada-cena
               style={{ "--atraso": 0.18 } as CSSProperties}
             >
-              <div className="flex w-full flex-wrap items-center justify-between gap-y-8">
+              {/* No telemóvel o "design" fica por baixo da marca e alinhado
+                  à esquerda, não ao lado: é assim na moldura estreita do
+                  ficheiro, e a marca ocupa lá 412,5 de 681. */}
+              <div className="flex w-full flex-col items-start gap-[min(3.5vw,24px)] md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-y-8">
                 <h1>
                   <Image
                     src="/home/marca-joana-domingues.svg"
@@ -293,7 +312,7 @@ export default function HomePage() {
                     height={194}
                     priority
                     unoptimized
-                    className="h-auto w-[clamp(13rem,49.8vw,52rem)]"
+                    className="h-auto w-[60.6vw] md:w-[clamp(13rem,49.8vw,52rem)]"
                   />
                 </h1>
                 <Image
@@ -302,7 +321,7 @@ export default function HomePage() {
                   width={191}
                   height={33}
                   unoptimized
-                  className="h-auto w-[clamp(6rem,13.5vw,14rem)]"
+                  className="h-auto w-[24.8vw] md:w-[clamp(6rem,13.5vw,14rem)]"
                 />
               </div>
             </div>
@@ -313,10 +332,10 @@ export default function HomePage() {
               data-entrada-cena
               style={{ "--atraso": 0.32 } as CSSProperties}
             >
-              <p className="font-serif text-[clamp(1.5rem,3.18vw,3.3rem)] leading-tight">
+              <p className={`font-serif ${TEL.frase} leading-tight`}>
                 Entre o fazer e o pensar.
               </p>
-              <p className="font-body text-[clamp(1rem,1.8vw,1.9rem)] italic leading-snug opacity-95">
+              <p className={`font-body ${TEL.fraseSegunda} italic leading-snug opacity-95`}>
                 Design de comunicação, investigação e escrita.
               </p>
             </div>
@@ -326,11 +345,17 @@ export default function HomePage() {
         {/* ========================================================== designer */}
         {/* A nota da Joana: o lado esquerdo mantém-se, o direito roda. O bloco
             fica fixo enquanto se percorrem cinco ecrãs, e o texto troca em
-            quatro passos -- a bio, e depois os três campos. */}
+            quatro passos -- a bio, e depois os três campos.
+
+            No telemóvel não: a moldura estreita do ficheiro põe isto em
+            sequência -- "Designer", depois "Comunicação institucional", depois
+            o parágrafo -- e com o corpo de texto na escala dela não cabia num
+            ecrã de qualquer maneira. */}
         <Capitulo
           id="sobre"
           ecras={5}
           passos={4}
+          soltoNoTelemovel
           className="relative isolate z-10 bg-mauve"
         >
           <Image
@@ -348,38 +373,57 @@ export default function HomePage() {
             className="absolute inset-x-0 top-0 h-[clamp(4rem,9vh,9rem)] bg-gradient-to-b from-paper-soft/55 via-paper-soft/15 to-transparent"
           />
           <div
-            className={`grid h-full items-center gap-y-6 py-[clamp(2rem,6vw,6rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,5vw,5rem)] ${gutter}`}
+            /* O corpo de letra do "Designer" fica aqui porque o desvio do
+               texto, mais abaixo, se mede nele. */
+            style={{ "--tipo": "clamp(2.25rem,8.39vw,8.75rem)" } as CSSProperties}
+            /* `content-center` e não `items-center`: com a altura toda e duas
+               linhas, o `items-center` estica-as e centra cada uma na sua --
+               abria um buraco entre o "Designer" e o título do campo. O que
+               se quer é a pilha inteira ao meio. */
+            className={`grid h-full content-center py-[clamp(2rem,6vw,6rem)] ${gutter}`}
           >
-            <div>
-              <h2 className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft">
-                Designer
-              </h2>
-              {/* O título do campo fica por baixo de "Designer" e à mesma
-                  escala -- 140px numa moldura de 1669 no ficheiro. É a troca
-                  deste título que faz a mudança ler-se. */}
-              <div className="relative mt-[0.12em] min-h-[clamp(2.4rem,14vw,14.6rem)]">
-                {CAMPOS.map((c, i) => (
-                  <p
-                    key={c.titulo ?? "bio"}
-                    data-quando={i}
-                    className="font-serif text-[clamp(2.25rem,8.39vw,8.75rem)] leading-[0.84] text-paper-soft/70"
-                  >
-                    {c.titulo}
-                  </p>
-                ))}
-              </div>
-            </div>
+            <h2 className={`font-serif ${TEL.tituloDesigner} leading-[0.84] text-paper-soft`}>
+              Designer
+            </h2>
 
-            <div className="relative min-h-[clamp(13rem,26vw,22rem)]">
+            {/* Cada passo é um bloco só -- o título do campo e os parágrafos
+                dele juntos. Antes eram duas listas, uma por coluna: preso dava
+                no mesmo, mas solto saíam os títulos todos de enfiada e os
+                textos todos a seguir, desemparelhados. Agora solta-se aos
+                pares, que é como está na moldura estreita do ficheiro.
+
+                O título do campo fica por baixo de "Designer" e à mesma escala
+                -- 140px numa moldura de 1669 --, e é a troca dele que faz a
+                mudança ler-se. */}
+            {/* O afastamento entre o "Designer" e o título do campo mede-se no
+                corpo de letra dele -- 0,364 dele --, que é o que repõe ao
+                pixel o que estava antes de os passos passarem a blocos. A
+                margem negativa por baixo devolve-lhe a altura: senão o bloco
+                ficava 44px mais alto e, estando centrado, subia 22. */}
+            <div className="relative mt-[calc(var(--tipo)*0.364)] mb-[calc(var(--tipo)*-0.364)] min-h-[clamp(2.4rem,14vw,14.6rem)]">
               {CAMPOS.map((c, i) => (
                 <div
                   key={c.titulo ?? "bio"}
                   data-quando={i}
-                  className="flex flex-col gap-[0.7em] font-body text-[clamp(0.9rem,1.5vw,1.6rem)] leading-snug text-paper"
+                  className="lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-x-[clamp(2rem,5vw,5rem)]"
                 >
-                  {c.paragrafos.map((t) => (
-                    <p key={t.slice(0, 24)}>{t}</p>
-                  ))}
+                  <p
+                    className={`font-serif ${TEL.tituloDesigner} leading-[0.84] text-paper-soft/70`}
+                  >
+                    {c.titulo}
+                  </p>
+                  {/* Em sequência, o texto fica debaixo do título do campo,
+                      com os 76/681 de ar que o ficheiro lhe dá. No ecrã largo
+                      sobe para o alto do bloco, à altura de "Designer", que é
+                      onde o ficheiro o tem: o desvio é a caixa do "Designer",
+                      1,05 do corpo de letra dele. */}
+                  <div
+                    className={`mt-[min(11.2vw,76px)] flex flex-col gap-[0.7em] font-body ${TEL.corpoDesigner} leading-snug text-paper lg:mt-[calc(var(--tipo)*-1.05)]`}
+                  >
+                    {c.paragrafos.map((t) => (
+                      <p key={t.slice(0, 24)}>{t}</p>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -442,7 +486,7 @@ export default function HomePage() {
                             // perder o lugar na página.
                             target={externo ? "_blank" : undefined}
                             rel={externo ? "noopener noreferrer me" : undefined}
-                            className={`${CAPS_PERCURSOS} ${ALVO_CIMA} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
+                            className={`${CAPS} ${ALVO_CIMA} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
                           >
                             {l.label} <Seta />
                           </a>
@@ -477,10 +521,10 @@ export default function HomePage() {
           className="-z-10 object-cover"
         />
         <div className={`py-[clamp(3.5rem,10vw,11rem)] ${gutter}`}>
-          <h2 className="font-serif text-[clamp(2rem,6.53vw,6.8rem)] uppercase leading-[0.95] text-paper">
+          <h2 className={`font-serif ${TEL.tituloConversar} uppercase leading-[0.95] text-paper`}>
             Vamos conversar?
           </h2>
-          <p className="mt-[clamp(1rem,2vw,2rem)] max-w-[34ch] font-body text-[clamp(1rem,1.92vw,2rem)] leading-snug text-paper">
+          <p className={`mt-[clamp(1rem,2vw,2rem)] max-w-[34ch] font-body ${TEL.corpoConversar} leading-snug text-paper`}>
             Disponível para novos projetos e colaborações em design e
             comunicação.
           </p>

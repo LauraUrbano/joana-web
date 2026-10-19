@@ -76,14 +76,14 @@ export default function Capitulo({
 
   /* Cabe na caixa?
      A medida é contra `100svh`, que é a altura que a caixa tem quando está
-     fixa -- e não contra `innerHeight`. No telemóvel a janela cresce e encolhe
+     presa -- e não contra `innerHeight`. No telemóvel a janela cresce e encolhe
      ao esconder a barra do browser; o `svh` não, e usá-lo evita o capítulo
      ficar a prender e a soltar-se a meio de um scroll.
 
-     O estado é um ferrolho: solto, o conteúdo passa a ser outro (os passos
-     deixam de estar empilhados um sobre o outro) e medi-lo outra vez daria
-     sempre "não cabe". Quando o `svh` muda -- mudar de orientação, rodar o
-     tablete -- volta a prender para se poder medir de novo com honestidade. */
+     Durante a medição o `data-medindo` dá à caixa a geometria de presa, esteja
+     ela como estiver (ver o CSS). Assim a resposta é sempre à mesma pergunta,
+     e um engano -- medir antes de as letras chegarem, por exemplo -- corrige-se
+     na medição seguinte em vez de ficar preso para sempre. */
   useEffect(() => {
     const f = fixo.current;
     if (!f) return;
@@ -93,31 +93,24 @@ export default function Capitulo({
       "position:absolute;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
     document.body.appendChild(sonda);
 
-    let svhAnterior = -1;
-    const aplicar = (v: boolean) => {
-      if (naoCabeRef.current === v) return;
-      naoCabeRef.current = v;
-      setNaoCabe(v);
-    };
+    let aMedir = false;
     const medir = () => {
+      // A própria medição mexe na caixa, e isso acorda o observador: sem esta
+      // guarda ficava a medir-se a si mesma.
+      if (aMedir) return;
+      aMedir = true;
       const svh = sonda.getBoundingClientRect().height || window.innerHeight;
-      if (svh !== svhAnterior) {
-        svhAnterior = svh;
-        // Volta a prender e remede no retorno do observador, já com a caixa
-        // na altura certa.
-        if (naoCabeRef.current) return aplicar(false);
-      }
-      /* O `data-medindo` desliga o deslocamento dos passos que ainda não
-         entraram. Sem isso media-se a animação e não o conteúdo: os passos
-         por revelar estão 3rem abaixo do lugar, o que dava 49px a mais e
-         punha o capítulo a prender e a soltar-se em ciclo. */
       f.dataset.medindo = "";
       const pede = f.scrollHeight;
       delete f.dataset.medindo;
-      aplicar(pede > svh + 4);
+      aMedir = false;
+      const naoCabeAgora = pede > svh + 4;
+      if (naoCabeRef.current === naoCabeAgora) return;
+      naoCabeRef.current = naoCabeAgora;
+      setNaoCabe(naoCabeAgora);
     };
 
-    // Preso, a caixa tem altura fixa: o observador não acorda quando é o
+    // Presa, a caixa tem altura fixa: o observador não acorda quando é o
     // conteúdo que cresce. As letras a chegar são a única coisa que o faz
     // crescer aqui, e isso dá-se uma vez.
     const olho = new ResizeObserver(medir);

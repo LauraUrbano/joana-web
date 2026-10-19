@@ -325,7 +325,9 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
           sizes="100vw"
           className="-z-10 object-cover"
         />
-        <h2 className="mb-[clamp(1.75rem,7vw,3rem)] max-w-[11ch] px-[22px] font-serif text-[clamp(2.25rem,11vw,3.5rem)] leading-[0.95] text-paper">
+        {/* 85/681, a mesma medida dos outros títulos na moldura estreita do
+            ficheiro: "uniformizar tamanho de titulos", diz a nota dela. */}
+        <h2 className="mb-[clamp(1.75rem,7vw,3rem)] max-w-[11ch] px-[22px] font-serif text-[min(12.48vw,55px)] leading-[0.95] text-paper">
           Há coisas que <em>faço</em>.
         </h2>
         <TiraProjetos pecas={pecas} />

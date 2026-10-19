@@ -201,13 +201,67 @@ a:focus-visible .nextmark {
   filter: none;
 }
 
-/* Só durante a medição do capítulo: o que conta é a altura do conteúdo, não
-   o sítio onde a animação o tem parqueado. Vem depois das regras acima de
-   propósito, para as vencer. Invisível -- estes passos estão a zero de
-   opacidade quando estão deslocados. */
-[data-medindo] [data-quando],
+/* Só durante a medição do capítulo, e a pergunta é sempre a mesma: isto cabia
+   numa caixa presa? Por isso a caixa toma aqui a geometria de preso -- um ecrã
+   de altura, e os passos sobrepostos em vez de em sequência -- mesmo quando
+   está solta. Sem isto, medir uma caixa já solta respondia pela sequência
+   (muito mais alta) e nunca mais se podia voltar atrás de um engano.
+
+   Vem depois das regras acima de propósito, para as vencer, e a medição é
+   síncrona: põe-se o atributo, lê-se e tira-se, tudo antes de haver pintura.
+   Nada disto chega a ver-se. */
+[data-medindo] {
+  height: 100svh;
+  overflow: hidden;
+}
+[data-medindo] [data-quando] {
+  position: absolute;
+  inset: 0;
+  transform: none;
+}
 [data-medindo] [data-desde] {
   transform: none;
+}
+
+/* Capítulo solto: os passos deixam de estar sobrepostos e passam a ler-se em
+   sequência, por isso precisam de ar entre eles. O dobro do que separa o
+   título do campo dos parágrafos dele -- a conta é minha, o ficheiro só mostra
+   um campo nesta moldura. */
+[data-estatico] [data-quando] + [data-quando] {
+  margin-top: min(22.4vw, 152px);
+}
+
+/* ---------------------------------------------------------------------------
+   Menu do telemóvel.
+
+   O `<dialog>` passa de `display: none` a bloco quando abre, e uma transição
+   não pega nisso -- por isso a entrada é uma animação, que corre quando o
+   elemento aparece. O conteúdo entra a seguir, de baixo para cima e um pouco
+   depois do outro: é o mesmo gesto da entrada em cena do resto da página.
+   --------------------------------------------------------------------------- */
+dialog[data-menu][open] {
+  animation: menu-entra 0.28s ease-out;
+}
+@keyframes menu-entra {
+  from {
+    opacity: 0;
+  }
+}
+dialog[data-menu][open] [data-entrada-menu] {
+  animation: menu-sobe 0.5s cubic-bezier(0.16, 0.84, 0.24, 1) var(--atraso, 0s)
+    backwards;
+}
+@keyframes menu-sobe {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog[data-menu][open],
+  dialog[data-menu][open] [data-entrada-menu] {
+    animation: none;
+  }
 }
 
 /* ---------------------------------------------------------------------------
