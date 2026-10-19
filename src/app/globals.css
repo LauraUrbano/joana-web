@@ -223,6 +223,32 @@ a:focus-visible .nextmark {
   transform: none;
 }
 
+/* Capítulo em sequência que pede revelação: cada passo entra ao chegar ao ecrã.
+   É o mesmo gesto da troca de passo do capítulo preso -- subir e ganhar foco --
+   mas uma vez por bloco, em vez de um a substituir o outro. Sem o `data-revela`,
+   que é posto por script, fica tudo visível. */
+[data-revela] [data-quando],
+[data-revela] [data-desde] {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.16, 0.84, 0.24, 1);
+}
+[data-revela] [data-quando][data-visto],
+[data-revela] [data-desde][data-visto] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-revela] [data-quando],
+  [data-revela] [data-desde] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Capítulo solto: os passos deixam de estar sobrepostos e passam a ler-se em
    sequência, por isso precisam de ar entre eles. O dobro do que separa o
    título do campo dos parágrafos dele -- a conta é minha, o ficheiro só mostra

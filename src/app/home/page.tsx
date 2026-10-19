@@ -356,6 +356,7 @@ export default function HomePage() {
           ecras={5}
           passos={4}
           soltoNoTelemovel
+          revelaSolto
           className="relative isolate z-10 bg-mauve"
         >
           <Image

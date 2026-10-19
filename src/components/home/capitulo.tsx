@@ -36,12 +36,18 @@ import { useMovimentoReduzido } from "./movimento";
  * No telemóvel há capítulos que é melhor não prender de todo: a Joana pediu
  * que a secção dos percursos não fosse aparecendo um tópico de cada vez. Para
  * esses, `soltoNoTelemovel`.
+ *
+ * Mas "não prender" não quer dizer "não mexer". Do capítulo "Designer" ela
+ * disse o contrário -- "aqui a animação estava bem" --, e em sequência não
+ * sobrava nenhuma: cada passo já lá estava quando se chegava a ele. Com
+ * `revelaSolto`, aparece ao entrar no ecrã.
  */
 export default function Capitulo({
   id,
   ecras = 3,
   passos = 1,
   soltoNoTelemovel = false,
+  revelaSolto = false,
   className = "",
   children,
 }: {
@@ -50,8 +56,10 @@ export default function Capitulo({
   ecras?: number;
   /** Quantos estados o capítulo atravessa. */
   passos?: number;
-  /** No telemóvel fica em sequência, sem prender e sem revelar por passos. */
+  /** No telemóvel fica em sequência, sem prender. */
   soltoNoTelemovel?: boolean;
+  /** Em sequência, cada passo aparece ao entrar no ecrã em vez de já lá estar. */
+  revelaSolto?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -125,6 +133,34 @@ export default function Capitulo({
       sonda.remove();
     };
   }, []);
+
+  /* Em sequência, cada passo aparece quando entra no ecrã. O `data-revela` é
+     posto por script: sem ele -- sem script, ou sem este capítulo o pedir --
+     fica tudo visível, que é o que tem de acontecer por omissão. */
+  useEffect(() => {
+    const f = fixo.current;
+    if (!f || !solto || !revelaSolto) return;
+    const passos = f.querySelectorAll<HTMLElement>("[data-quando],[data-desde]");
+    if (!passos.length) return;
+    f.dataset.revela = "";
+    const olho = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (!e.isIntersecting) continue;
+          (e.target as HTMLElement).dataset.visto = "";
+          olho.unobserve(e.target);
+        }
+      },
+      // Revela quando já entrou um pedaço do passo, e não à primeira aresta.
+      { rootMargin: "0px 0px -15% 0px" },
+    );
+    passos.forEach((x) => olho.observe(x));
+    return () => {
+      olho.disconnect();
+      delete f.dataset.revela;
+      passos.forEach((x) => delete x.dataset.visto);
+    };
+  }, [solto, revelaSolto]);
 
   useEffect(() => {
     if (solto) return;
