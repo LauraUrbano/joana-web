@@ -210,32 +210,6 @@ a:focus-visible .nextmark {
   transform: none;
 }
 
-/* Capítulo solto -- quando o conteúdo não cabe numa caixa fixa, e no telemóvel
-   é o caso. Os passos ficam em sequência e cada um aparece ao entrar no ecrã,
-   para não se perder a revelação que o capítulo fixo tem. O `data-revela` é
-   posto por script: sem ele, tudo fica visível. */
-[data-revela] [data-quando],
-[data-revela] [data-desde] {
-  opacity: 0;
-  transform: translateY(1.75rem);
-  transition:
-    opacity 0.6s ease,
-    transform 0.6s cubic-bezier(0.16, 0.84, 0.24, 1);
-}
-[data-revela] [data-quando][data-visto],
-[data-revela] [data-desde][data-visto] {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-revela] [data-quando],
-  [data-revela] [data-desde] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
 /* ---------------------------------------------------------------------------
    Hero: o foco perde-se à medida que o capítulo seguinte sobe por cima.
 

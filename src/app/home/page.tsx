@@ -350,7 +350,16 @@ export default function HomePage() {
       {/* ========================================================= percursos */}
       {/* "À medida que vamos fazendo scroll vão aparecendo os tópicos 1, 2 e 3."
           Acumulam-se: aparecem e ficam. */}
-      <Capitulo id="percursos" ecras={4} passos={3} className="relative z-10 bg-sand">
+      {/* No telemóvel fica em sequência: ela pediu que os tópicos não fossem
+          aparecendo um de cada vez, e é onde a maior parte das pessoas vai
+          ver o sítio. */}
+      <Capitulo
+        id="percursos"
+        ecras={4}
+        passos={3}
+        soltoNoTelemovel
+        className="relative z-10 bg-sand"
+      >
         <div
           className={`flex h-full flex-col justify-center py-[clamp(2rem,5vw,5rem)] ${gutter}`}
         >

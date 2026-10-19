@@ -33,14 +33,15 @@ import { useMovimentoReduzido } from "./movimento";
  * resolve-se sozinho em qualquer largura, de lado, e com o corpo de letra
  * aumentado por quem precisa.
  *
- * Solto, o capítulo perderia a revelação dos passos, que é o que lhe dá vida
- * -- e é no telemóvel que a maior parte das pessoas o vai ver. Por isso em
- * vez de nada, revela cada passo quando ele entra no ecrã.
+ * No telemóvel há capítulos que é melhor não prender de todo: a Joana pediu
+ * que a secção dos percursos não fosse aparecendo um tópico de cada vez. Para
+ * esses, `soltoNoTelemovel`.
  */
 export default function Capitulo({
   id,
   ecras = 3,
   passos = 1,
+  soltoNoTelemovel = false,
   className = "",
   children,
 }: {
@@ -49,6 +50,8 @@ export default function Capitulo({
   ecras?: number;
   /** Quantos estados o capítulo atravessa. */
   passos?: number;
+  /** No telemóvel fica em sequência, sem prender e sem revelar por passos. */
+  soltoNoTelemovel?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -57,7 +60,19 @@ export default function Capitulo({
   const reduz = useMovimentoReduzido();
   const [naoCabe, setNaoCabe] = useState(false);
   const naoCabeRef = useRef(false);
-  const solto = reduz || naoCabe;
+  const [telemovel, setTelemovel] = useState(false);
+  const solto = reduz || naoCabe || (soltoNoTelemovel && telemovel);
+
+  /* Abaixo do `md` do Tailwind, que é onde o resto da página também troca de
+     desenho. Começa em falso para o servidor e o cliente desenharem o mesmo. */
+  useEffect(() => {
+    if (!soltoNoTelemovel) return;
+    const mq = window.matchMedia("(max-width: 47.99rem)");
+    const ler = () => setTelemovel(mq.matches);
+    ler();
+    mq.addEventListener("change", ler);
+    return () => mq.removeEventListener("change", ler);
+  }, [soltoNoTelemovel]);
 
   /* Cabe na caixa?
      A medida é contra `100svh`, que é a altura que a caixa tem quando está
@@ -117,33 +132,6 @@ export default function Capitulo({
       sonda.remove();
     };
   }, []);
-
-  /* Solto: cada passo aparece quando entra no ecrã. A classe só é posta por
-     script, para quem não o tenha ver tudo em vez de ver nada. */
-  useEffect(() => {
-    const f = fixo.current;
-    if (!f || !solto) return;
-    const alvos = f.querySelectorAll<HTMLElement>("[data-quando],[data-desde]");
-    if (!alvos.length) return;
-    f.dataset.revela = "";
-    const olho = new IntersectionObserver(
-      (entradas) => {
-        for (const e of entradas) {
-          if (!e.isIntersecting) continue;
-          (e.target as HTMLElement).dataset.visto = "";
-          olho.unobserve(e.target);
-        }
-      },
-      // Revela quando já entrou um pedaço do passo, não à primeira aresta.
-      { rootMargin: "0px 0px -18% 0px" },
-    );
-    alvos.forEach((a) => olho.observe(a));
-    return () => {
-      olho.disconnect();
-      delete f.dataset.revela;
-      alvos.forEach((a) => delete a.dataset.visto);
-    };
-  }, [solto]);
 
   useEffect(() => {
     if (solto) return;
