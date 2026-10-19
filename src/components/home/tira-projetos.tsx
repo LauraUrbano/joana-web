@@ -153,9 +153,15 @@ export default function TiraProjetos({ pecas }: { pecas: Peca[] }) {
                     Botões e não enfeite: sem movimento permitido não há
                     passagem automática, e é por aqui que se vêem as outras.
                     O fio de tinta à volta é porque as fotografias dela são
-                    claras, e creme sobre creme desaparecia. */}
+                    claras, e creme sobre creme desaparecia.
+
+                    O ponto continua a ter 6px; quem tem 24 é o botão à volta
+                    dele, que é o que o dedo precisa. Por isso o `right` é 5 e
+                    não 14: é a conta para o ponto ficar onde estava. Ficam
+                    encostados uns aos outros, sem intervalo, para os 24px de
+                    cada um não invadirem o do lado. */}
                 {imagens.length > 1 && (
-                  <div className="absolute right-[14px] top-1/2 z-20 flex -translate-y-1/2 flex-col gap-[9px]">
+                  <div className="absolute right-[5px] top-1/2 z-20 flex -translate-y-1/2 flex-col">
                     {imagens.map((src, k) => (
                       <button
                         key={src}
@@ -167,12 +173,16 @@ export default function TiraProjetos({ pecas }: { pecas: Peca[] }) {
                         }}
                         aria-label={`Imagem ${k + 1} de ${imagens.length}`}
                         aria-current={k === aqui}
-                        className={`size-[6px] rounded-full bg-paper shadow-[0_0_0_1px_rgb(22_20_16_/_0.34)] transition-[opacity,transform] duration-500 ${
-                          k === aqui
-                            ? "scale-150 opacity-[0.95]"
-                            : "scale-100 opacity-40"
-                        }`}
-                      />
+                        className="grid size-6 place-items-center"
+                      >
+                        <span
+                          className={`size-[6px] rounded-full bg-paper shadow-[0_0_0_1px_rgb(22_20_16_/_0.34)] transition-[opacity,transform] duration-500 ${
+                            k === aqui
+                              ? "scale-150 opacity-[0.95]"
+                              : "scale-100 opacity-40"
+                          }`}
+                        />
+                      </button>
                     ))}
                   </div>
                 )}

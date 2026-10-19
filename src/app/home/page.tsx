@@ -165,6 +165,14 @@ const PECAS: Peca[] = EM_PREPARACAO.filter((p) => p.naCena && p.src).map(
 const CAPS =
   "font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em]";
 
+/* Área de toque. O texto em caixa alta tem 15px de altura e o dedo precisa de
+   24 (WCAG 2.2 AA); são 5px acima e abaixo, que é enchimento a sério e não uma
+   camada por cima -- assim nunca rouba o toque ao vizinho. Quem tem risco por
+   baixo só recebe por cima, para o risco ficar onde está. */
+const ALVO = "py-[5px]";
+const ALVO_CIMA = "pt-2";
+
+
 /** Seta a 45°, como no ficheiro. */
 function Seta({ className = "" }: { className?: string }) {
   return (
@@ -214,14 +222,14 @@ export default function HomePage() {
                 <a
                   key={i.label}
                   href={i.href}
-                  className={`${CAPS} opacity-85 transition-opacity hover:opacity-100`}
+                  className={`${CAPS} ${ALVO} opacity-85 transition-opacity hover:opacity-100`}
                 >
                   {i.label}
                 </a>
               ))}
               <a
                 href="#conversar"
-                className={`${CAPS} flex items-center gap-3 border-b border-paper pb-0.5`}
+                className={`${CAPS} ${ALVO_CIMA} flex items-center gap-3 border-b border-paper pb-0.5`}
               >
                 Entrar em contacto <Seta />
               </a>
@@ -380,7 +388,7 @@ export default function HomePage() {
                             // perder o lugar na página.
                             target={externo ? "_blank" : undefined}
                             rel={externo ? "noopener noreferrer me" : undefined}
-                            className={`${CAPS} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
+                            className={`${CAPS} ${ALVO_CIMA} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
                           >
                             {l.label} <Seta />
                           </a>
@@ -424,7 +432,7 @@ export default function HomePage() {
           </p>
           <a
             href="mailto:jcm@linear.com.pt"
-            className={`${CAPS} mt-[clamp(1.75rem,3.5vw,3.5rem)] inline-flex items-center gap-3 border-b border-paper pb-1 text-paper transition-opacity hover:opacity-70`}
+            className={`${CAPS} ${ALVO_CIMA} mt-[clamp(1.75rem,3.5vw,3.5rem)] inline-flex items-center gap-3 border-b border-paper pb-1 text-paper transition-opacity hover:opacity-70`}
           >
             Entrar em contacto <Seta />
           </a>
@@ -450,7 +458,7 @@ export default function HomePage() {
                   href={r.href}
                   target="_blank"
                   rel="noopener noreferrer me"
-                  className={`${CAPS} opacity-70 transition-opacity hover:opacity-100`}
+                  className={`${CAPS} ${ALVO} opacity-70 transition-opacity hover:opacity-100`}
                 >
                   {r.nome}
                 </a>
@@ -467,13 +475,13 @@ export default function HomePage() {
           <p className="flex flex-wrap gap-x-6 gap-y-2">
             <a
               href="/aviso-legal"
-              className="transition-opacity hover:opacity-100"
+              className={`${ALVO} transition-opacity hover:opacity-100`}
             >
               Aviso legal
             </a>
             <a
               href="/politica-de-privacidade"
-              className="transition-opacity hover:opacity-100"
+              className={`${ALVO} transition-opacity hover:opacity-100`}
             >
               Política de Privacidade
             </a>

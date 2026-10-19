@@ -37,7 +37,7 @@ export default function EmPreparacao({ peca }: { peca: Preparacao }) {
       <nav className="py-[clamp(1.25rem,2.6vw,2.6rem)]">
         <Link
           href="/home#projetos"
-          className="flex w-fit items-center gap-3 border-b border-clay/60 pb-0.5 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
+          className="flex w-fit items-center gap-3 border-b border-clay/60 pb-0.5 pt-2 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
         >
           <span aria-hidden="true" className="inline-block rotate-[-135deg]">
             →
@@ -67,7 +67,7 @@ export default function EmPreparacao({ peca }: { peca: Preparacao }) {
 
         <a
           href="/home#conversar"
-          className="mt-[clamp(1.5rem,3vw,3rem)] inline-flex items-center gap-3 border-b border-clay/60 pb-1 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
+          className="mt-[clamp(1.5rem,3vw,3rem)] inline-flex items-center gap-3 border-b border-clay/60 pb-1 pt-2 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
         >
           Falar sobre este projeto
           <span aria-hidden="true" className="inline-block -rotate-45">

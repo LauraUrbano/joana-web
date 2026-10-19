@@ -472,7 +472,7 @@ export default function Orbita({ pecas }: { pecas: Peca[] }) {
             {seleccionada?.href && (
               <Link
                 href={seleccionada.href}
-                className="flex items-center gap-3 border-b border-paper pb-0.5 font-sans text-[clamp(0.5625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] text-paper transition-opacity hover:opacity-70"
+                className="flex items-center gap-3 border-b border-paper pb-0.5 pt-2 font-sans text-[clamp(0.5625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] text-paper transition-opacity hover:opacity-70"
               >
                 Ver o projeto
                 <span aria-hidden="true" className="inline-block -rotate-45">

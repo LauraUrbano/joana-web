@@ -129,7 +129,7 @@ export default function EmBreve() {
                 href={r.href}
                 target="_blank"
                 rel="noopener noreferrer me"
-                className={`${CAPS} text-paper transition-opacity hover:opacity-70`}
+                className={`${CAPS} ${ALVO} text-paper transition-opacity hover:opacity-70`}
               >
                 {r.nome}
               </a>
@@ -152,13 +152,13 @@ export default function EmBreve() {
       >
         <a
           href="/aviso-legal"
-          className={`${CAPS} text-paper/55 transition-opacity hover:text-paper`}
+          className={`${CAPS} ${ALVO} text-paper/55 transition-opacity hover:text-paper`}
         >
           Aviso legal
         </a>
         <a
           href="/politica-de-privacidade"
-          className={`${CAPS} text-paper/55 transition-opacity hover:text-paper`}
+          className={`${CAPS} ${ALVO} text-paper/55 transition-opacity hover:text-paper`}
         >
           Política de Privacidade
         </a>
@@ -173,3 +173,9 @@ const GUTTER = "px-[clamp(1.25rem,12.7vw,14.5rem)]";
 /** Caixa alta das redes: 14px numa moldura de 1851, espacejamento 0,18em. */
 const CAPS =
   "font-sans text-[clamp(0.625rem,0.76vw,1rem)] font-semibold uppercase tracking-[0.18em]";
+
+/* Área de toque. O texto em caixa alta tem 15px de altura e o dedo precisa de
+   24 (WCAG 2.2 AA); são 5px acima e abaixo, que é enchimento a sério e não uma
+   camada por cima -- assim nunca rouba o toque ao vizinho. */
+const ALVO = "py-[5px]";
+

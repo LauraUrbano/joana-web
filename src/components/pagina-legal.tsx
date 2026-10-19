@@ -25,7 +25,7 @@ export default function PaginaLegal({
       <nav className="py-[clamp(1.25rem,2.6vw,2.6rem)]">
         <Link
           href="/"
-          className="flex w-fit items-center gap-3 border-b border-clay/60 pb-0.5 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
+          className="flex w-fit items-center gap-3 border-b border-clay/60 pb-0.5 pt-2 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
         >
           <span aria-hidden="true" className="inline-block rotate-[-135deg]">
             →
