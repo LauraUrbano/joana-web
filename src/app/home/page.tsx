@@ -173,6 +173,49 @@ const ALVO = "py-[5px]";
 const ALVO_CIMA = "pt-2";
 
 
+/**
+ * A escala desta secção no telemóvel, tirada da moldura de 681 do ficheiro.
+ *
+ * O ficheiro tem duas molduras -- 681 para o estreito e 1669 para o largo -- e
+ * usa os mesmos tamanhos absolutos nas duas: 85px no título da secção, 66 no
+ * título da linha, 32 no corpo, 24 no número, 22 nas ligações. A 681 isso é
+ * muito maior em proporção, e era essa a nota da Joana: "no mobile, tentar
+ * seguir mais este layout (mais por causa dos espaçamentos e tamanho do
+ * título)".
+ *
+ * Cada medida é a fracção da moldura (85/681 = 12,48vw, e por aí fora),
+ * travada no valor que atinge aos 440px -- acima disso o telemóvel acabou e
+ * não vale a pena continuar a crescer até ao `md`.
+ */
+const TEL = {
+  /* 85/681 */
+  titulo: "text-[min(12.48vw,55px)] md:text-[clamp(1.75rem,6.4vw,6.6rem)]",
+  /* 98/681: do fundo do título ao primeiro risco */
+  aposTitulo: "mt-[min(14.4vw,63px)] md:mt-[clamp(1.5rem,4vw,4rem)]",
+  /* 32/681 por cima, 31/681 por baixo */
+  linha: "pb-[min(4.55vw,20px)] pt-[min(4.7vw,21px)] md:py-[clamp(0.8rem,1.7vw,1.9rem)]",
+  /* 64/681: o número fica numa coluna à esquerda e o resto alinha com o
+     título, que é o que a moldura estreita faz */
+  grelha:
+    "grid-cols-[min(9.4vw,41px)_minmax(0,1fr)] gap-x-0 md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.6fr)_auto] md:gap-x-[clamp(1rem,3vw,3.5rem)]",
+  /* 45/681: do título ao parágrafo */
+  entreTituloECorpo: "gap-y-[min(6.6vw,29px)] md:gap-y-3",
+  /* 24/681 */
+  numero: "text-[min(3.52vw,15px)] md:text-[clamp(0.875rem,1.44vw,1.5rem)]",
+  /* 66/681 */
+  tituloLinha: "text-[min(9.69vw,43px)] md:text-[clamp(1.4rem,3.4vw,3.5rem)]",
+  /* 32/681. A entrelinha do ficheiro é 34 em 32, que em três ou quatro linhas
+     de telemóvel fica apertada de mais para ler; fica a nossa. */
+  corpo: "text-[min(4.7vw,21px)] md:text-[clamp(0.95rem,1.6vw,1.7rem)]",
+  /* 86/681: do parágrafo às ligações */
+  antesDasLigacoes: "mt-[min(12.6vw,56px)] md:mt-[clamp(0.5rem,1.2vw,1.2rem)]",
+  /* 22/681 */
+  ligacao: "text-[min(3.23vw,14px)] md:text-[clamp(0.625rem,0.84vw,1rem)]",
+} as const;
+
+/** Como o CAPS, mas na escala do telemóvel desta secção. */
+const CAPS_PERCURSOS = `font-sans ${TEL.ligacao} font-semibold uppercase tracking-[0.18em]`;
+
 /** Seta a 45°, como no ficheiro. */
 function Seta({ className = "" }: { className?: string }) {
   return (
@@ -363,29 +406,31 @@ export default function HomePage() {
         <div
           className={`flex h-full flex-col justify-center py-[clamp(2rem,5vw,5rem)] ${gutter}`}
         >
-          <h2 className="font-serif text-[clamp(1.75rem,6.4vw,6.6rem)] leading-[0.95] text-clay">
+          <h2 className={`font-serif ${TEL.titulo} leading-[0.95] text-clay`}>
             Outras, escrevo para <em>compreender</em> melhor aquilo que faço.
           </h2>
 
-          <ul className="mt-[clamp(1.5rem,4vw,4rem)]">
+          <ul className={TEL.aposTitulo}>
             {PERCURSOS.map((p, i) => (
               <li
                 key={p.n}
                 data-desde={i}
-                className="border-t border-clay/70 py-[clamp(0.8rem,1.7vw,1.9rem)]"
+                className={`border-t border-clay/70 ${TEL.linha}`}
               >
-                <div className="grid gap-x-[clamp(1rem,3vw,3.5rem)] gap-y-3 md:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.6fr)_auto] md:items-start">
-                  <span className="font-sans text-[clamp(0.875rem,1.44vw,1.5rem)] tracking-[0.075em] text-clay">
+                <div
+                  className={`grid ${TEL.grelha} ${TEL.entreTituloECorpo} md:items-start`}
+                >
+                  <span className={`font-sans ${TEL.numero} tracking-[0.075em] text-clay`}>
                     {p.n}
                   </span>
-                  <h3 className="font-serif text-[clamp(1.4rem,3.4vw,3.5rem)] uppercase leading-[0.86] text-clay">
+                  <h3 className={`font-serif ${TEL.tituloLinha} uppercase leading-[0.86] text-clay`}>
                     {p.titulo}
                   </h3>
-                  <div className="text-clay">
-                    <p className="font-body text-[clamp(0.95rem,1.6vw,1.7rem)] leading-snug">
+                  <div className="col-start-2 text-clay md:col-start-auto">
+                    <p className={`font-body ${TEL.corpo} leading-snug`}>
                       {p.corpo}
                     </p>
-                    <p className="mt-[clamp(0.5rem,1.2vw,1.2rem)] flex flex-wrap gap-x-6 gap-y-2">
+                    <p className={`${TEL.antesDasLigacoes} flex flex-wrap gap-x-6 gap-y-2`}>
                       {p.links.map((l) => {
                         const externo = "externo" in l && l.externo;
                         return (
@@ -397,7 +442,7 @@ export default function HomePage() {
                             // perder o lugar na página.
                             target={externo ? "_blank" : undefined}
                             rel={externo ? "noopener noreferrer me" : undefined}
-                            className={`${CAPS} ${ALVO_CIMA} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
+                            className={`${CAPS_PERCURSOS} ${ALVO_CIMA} flex items-center gap-2 border-b border-clay/60 pb-0.5 transition-opacity hover:opacity-60`}
                           >
                             {l.label} <Seta />
                           </a>
