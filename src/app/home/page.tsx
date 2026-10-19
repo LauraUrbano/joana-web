@@ -388,7 +388,16 @@ export default function HomePage() {
                       })}
                     </p>
                   </div>
-                  <Seta className="hidden text-[clamp(1.25rem,2.2vw,2.3rem)] text-clay md:block" />
+                  {/* A seta de fim de linha é só do ecrã grande. Vai num
+                      invólucro porque o `hidden` e o `inline-block` da própria
+                      seta são os dois `display`: quem ganha é a ordem na folha
+                      de estilo, não a ordem na classe, e ganhava o
+                      `inline-block`. A seta aparecia no telemóvel, deitada, a
+                      ocupar a linha toda, e empurrava 125px para fora da
+                      caixa do capítulo. */}
+                  <div className="hidden md:block">
+                    <Seta className="text-[clamp(1.25rem,2.2vw,2.3rem)] text-clay" />
+                  </div>
                 </div>
               </li>
             ))}
