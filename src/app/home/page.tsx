@@ -347,15 +347,16 @@ export default function HomePage() {
             fica fixo enquanto se percorrem cinco ecrãs, e o texto troca em
             quatro passos -- a bio, e depois os três campos.
 
-            No telemóvel não: a moldura estreita do ficheiro põe isto em
-            sequência -- "Designer", depois "Comunicação institucional", depois
-            o parágrafo -- e com o corpo de texto na escala dela não cabia num
-            ecrã de qualquer maneira. */}
+            No telemóvel também: "antes havia uma animação que mudava o texto
+            no scroll, ela quer esse de volta". Cheguei a pô-lo em sequência,
+            como a moldura estreita do ficheiro o mostra, e é isso que ela não
+            quer aqui. Fica preso, e o que teve de ceder foi o ar à volta do
+            texto -- não o corpo de letra, que é o que ela pediu para
+            uniformizar. */}
         <Capitulo
           id="sobre"
           ecras={5}
           passos={4}
-          soltoNoTelemovel
           revelaSolto
           className="relative isolate z-10 bg-mauve"
         >
@@ -401,7 +402,7 @@ export default function HomePage() {
                 pixel o que estava antes de os passos passarem a blocos. A
                 margem negativa por baixo devolve-lhe a altura: senão o bloco
                 ficava 44px mais alto e, estando centrado, subia 22. */}
-            <div className="relative mt-[calc(var(--tipo)*0.364)] mb-[calc(var(--tipo)*-0.364)] min-h-[clamp(2.4rem,14vw,14.6rem)]">
+            <div className="relative mt-[calc(var(--tipo)*0.364)] mb-[calc(var(--tipo)*-0.364)] grid min-h-[clamp(2.4rem,14vw,14.6rem)] lg:block">
               {CAMPOS.map((c, i) => (
                 <div
                   key={c.titulo ?? "bio"}

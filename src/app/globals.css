@@ -153,10 +153,19 @@ a:focus-visible .nextmark {
    espera de um observador.
    --------------------------------------------------------------------------- */
 
-/* Painéis que se substituem: um por passo. */
+/* Painéis que se substituem: um por passo.
+
+   Sobrepõem-se por grelha e não por `position: absolute`, excepto no ecrã
+   largo. A razão é a altura: um painel absoluto não conta para a altura do
+   contentor, e no telemóvel, onde o título do campo e o texto ficam um por
+   cima do outro, isso dava um bloco que o capítulo julgava pequeno -- ficava
+   centrado como tal e o texto corria para fora por baixo. Empilhados por
+   grelha, o contentor fica com a altura do painel mais alto e tudo cabe.
+
+   No ecrã largo ficam absolutos, como estavam: lá o título e o texto estão
+   lado a lado e a medida do bloco está acertada ao ficheiro. */
 [data-vivo] [data-quando] {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
   opacity: 0;
   visibility: hidden;
   /* Movimento generoso e desfoque: a troca tem de se notar. Com 1.25rem e só
@@ -178,6 +187,14 @@ a:focus-visible .nextmark {
   transform: none;
   filter: none;
   transition-delay: 0s;
+}
+
+@media (min-width: 64rem) {
+  [data-vivo] [data-quando],
+  [data-medindo] [data-quando] {
+    position: absolute;
+    inset: 0;
+  }
 }
 
 /* Painéis que se acumulam: aparecem e ficam. */
@@ -215,8 +232,7 @@ a:focus-visible .nextmark {
   overflow: hidden;
 }
 [data-medindo] [data-quando] {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
   transform: none;
 }
 [data-medindo] [data-desde] {
