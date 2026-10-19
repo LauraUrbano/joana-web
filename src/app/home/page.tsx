@@ -50,12 +50,17 @@ const PERCURSOS = [
     titulo: "Escrevo",
     corpo:
       "Artigos de opinião, ideias em desenvolvimento e outras coisas que preciso de pôr em palavras.",
-    // O Substack dela é exactamente isto -- "Escrevo sobre Design, tecnologia,
-    // IA e as perguntas que surgem quando uma profissão se transforma". Era a
-    // única ligação morta que restava nesta linha.
+    // Duas ligações, como no ficheiro do Figma, que nesta linha tinha "artigos
+    // de opinião" e "notas e ensaios": o artigo de opinião dela no Marketeer,
+    // que ela mandou, e o Substack, onde escreve a seguir.
     links: [
       {
         label: "Artigos",
+        href: "https://marketeer.sapo.pt/a-ia-nao-esta-a-substituir-os-designers-esta-a-mudar-aquilo-pelo-qual-somos-responsaveis/",
+        externo: true,
+      },
+      {
+        label: "Substack",
         href: "https://substack.com/@joanadomingues",
         externo: true,
       },
