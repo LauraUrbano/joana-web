@@ -23,8 +23,6 @@ const TEMPO = 4500;
  *   cartão      328 x 360, ou seja 84vw -- aqui travado nos 30rem, para num
  *               tablet não ocupar o ecrã todo --, snap-align: center
  *   imagem      quadrada, 328 x 328, cantos de 6px
- *   pontos      coluna de cinco, 6px cada, 9px entre eles, creme a 0,78,
- *               dentro da imagem e encostados à direita
  *   relógio     barra de 4px, cantos de 2px, carril a 0,18, debaixo da imagem
  *   legenda     título e crédito por baixo
  *   setas       dois botões redondos de 46px, no fundo
@@ -36,8 +34,10 @@ const TEMPO = 4500;
  * espreitam nas bordas, ficam na primeira. Fazer as quatro andarem ao mesmo
  * tempo seria ruído e trabalho à toa.
  *
- * Sem movimento permitido não há passagem automática, e é por isso que os
- * pontos são botões a sério: assim continua a dar para ver todas as imagens.
+ * A referência tem pontos dentro da imagem, um por fotografia. A Joana pediu
+ * para saírem. Quem quiser ver as outras fotografias de um projeto toca no
+ * cartão e vai à página dele, onde estão todas -- e o relógio por baixo já
+ * diz que a imagem vai mudar.
  *
  * Tocar na imagem vai para a página do projeto. No telemóvel a tira já centra
  * a peça, não é preciso o passo de abrir que a órbita tem.
@@ -139,53 +139,12 @@ export default function TiraProjetos({ pecas }: { pecas: Peca[] }) {
                   />
                 ))}
 
-                {/* A ligação cobre a imagem toda. Fora dos pontos, e não à
-                    volta deles: botões dentro de uma âncora não é marcação
-                    válida, e o toque ficava a disputar-se. */}
+                {/* A ligação cobre a imagem toda. */}
                 <Link
                   href={p.href ?? "#projetos"}
                   aria-label={`Ver o projeto ${p.titulo}`}
                   className="absolute inset-0 z-10"
                 />
-
-                {/* Os pontos: coluna à direita, ao meio da imagem, como na
-                    referência -- lá são 6px com 9px entre eles, creme a 0,78.
-                    Botões e não enfeite: sem movimento permitido não há
-                    passagem automática, e é por aqui que se vêem as outras.
-                    O fio de tinta à volta é porque as fotografias dela são
-                    claras, e creme sobre creme desaparecia.
-
-                    O ponto continua a ter 6px; quem tem 24 é o botão à volta
-                    dele, que é o que o dedo precisa. Por isso o `right` é 5 e
-                    não 14: é a conta para o ponto ficar onde estava. Ficam
-                    encostados uns aos outros, sem intervalo, para os 24px de
-                    cada um não invadirem o do lado. */}
-                {imagens.length > 1 && (
-                  <div className="absolute right-[5px] top-1/2 z-20 flex -translate-y-1/2 flex-col">
-                    {imagens.map((src, k) => (
-                      <button
-                        key={src}
-                        type="button"
-                        onClick={() => {
-                          activoRef.current = i;
-                          setActivo(i);
-                          setSlide(k);
-                        }}
-                        aria-label={`Imagem ${k + 1} de ${imagens.length}`}
-                        aria-current={k === aqui}
-                        className="grid size-6 place-items-center"
-                      >
-                        <span
-                          className={`size-[6px] rounded-full bg-paper shadow-[0_0_0_1px_rgb(22_20_16_/_0.34)] transition-[opacity,transform] duration-500 ${
-                            k === aqui
-                              ? "scale-150 opacity-[0.95]"
-                              : "scale-100 opacity-40"
-                          }`}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
 
               {/* O relógio da imagem: enche no tempo que ela fica. Recomeça
