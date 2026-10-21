@@ -1,6 +1,9 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 
+import Conversar from "@/components/conversar";
+import Rodape from "@/components/rodape";
+import Seta from "@/components/seta";
 import HomeMotion from "@/components/home/motion";
 import Capitulo from "@/components/home/capitulo";
 import MenuTelemovel from "@/components/home/menu-telemovel";
@@ -9,6 +12,7 @@ import Orbita, { type Peca } from "@/components/home/orbita";
 import { EM_PREPARACAO } from "@/lib/projetos";
 import { REDES } from "@/lib/redes";
 import { SITIO } from "@/lib/sitio";
+import { ALVO, ALVO_CIMA, CAPS, GUTTER } from "@/lib/tipo";
 
 /**
  * Home do estúdio.
@@ -38,7 +42,7 @@ import { SITIO } from "@/lib/sitio";
 const NAV = [
   { label: "Projetos", href: "#projetos" },
   { label: "Investigação", href: "#percursos" },
-  { label: "Escrita", href: "#percursos" },
+  { label: "Escrita", href: "/escrita" },
 ];
 
 const PERCURSOS = [
@@ -48,14 +52,15 @@ const PERCURSOS = [
     corpo:
       "Artigos de opinião, ideias em desenvolvimento e outras coisas que preciso de pôr em palavras.",
     // Duas ligações, como no ficheiro do Figma, que nesta linha tinha "artigos
-    // de opinião" e "notas e ensaios": o artigo de opinião dela no Marketeer,
-    // que ela mandou, e o Substack, onde escreve a seguir.
+    // de opinião" e "notas e ensaios": os textos dela, e o Substack, onde
+    // escreve a seguir.
+    //
+    // Os "artigos" apontavam directamente ao artigo no Marketeer e passam a
+    // apontar à página da escrita, que é onde ele está com os outros -- a nota
+    // dela: "é importante ter esta página intermédia, já com a possibilidade
+    // de colocar o artigo da marketeer".
     links: [
-      {
-        label: "Artigos",
-        href: "https://marketeer.sapo.pt/a-ia-nao-esta-a-substituir-os-designers-esta-a-mudar-aquilo-pelo-qual-somos-responsaveis/",
-        externo: true,
-      },
+      { label: "Artigos", href: "/escrita" },
       {
         label: "Substack",
         href: "https://substack.com/@joanadomingues",
@@ -158,18 +163,6 @@ const PECAS: Peca[] = EM_PREPARACAO.filter((p) => p.naCena && p.src).map(
   })
 );
 
-/** Maiúsculas espaçadas do sistema: navegação, etiquetas e ligações. */
-const CAPS =
-  "font-sans text-[min(3.23vw,14px)] md:text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em]";
-
-/* Área de toque. O texto em caixa alta tem 15px de altura e o dedo precisa de
-   24 (WCAG 2.2 AA); são 5px acima e abaixo, que é enchimento a sério e não uma
-   camada por cima -- assim nunca rouba o toque ao vizinho. Quem tem risco por
-   baixo só recebe por cima, para o risco ficar onde está. */
-const ALVO = "py-[5px]";
-const ALVO_CIMA = "pt-2";
-
-
 /**
  * A escala do telemóvel, tirada da moldura de 681 do ficheiro.
  *
@@ -221,17 +214,7 @@ const TEL = {
   antesDasLigacoes: "mt-[min(12.6vw,56px)] md:mt-[clamp(0.5rem,1.2vw,1.2rem)]",
 } as const;
 
-/** Seta a 45°, como no ficheiro. */
-function Seta({ className = "" }: { className?: string }) {
-  return (
-    <span aria-hidden="true" className={`inline-block -rotate-45 ${className}`}>
-      →
-    </span>
-  );
-}
-
 export default function HomePage() {
-  const gutter = "px-[clamp(1.25rem,6.8vw,7.5rem)]";
 
   return (
     <div className="min-h-dvh overflow-x-clip bg-sand">
@@ -289,7 +272,7 @@ export default function HomePage() {
           />
 
           <div
-            className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${gutter}`}
+            className={`flex h-full flex-col justify-between py-[clamp(1.5rem,5.9vw,6rem)] ${GUTTER}`}
           >
             {/* A saída não é um bloco só: a navegação vai-se primeiro, a marca
               sobe, e a frase de baixo afunda-se com a cortina. É isso que faz
@@ -412,7 +395,7 @@ export default function HomePage() {
                linhas, o `items-center` estica-as e centra cada uma na sua --
                abria um buraco entre o "Designer" e o título do campo. O que
                se quer é a pilha inteira ao meio. */
-            className={`grid h-full content-center py-[clamp(2rem,6vw,6rem)] ${gutter}`}
+            className={`grid h-full content-center py-[clamp(2rem,6vw,6rem)] ${GUTTER}`}
           >
             <h2 className={`font-serif ${TEL.tituloDesigner} leading-[0.84] text-paper-soft`}>
               Designer
@@ -480,7 +463,7 @@ export default function HomePage() {
         className="relative z-10 bg-sand"
       >
         <div
-          className={`flex h-full flex-col justify-center py-[clamp(2rem,5vw,5rem)] ${gutter}`}
+          className={`flex h-full flex-col justify-center py-[clamp(2rem,5vw,5rem)] ${GUTTER}`}
         >
           <h2 className={`font-serif ${TEL.titulo} leading-[0.95] text-clay`}>
             Outras, escrevo para <em>compreender</em> melhor aquilo que faço.
@@ -543,81 +526,8 @@ export default function HomePage() {
         </div>
       </Capitulo>
 
-      {/* ========================================================= conversar */}
-      <section className="relative isolate bg-olive" id="conversar">
-        <Image
-          src="/home/fundo-azeitona.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-        <div className={`py-[clamp(3.5rem,10vw,11rem)] ${gutter}`}>
-          <h2 className={`font-serif ${TEL.tituloConversar} uppercase leading-[0.95] text-paper`}>
-            Vamos conversar?
-          </h2>
-          <p className={`mt-[clamp(1rem,2vw,2rem)] max-w-[34ch] font-body ${TEL.corpoConversar} leading-snug text-paper`}>
-            Disponível para novos projetos e colaborações em design e
-            comunicação.
-          </p>
-          <a
-            href="mailto:jcm@linear.com.pt"
-            className={`${CAPS} ${ALVO_CIMA} mt-[clamp(1.75rem,3.5vw,3.5rem)] inline-flex items-center gap-3 border-b border-paper pb-1 text-paper transition-opacity hover:opacity-70`}
-          >
-            Entrar em contacto <Seta />
-          </a>
-        </div>
-      </section>
-
-      {/* ============================================================ rodapé */}
-      <footer className={`bg-olive-deep pb-10 pt-[clamp(2.5rem,6vw,6.5rem)] text-paper ${gutter}`}>
-        <div className="flex flex-wrap items-start justify-between gap-y-10">
-          <Image
-            src="/home/marca-rodape.svg"
-            alt="Joana Domingues Design"
-            width={527}
-            height={306}
-            unoptimized
-            className="h-auto w-[clamp(7rem,13.8vw,14.5rem)]"
-          />
-          <nav className="flex flex-wrap gap-x-[clamp(1.5rem,3.2vw,3.5rem)] gap-y-3">
-            {REDES.map((r) =>
-              r.href ? (
-                <a
-                  key={r.nome}
-                  href={r.href}
-                  target="_blank"
-                  rel="noopener noreferrer me"
-                  className={`${CAPS} ${ALVO} opacity-70 transition-opacity hover:opacity-100`}
-                >
-                  {r.nome}
-                </a>
-              ) : (
-                <span key={r.nome} className={`${CAPS} opacity-70`}>
-                  {r.nome}
-                </span>
-              )
-            )}
-          </nav>
-        </div>
-        <div className="mt-[clamp(2.5rem,5vw,5rem)] flex flex-wrap justify-between gap-y-2 border-t border-paper/20 pt-5 font-body text-[clamp(0.75rem,1vw,1rem)] opacity-70">
-          <p>© 2026 Joana Domingues Design</p>
-          <p className="flex flex-wrap gap-x-6 gap-y-2">
-            <a
-              href="/aviso-legal"
-              className={`${ALVO} transition-opacity hover:opacity-100`}
-            >
-              Aviso legal
-            </a>
-            <a
-              href="/politica-de-privacidade"
-              className={`${ALVO} transition-opacity hover:opacity-100`}
-            >
-              Política de Privacidade
-            </a>
-          </p>
-        </div>
-      </footer>
+      <Conversar />
+      <Rodape />
     </div>
   );
 }
