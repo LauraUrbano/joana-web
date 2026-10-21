@@ -35,9 +35,12 @@ const ebGaramond = EB_Garamond({
   display: "swap",
 });
 
-const TITULO = "Joana Domingues Design — Comunicação, investigação e escrita";
+/* O título e a descrição da entrada do sítio, que é a home. Serviam a página
+   de espera e diziam "o novo site está a chegar" -- já chegou. As outras
+   páginas põem os seus por cima destes. */
+const TITULO = "Joana Domingues — Design de comunicação, investigação e escrita";
 const DESCRICAO =
-  "Design de comunicação, investigação e escrita. Mais de 14 anos a construir identidades e a comunicar marcas. O novo site está a chegar.";
+  "Entre o fazer e o pensar. Design de comunicação, investigação e escrita, a partir de Portugal. Mais de 14 anos a construir identidades e a comunicar marcas.";
 
 export const metadata: Metadata = {
   // Base dos endereços absolutos: sem isto, a imagem de partilha e o canónico

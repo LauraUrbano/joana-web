@@ -5,7 +5,7 @@ import { SITIO } from "@/lib/sitio";
 /**
  * Deixa passar tudo, de propósito.
  *
- * A /home e as páginas de projeto são rascunho e já dizem `noindex` nos seus
+ * As páginas de projeto e a página de espera dizem `noindex` nos seus próprios
  * metadados. Proibi-las aqui seria contraproducente: um endereço proibido no
  * robots.txt não chega a ser lido, por isso o `noindex` nunca seria visto -- e
  * o Google pode na mesma listar o endereço, só que sem conteúdo. Deixar

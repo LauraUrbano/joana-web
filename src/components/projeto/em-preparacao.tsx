@@ -36,7 +36,7 @@ export default function EmPreparacao({ peca }: { peca: Preparacao }) {
     <main className={`min-h-dvh bg-sand text-clay ${gutter}`}>
       <nav className="py-[clamp(1.25rem,2.6vw,2.6rem)]">
         <Link
-          href="/home#projetos"
+          href="/#projetos"
           className="flex w-fit items-center gap-3 border-b border-clay/60 pb-0.5 pt-2 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
         >
           <span aria-hidden="true" className="inline-block rotate-[-135deg]">
@@ -65,15 +65,15 @@ export default function EmPreparacao({ peca }: { peca: Preparacao }) {
           </p>
         )}
 
-        <a
-          href="/home#conversar"
+        <Link
+          href="/#conversar"
           className="mt-[clamp(1.5rem,3vw,3rem)] inline-flex items-center gap-3 border-b border-clay/60 pb-1 pt-2 font-sans text-[clamp(0.625rem,0.84vw,1rem)] font-semibold uppercase tracking-[0.18em] transition-opacity hover:opacity-60"
         >
           Falar sobre este projeto
           <span aria-hidden="true" className="inline-block -rotate-45">
             →
           </span>
-        </a>
+        </Link>
       </header>
 
       {(imagens.length > 0 || videos.length > 0) && (

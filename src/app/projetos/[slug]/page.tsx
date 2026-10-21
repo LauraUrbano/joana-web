@@ -24,20 +24,29 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const projeto = getProjeto(slug);
+  /* O canónico é obrigatório aqui: o `layout` tem o da entrada do sítio e, sem
+     este, cada página de projeto dizia que a sua versão canónica era a home. */
+  const canonico = { canonical: `/projetos/${slug}` };
   if (!projeto) {
     const peca = getPreparacao(slug);
+    const titulo = peca
+      ? `${peca.titulo} — Joana Domingues`
+      : "Projeto — Joana Domingues";
     return {
-      title: peca
-        ? `${peca.titulo} — Joana Domingues`
-        : "Projeto — Joana Domingues",
+      title: titulo,
+      description: peca?.descricao,
+      alternates: canonico,
+      openGraph: { title: titulo, description: peca?.descricao },
+      // Rascunho: as páginas de projeto ainda não são para indexar.
       robots: { index: false, follow: false },
     };
   }
+  const titulo = `${projeto.nome.sans} ${projeto.nome.serif} — Joana Domingues`;
   return {
-    title: `${projeto.nome.sans} ${projeto.nome.serif} — Joana Domingues`,
+    title: titulo,
     description: projeto.premissa,
-    // Enquanto a entrada do site for a página "em breve", isto é rascunho,
-    // como a /home. Apaga-se quando for para publicar.
+    alternates: canonico,
+    openGraph: { title: titulo, description: projeto.premissa },
     robots: { index: false, follow: false },
   };
 }
@@ -92,13 +101,13 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
           className={`mx-auto flex max-w-[1600px] items-center justify-between gap-4 py-3 ${gutter}`}
         >
           <Link
-            href="/home"
+            href="/"
             className="text-[0.6875rem] font-bold uppercase tracking-[0.14em]"
           >
             Joana Domingues
           </Link>
           <Link
-            href="/home#work"
+            href="/#projetos"
             className="flex items-center gap-2 text-[0.625rem] font-bold uppercase tracking-[0.12em] opacity-70 transition-opacity hover:opacity-100"
           >
             Todos os projetos
@@ -326,7 +335,7 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
       {/* --------------------------------------------------- 05 seguinte */}
       <section className={`bg-paper ${banda}`}>
         <div className="mx-auto max-w-[1600px]">
-          <Link href={projeto.seguinte.slug ? `/projetos/${projeto.seguinte.slug}` : "/home#work"} className="block">
+          <Link href={projeto.seguinte.slug ? `/projetos/${projeto.seguinte.slug}` : "/#projetos"} className="block">
             <SectionLabel className="mb-2">Projeto seguinte</SectionLabel>
             <div className="nextmark overflow-hidden whitespace-nowrap text-[clamp(2.25rem,10.4vw,9rem)] font-bold uppercase leading-[0.95] tracking-[-0.025em]">
               {projeto.seguinte.nome}
@@ -351,7 +360,7 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
               Estúdio de design e investigação, a trabalhar a partir de Portugal.
             </p>
             <div className="mt-6">
-              <Pill href="/home#contact" tone="lilac">
+              <Pill href="/#conversar" tone="lilac">
                 Falar do próximo <Arrow />
               </Pill>
             </div>

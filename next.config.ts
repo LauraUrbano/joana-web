@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
     // 02-components/image.md, secção "qualities".
     qualities: [75, 88],
   },
+  /* A home esteve em /home enquanto a entrada era a página de espera, e esse
+     endereço andou por aí -- está no WhatsApp da Joana e no histórico de quem
+     já lá foi. Fica a apontar para a entrada, em definitivo (308).
+
+     O caminho é exacto, sem `:path*`: as redirecções são verificadas antes do
+     sistema de ficheiros, e um padrão apanhava também as fotografias todas,
+     que vivem em /public/home. */
+  redirects() {
+    return [{ source: "/home", destination: "/", permanent: true }];
+  },
 };
 
 export default nextConfig;
