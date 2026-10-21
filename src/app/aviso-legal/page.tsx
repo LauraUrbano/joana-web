@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import PaginaLegal, { Acto } from "@/components/pagina-legal";
+import { EMAIL, EMAIL_HREF } from "@/lib/contacto";
 
 export const metadata: Metadata = {
   title: "Aviso legal — Joana Domingues Design",
@@ -32,10 +33,10 @@ export default function AvisoLegal() {
         <p>
           Para falar com ela:{" "}
           <a
-            href="mailto:jcm@linear.com.pt"
+            href={EMAIL_HREF}
             className="border-b border-clay/60 transition-opacity hover:opacity-60"
           >
-            jcm@linear.com.pt
+            {EMAIL}
           </a>{" "}
           ou{" "}
           <a

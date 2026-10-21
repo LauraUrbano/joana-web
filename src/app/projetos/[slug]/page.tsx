@@ -8,6 +8,7 @@ import { Arrow, Pill, SectionLabel } from "@/components/home/primitives";
 import { GridArt, Swatches } from "@/components/projeto/bits";
 import EmPreparacao from "@/components/projeto/em-preparacao";
 import CaseMotion from "@/components/projeto/motion";
+import { EMAIL } from "@/lib/contacto";
 import {
   EM_PREPARACAO,
   PROJETOS,
@@ -377,7 +378,7 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
           <div>
             <SectionLabel className="text-paper">Contacto</SectionLabel>
             <ul className="mt-3 grid gap-1.5 text-xs opacity-60">
-              <li>jcm@linear.com.pt</li>
+              <li>{EMAIL}</li>
               <li>LinkedIn</li>
               <li>Instagram</li>
               <li>ORCID</li>
