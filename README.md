@@ -40,7 +40,9 @@ Qualquer push para `main` publica automaticamente em produção no Vercel.
 
 ## Próximos passos
 
-- [ ] Ligar o projeto Supabase (variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+- [x] ~~Ligar o projeto Supabase~~ — não chegou a ser preciso: o conteúdo vive
+      em ficheiros no repositório e o painel (`/admin`) escreve-os lá. Ver
+      `docs/cms.md`.
 - [ ] Formulário de contacto gravado em base de dados
 - [ ] Projetos/portfólio dinâmicos, com imagens em Supabase Storage
 - [ ] Painel de administração com Supabase Auth

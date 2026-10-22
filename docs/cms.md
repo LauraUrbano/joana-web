@@ -1,12 +1,13 @@
 # Backoffice: mapa de conteúdos
 
-Estado em 21 de outubro de 2026. **Ainda não existe backoffice nenhum.** O
-conteúdo vive em ficheiros de código (`src/lib/projetos.ts`, `escritos.ts`,
-`redes.ts`) e é alterado por quem mexe no código. O Supabase está ligado do lado
-da Vercel desde o início mas o site não lhe toca.
+Decidido e construído a 22 de outubro de 2026. O painel está em **`/admin`** e
+guarda tudo em ficheiros dentro do repositório: cada alteração fica com data,
+autor e histórico, e desfaz-se se for preciso. Não há base de dados nenhuma.
 
-Este documento é o que se decide **antes** de se escrever código, e é para a
-Laura validar. O que a Joana pediu para poder editar sozinha:
+Falta um passo que só pode ser dado por quem tem a conta do GitHub e da Vercel
+-- está em **"Falta fazer, e é contigo"**, no fim.
+
+O que a Joana edita:
 
 1. **Projetos**
 2. **Ligações externas**

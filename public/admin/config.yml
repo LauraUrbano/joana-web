@@ -1,0 +1,230 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+#
+# O painel de conteúdos.
+#
+# Guarda tudo em ficheiros dentro do repositório, como qualquer outra alteração:
+# fica com data, autor e histórico, e desfaz-se se for preciso. Não há base de
+# dados nenhuma para manter.
+#
+# O que a Joana edita é o que ela pediu: projetos, ligações externas, blog e
+# contactos. Os textos do desenho -- a bio, os campos do "Designer", as linhas
+# dos percursos, as frases do hero -- não estão aqui de propósito: vêm do
+# ficheiro do Figma e mudam-se por pedido.
+
+backend:
+  name: github
+  repo: LauraUrbano/joana-web
+  branch: main
+  # O cliente de OAuth é o próprio sítio: /api/auth e /api/auth/callback.
+  base_url: https://www.joanadominguesdesign.pt
+  auth_endpoint: api/auth
+
+# Por omissão publica directo. O blog é a excepção e está mais abaixo.
+publish_mode: simple
+
+# Onde ficam as imagens carregadas, quando a coleção não disser outra coisa.
+media_folder: public/escrita
+public_folder: /escrita
+
+locale: pt
+
+collections:
+  # ----------------------------------------------------------- projetos
+  - name: projetos
+    label: Projetos
+    label_singular: Projeto
+    folder: content/projetos
+    format: json
+    create: true
+    slug: "{{slug}}"
+    identifier_field: titulo
+    summary: "{{titulo}} · {{ano}}"
+    sortable_fields: [ordem, titulo, ano]
+    media_folder: /public/home/projetos/{{slug}}
+    public_folder: /home/projetos/{{slug}}
+    fields:
+      - { name: titulo, label: Título, widget: string }
+      - {
+          name: tipo,
+          label: Tipo,
+          widget: string,
+          hint: "Sai no cartão, em maiúsculas. Ex.: Marca · Identidade visual",
+        }
+      - { name: ano, label: Ano, widget: string, pattern: ['^\d{4}$', "Quatro algarismos"] }
+      - {
+          name: descricao,
+          label: Descrição,
+          widget: text,
+          required: false,
+          hint: "Sem descrição, a página do projeto diz que o texto está a chegar.",
+        }
+      - {
+          name: capa,
+          label: Capa,
+          widget: image,
+          hint: "É a que vai à órbita e à tira do telemóvel. Quadrada, pelo menos 1400 px.",
+        }
+      - {
+          name: imagens,
+          label: Imagens,
+          widget: list,
+          field: { name: imagem, label: Imagem, widget: image },
+          required: false,
+          hint: "A galeria da página do projeto. Pelo menos 1600 px de largura.",
+        }
+      - name: videos
+        label: Vídeos
+        widget: list
+        required: false
+        fields:
+          - { name: src, label: Vídeo (MP4), widget: file }
+          - {
+              name: poster,
+              label: Imagem de cartaz,
+              widget: image,
+              hint: "Um fotograma do vídeo. Sem ela fica um rectângulo preto à espera.",
+            }
+      - {
+          name: naHome,
+          label: Aparece na home,
+          widget: boolean,
+          default: true,
+          hint: "Se entra na órbita e na tira, ou se só existe pelo endereço directo.",
+        }
+      - {
+          name: ordem,
+          label: Ordem na home,
+          widget: number,
+          value_type: int,
+          default: 99,
+          hint: "Mais baixo aparece primeiro.",
+        }
+      - {
+          name: estado,
+          label: Estado,
+          widget: select,
+          options: [rascunho, publicado],
+          default: rascunho,
+        }
+
+  # --------------------------------------------------------------- blog
+  - name: escritos
+    label: Blog
+    label_singular: Texto
+    folder: content/escritos
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: titulo
+    summary: "{{titulo}}"
+    sortable_fields: [data, titulo]
+    # A única coleção com pré-visualização: ela escreve, grava, e isso abre um
+    # pedido de integração no GitHub. A Vercel constrói esse pedido num
+    # endereço à parte, onde se vê o texto na página a sério antes de publicar.
+    # Nada disto chega ao site enquanto ela não carregar em publicar.
+    publish_mode: editorial_workflow
+    media_folder: /public/escrita
+    public_folder: /escrita
+    fields:
+      - { name: titulo, label: Título, widget: string }
+      - {
+          name: familia,
+          label: Família,
+          widget: select,
+          options: ["Artigo de opinião", "Texto original", "Paper"],
+          default: "Artigo de opinião",
+        }
+      - { name: data, label: Data, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - {
+          name: resumo,
+          label: Resumo,
+          widget: text,
+          hint: "Duas linhas. É o que sai no cartão e o que os motores de busca mostram.",
+        }
+      - {
+          name: imagem,
+          label: Imagem,
+          widget: image,
+          required: false,
+          hint: "Proporção 3:2, pelo menos 1200 px. Sem ela fica a ilustração do estúdio.",
+        }
+      - {
+          name: publicado,
+          label: Publicado em,
+          widget: string,
+          required: false,
+          hint: "O nome da revista ou do jornal, se saiu noutro sítio. Ex.: Marketeer",
+        }
+      - {
+          name: enderecoExterno,
+          label: Endereço externo,
+          widget: string,
+          required: false,
+          hint: "Preenchido, o cartão aponta para lá em vez de para uma página aqui.",
+        }
+      - {
+          name: estado,
+          label: Estado,
+          widget: select,
+          options: [rascunho, publicado],
+          default: rascunho,
+        }
+      - {
+          name: body,
+          label: Texto,
+          widget: markdown,
+          required: false,
+          hint: "Só para os textos que vivem aqui. Para os que saíram noutro sítio, deixa vazio.",
+        }
+
+  # ------------------------------------------------------------ ficheiros
+  - name: definicoes
+    label: Definições
+    files:
+      - name: ligacoes
+        label: Ligações externas
+        file: content/ligacoes.json
+        format: json
+        fields:
+          - name: ligacoes
+            label: Ligações
+            widget: list
+            fields:
+              - { name: nome, label: Nome, widget: string }
+              - {
+                  name: endereco,
+                  label: Endereço,
+                  widget: string,
+                  pattern: ['^https?://', "Tem de começar por https://"],
+                }
+              - name: onde
+                label: Onde aparece
+                widget: select
+                multiple: true
+                options:
+                  - { label: "Rodapé", value: rodape }
+                  - { label: "Menu do telemóvel", value: menu }
+                  - { label: 'Linha "Investigo"', value: investigo }
+                  - { label: 'Linha "Escrevo"', value: escrevo }
+              - { name: activa, label: Activa, widget: boolean, default: true }
+
+      - name: contacto
+        label: Informações de contacto
+        file: content/contacto.json
+        format: json
+        fields:
+          - {
+              name: email,
+              label: Email,
+              widget: string,
+              pattern: ['^[^@\s]+@[^@\s]+\.[^@\s]+$', "Isto não parece um email"],
+              hint: "Aparece na home, nas duas páginas legais e nas fichas de projeto. Nas legais é o contacto do responsável pelos dados, que o RGPD obriga a estar certo -- não pode ficar vazio.",
+            }
+          - {
+              name: telefone,
+              label: Telefone,
+              widget: string,
+              required: false,
+              hint: "Com indicativo. Ex.: +351 915 086 579",
+            }

@@ -20,6 +20,12 @@ const nextConfig: NextConfig = {
   redirects() {
     return [{ source: "/home", destination: "/", permanent: true }];
   },
+  /* O painel é um ficheiro estático em public/admin/index.html. O Next serve-o
+     nesse endereço exacto, mas não em /admin -- e /admin é o que se escreve.
+     Isto faz o endereço curto servir o ficheiro sem mudar de endereço. */
+  rewrites() {
+    return [{ source: "/admin", destination: "/admin/index.html" }];
+  },
 };
 
 export default nextConfig;
