@@ -15,7 +15,11 @@ backend:
   name: github
   repo: LauraUrbano/joana-web
   branch: main
-  # O cliente de OAuth é o próprio sítio: /api/auth e /api/auth/callback.
+  # O login é nosso: /api/auth serve uma página com palavra-passe e, quando
+  # certa, entrega a chave do GitHub que está guardada no servidor. O painel
+  # abre esse endereço numa janela e espera pela chave -- para ele, o que lá
+  # acontece dentro é indiferente. O botão continua a dizer "Sign In with
+  # GitHub" porque o nome vem da ferramenta; o que ele abre é o nosso login.
   base_url: https://www.joanadominguesdesign.pt
   auth_endpoint: api/auth
 

@@ -111,41 +111,99 @@ Hoje o endereço já vive num sítio só (`src/lib/contacto.ts`), à espera dist
 
 ---
 
-## Como se faz
+## Decidido
 
-**Recomendação: CMS sobre o próprio repositório** (Sveltia ou Decap).
+1. **Quem entra:** a Laura e a Joana, com uma palavra-passe partilhada. Mais
+   ninguém.
+2. **O blog publica com pré-visualização.** Gravar um texto não o põe no site:
+   abre um pedido de integração no GitHub, a Vercel constrói esse pedido num
+   endereço à parte, e vê-se o texto na página a sério antes de publicar. Os
+   projetos, as ligações e os contactos publicam directo.
+3. **O painel é o Sveltia CMS, sobre o próprio repositório.** Não custa nada,
+   não há servidor nem base de dados para manter, e cada alteração fica com
+   data, autor e histórico -- se alguém apagar um projeto sem querer,
+   recupera-se.
+4. **A migração está feita.** Os seis projetos, o artigo, as seis ligações e o
+   contacto já vivem em `content/`.
 
-- Um endereço `/admin` com login, e as alterações dela ficam gravadas no
-  GitHub como qualquer outra alteração. A Vercel reconstrói sozinha.
-- Não custa nada e não há servidor para manter.
-- Todas as alterações ficam com histórico e podem ser desfeitas — se ela
-  apagar um projeto sem querer, recupera-se.
-- O conteúdo continua a viver com o código: não há uma base de dados que
-  possa ficar inacessível e levar o site com ela.
+O Supabase não chegou a servir para nada: dava a base de dados, mas o painel
+ficava todo por construir.
 
-Alternativa, se ela vier a escrever muito e quiser uma biblioteca de imagens a
-sério: um CMS alojado (o Sanity tem plano gratuito que chega bem para isto). É
-melhor painel, mas é mais uma conta, mais uma dependência e o conteúdo passa a
-estar fora do repositório.
+## Como funciona, por dentro
 
-O Supabase não serve para isto: dava a base de dados, mas o painel ficava todo
-por construir — é o caminho mais trabalhoso e o que menos acrescenta a um
-portefólio.
+- O painel está em `public/admin/` -- `index.html` com a versão presa de
+  propósito (eles publicam versões novas quase todos os dias) e `config.yml`,
+  que é onde estão descritos os campos todos.
+- O painel corre no browser e, para escrever no repositório, precisa de uma
+  chave do GitHub. Essa chave está guardada no servidor, numa variável de
+  ambiente, e é entregue a quem acertar na palavra-passe: `/api/auth` serve a
+  página de login e devolve a chave à janela que a pediu.
+- O botão do painel continua a dizer "Sign In with GitHub" porque o nome vem da
+  ferramenta. O que ele abre é a nossa página de login.
 
-## O que ainda falta decidir
+## Falta fazer, e é contigo
 
-1. **Quem entra.** Só a Joana, ou a Laura também? (Muda a configuração do
-   acesso, não o modelo.)
-2. **Publica directo ou vê antes?** Para o blog recomendo rascunho →
-   pré-visualizar → publicar. Para os projetos, directo chega.
-3. **A migração dos seis projetos e do artigo** é um passo só, e faço-o eu —
-   os ficheiros `lib/` de hoje já são este esquema, campo a campo.
+Dois passos, uma vez só. Precisam do GitHub e do painel da Vercel.
+
+**1. Criar a chave do repositório.**
+Em <https://github.com/settings/personal-access-tokens> → *Generate new token*
+(*fine-grained*):
+
+| Campo | Valor |
+| --- | --- |
+| Token name | Painel Joana Domingues |
+| Expiration | *No expiration*, ou a data que preferires -- quando expirar, o painel deixa de gravar até se pôr uma nova |
+| Repository access | *Only select repositories* → `LauraUrbano/joana-web` |
+| Contents | **Read and write** -- é o que grava o conteúdo |
+| Pull requests | **Read and write** -- é o que faz a pré-visualização do blog |
+
+Copia a chave: só aparece uma vez.
+
+**2. Pôr as duas variáveis na Vercel.**
+No projeto → *Settings* → *Environment Variables*, para *Production*:
+
+| Nome | Valor |
+| --- | --- |
+| `PAINEL_CHAVE_GITHUB` | a chave do passo 1 |
+| `PAINEL_SENHA` | a palavra-passe que vocês vão usar |
+
+A palavra-passe escolhem-na vocês. Que seja **uma frase longa**, não uma
+palavra: quatro ou cinco palavras seguidas valem mais do que oito caracteres
+com símbolos, e é mais fácil de dizer ao telefone.
+
+Depois de gravar é preciso **voltar a publicar** (*Deployments* → o último →
+*Redeploy*): as variáveis só entram numa construção nova.
+
+## Como se entra
+
+1. Abrir <https://www.joanadominguesdesign.pt/admin>
+2. Carregar em **"Sign In with GitHub"**
+3. Escrever a palavra-passe
+
+Nem contas do GitHub para a Joana, nem tokens para gerir.
+
+## O que isto implica, dito com todas as letras
+
+- **A chave é uma só.** Quem entrar com a palavra-passe certa fica com ela no
+  browser enquanto a sessão durar. É inevitável -- é o browser que fala com o
+  GitHub -- e é por isso que a chave é estreita: só este repositório, só
+  conteúdo e pedidos de integração. Não dá para apagar o repositório nem para
+  tocar em mais nada.
+- **Todas as alterações ficam assinadas pela conta dona da chave**, seja quem
+  for que as fez. Para duas pessoas que trabalham juntas, serve. Se um dia for
+  preciso saber quem fez o quê, passa-se ao login por conta do GitHub, que é
+  mais seguro e que já esteve construído.
+- **Trocar a palavra-passe** é mudar a variável na Vercel e voltar a publicar.
+  Se a chave andar por onde não devia, revoga-se no GitHub e gera-se outra.
+- A palavra-passe está ao lado da chave nas variáveis da Vercel. Guardá-la
+  cifrada protegeria pouco: quem conseguisse lê-las levava a chave na mesma. O
+  que interessa é ser longa e não andar a passear por conversas.
 
 ## Ordem de trabalhos
 
-| Fase | O quê | Depende de |
+| Fase | O quê | Estado |
 | --- | --- | --- |
-| 0 | Este mapa validado | a Laura |
-| 1 | CMS com os três tipos, imagens optimizadas no carregamento, migração do que existe | fase 0 |
-| 2 | Página de artigo (moldura "Artigo" do Figma) + dados estruturados | fase 1 |
-| 3 | Títulos, descrições e palavras-chave por página | validação da procura (Keyword Planner / Search Console) |
+| 0 | Mapa de conteúdos validado | feito |
+| 1 | Conteúdo em ficheiros, painel, login | feito, à espera dos dois passos acima |
+| 2 | Página de artigo (moldura "Artigo" do Figma) + dados estruturados | a seguir |
+| 3 | Títulos, descrições e palavras-chave por página | depende da validação da procura |
