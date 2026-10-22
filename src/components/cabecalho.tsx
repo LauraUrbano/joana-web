@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import MenuTelemovel from "@/components/home/menu-telemovel";
 import Seta from "@/components/seta";
-import { REDES } from "@/lib/redes";
+import { lerRedes } from "@/lib/conteudo";
 import { ALVO, CAPS, GUTTER } from "@/lib/tipo";
 
 /** Os destinos do sítio, na ordem do ficheiro. */
@@ -64,7 +64,7 @@ export default function Cabecalho({ activo }: { activo?: string }) {
       </nav>
 
       <div className="md:hidden">
-        <MenuTelemovel destinos={[...DESTINOS]} redes={[...REDES]} />
+        <MenuTelemovel destinos={[...DESTINOS]} redes={lerRedes("menu")} />
       </div>
     </header>
   );

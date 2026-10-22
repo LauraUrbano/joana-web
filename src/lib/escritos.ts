@@ -6,8 +6,9 @@
  * artigo da marketeer, porque é a partir daí que consigo trabalhar SEO através
  * de conteúdos escritos por mim".
  *
- * Por agora há um texto só, o que ela publicou mesmo. Não invento os outros:
- * acrescentam-se aqui à medida que forem saindo, e a página cresce sozinha.
+ * Os textos vivem em `content/escritos/*.md` -- Markdown com cabeçalho, que é
+ * o que o painel escreve -- e são lidos por `lib/conteudo.ts`. Aqui ficam o
+ * tipo e as funções que também correm no browser.
  *
  * Quando um texto passar a viver no próprio sítio -- que é o que dá SEO a
  * sério, porque um artigo noutro domínio soma para esse domínio e não para o
@@ -30,31 +31,20 @@ export type Escrito = {
   publicado?: string;
   /** A ilustração do cartão. Sem imagem própria, fica a do ficheiro. */
   imagem?: string;
+  /** Rascunho não aparece em lado nenhum. */
+  estado?: "rascunho" | "publicado";
 };
-
-export const ESCRITOS: Escrito[] = [
-  {
-    titulo:
-      "A IA não está a substituir os designers. Está a mudar aquilo pelo qual somos responsáveis",
-    resumo:
-      "O que muda no trabalho de quem desenha quando a máquina passa a produzir forma depressa: a responsabilidade desloca-se da execução para o critério.",
-    familia: "Artigo de opinião",
-    data: "2026-10-17",
-    href: "https://marketeer.sapo.pt/a-ia-nao-esta-a-substituir-os-designers-esta-a-mudar-aquilo-pelo-qual-somos-responsaveis/",
-    publicado: "Marketeer",
-  },
-];
 
 /** A ilustração do ficheiro, para os cartões que ainda não têm a sua. */
 export const ILUSTRACAO_PADRAO = "/escrita/ilustracao-padrao.webp";
 
 /** Do mais recente para o mais antigo, que é como se lê uma lista destas. */
-export function porData(escritos: Escrito[] = ESCRITOS) {
+export function porData(escritos: Escrito[]) {
   return [...escritos].sort((a, b) => b.data.localeCompare(a.data));
 }
 
 /** As famílias que têm mesmo texto, pela ordem do ficheiro. */
-export function familiasComTexto(escritos: Escrito[] = ESCRITOS): Familia[] {
+export function familiasComTexto(escritos: Escrito[]): Familia[] {
   const ordem: Familia[] = ["Artigo de opinião", "Texto original", "Paper"];
   return ordem.filter((f) => escritos.some((e) => e.familia === f));
 }

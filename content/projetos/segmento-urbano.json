@@ -1,0 +1,18 @@
+{
+  "titulo": "Segmento Urbano",
+  "tipo": "Branding · Evento",
+  "ano": "2026",
+  "descricao": "Desenvolvimento de branding e criação de imagem para evento.",
+  "capa": "/home/projetos/segmento-urbano/1.webp",
+  "imagens": [
+    "/home/projetos/segmento-urbano/1.webp",
+    "/home/projetos/segmento-urbano/2.webp",
+    "/home/projetos/segmento-urbano/3.webp",
+    "/home/projetos/segmento-urbano/4.webp",
+    "/home/projetos/segmento-urbano/5.webp"
+  ],
+  "videos": [],
+  "naHome": true,
+  "ordem": 3,
+  "estado": "publicado"
+}

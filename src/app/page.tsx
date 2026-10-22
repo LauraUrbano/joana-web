@@ -9,8 +9,7 @@ import Capitulo from "@/components/home/capitulo";
 import MenuTelemovel from "@/components/home/menu-telemovel";
 import HeroFoco from "@/components/home/hero-foco";
 import Orbita, { type Peca } from "@/components/home/orbita";
-import { EM_PREPARACAO } from "@/lib/projetos";
-import { REDES } from "@/lib/redes";
+import { lerLigacoes, lerProjetos, lerRedes } from "@/lib/conteudo";
 import { SITIO } from "@/lib/sitio";
 import { ALVO, ALVO_CIMA, CAPS, GUTTER } from "@/lib/tipo";
 
@@ -61,37 +60,18 @@ const PERCURSOS = [
     // de colocar o artigo da marketeer".
     links: [
       { label: "Artigos", href: "/escrita" },
-      {
-        label: "Substack",
-        href: "https://substack.com/@joanadomingues",
-        externo: true,
-      },
     ],
+    ligacoes: "escrevo" as const,
   },
   {
     n: "02",
     titulo: "Investigo",
     corpo:
       "A minha investigação sobre design, agência projetual e inteligência artificial generativa.",
-    links: [
-      // O "saber mais" saiu a pedido dela: não levava a lado nenhum e os dois
-      // perfis a seguir já são o "saber mais".
-      // Os dois perfis de investigação dela. Vieram da Joana; limpei-os:
-      // o do ORCID vinha do painel dela (orcid.org/my-orcid?orcid=...), que
-      // só abre a quem tem sessão iniciada -- o público é o iD directo. O do
-      // Ciência Vitae vinha com uma barra a mais. Confirmei o ORCID na API
-      // pública: o registo é mesmo dela.
-      {
-        label: "ORCID",
-        href: "https://orcid.org/0009-0006-0013-609X",
-        externo: true,
-      },
-      {
-        label: "Ciência Vitae",
-        href: "https://www.cienciavitae.pt/pt/2E16-8DC8-2D22",
-        externo: true,
-      },
-    ],
+    // O "saber mais" saiu a pedido dela: não levava a lado nenhum e os dois
+    // perfis de investigação já são o "saber mais". Vêm do painel.
+    links: [],
+    ligacoes: "investigo" as const,
   },
   {
     n: "03",
@@ -99,6 +79,7 @@ const PERCURSOS = [
     titulo: "Um livro em curso",
     corpo: "Um livro em desenvolvimento, ainda a encontrar a sua forma.",
     links: [{ label: "Brevemente", href: "#percursos" }],
+    ligacoes: null,
   },
 ] as const;
 
@@ -145,23 +126,25 @@ const CAMPOS = [
  * os títulos foram lidos dos próprios mockups e os tipos de trabalho são
  * provisórios, à espera dos seis projetos reais.
  *
- * Vêm de `EM_PREPARACAO` para a cena e as páginas não divergirem, e cada uma
+ * Vêm do mesmo conteúdo das páginas, para a cena e elas não divergirem, e cada uma
  * leva para a sua página. Só entram as que estão marcadas com `naCena` e têm
  * imagem: os projetos reais que a Joana mandou ainda não têm fotografias, e um
  * cartão vazio numa órbita de fotografias seria um buraco, não uma peça.
  */
-const PECAS: Peca[] = EM_PREPARACAO.filter((p) => p.naCena && p.src).map(
-  (p) => ({
-    id: p.slug,
-    titulo: p.titulo,
-    tipo: p.tipo,
-    src: p.src as string,
-    w: p.w as number,
-    h: p.h as number,
-    href: `/projetos/${p.slug}`,
-    imagens: p.imagens,
-  })
-);
+function pecasDaCena(): Peca[] {
+  return lerProjetos()
+    .filter((p) => p.naCena && p.src)
+    .map((p) => ({
+      id: p.slug,
+      titulo: p.titulo,
+      tipo: p.tipo,
+      src: p.src as string,
+      w: p.w as number,
+      h: p.h as number,
+      href: `/projetos/${p.slug}`,
+      imagens: p.imagens,
+    }));
+}
 
 /**
  * A escala do telemóvel, tirada da moldura de 681 do ficheiro.
@@ -304,7 +287,7 @@ export default function HomePage() {
                   Entrar em contacto <Seta />
                 </a>
               </div>
-              <MenuTelemovel destinos={[...NAV]} redes={[...REDES]} />
+              <MenuTelemovel destinos={[...NAV]} redes={lerRedes("menu")} />
             </nav>
 
             <div
@@ -447,7 +430,7 @@ export default function HomePage() {
       </div>
 
       {/* ========================================================== projetos */}
-      <Orbita pecas={PECAS} />
+      <Orbita pecas={pecasDaCena()} />
 
       {/* ========================================================= percursos */}
       {/* "À medida que vamos fazendo scroll vão aparecendo os tópicos 1, 2 e 3."
@@ -490,8 +473,21 @@ export default function HomePage() {
                       {p.corpo}
                     </p>
                     <p className={`${TEL.antesDasLigacoes} flex flex-wrap gap-x-6 gap-y-2`}>
-                      {p.links.map((l) => {
-                        const externo = "externo" in l && l.externo;
+                      {[
+                        ...p.links.map((l) => ({
+                          label: l.label,
+                          href: l.href,
+                          externo: false,
+                        })),
+                        ...(p.ligacoes
+                          ? lerLigacoes(p.ligacoes).map((l) => ({
+                              label: l.nome,
+                              href: l.endereco,
+                              externo: true,
+                            }))
+                          : []),
+                      ].map((l) => {
+                        const externo = l.externo;
                         return (
                           <a
                             key={l.label}

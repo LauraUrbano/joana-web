@@ -5,7 +5,7 @@ import Cabecalho from "@/components/cabecalho";
 import Conversar from "@/components/conversar";
 import Rodape from "@/components/rodape";
 import Lista from "@/components/escrita/lista";
-import { ESCRITOS } from "@/lib/escritos";
+import { lerEscritos } from "@/lib/conteudo";
 import { ALVO, CAPS, GUTTER } from "@/lib/tipo";
 
 /**
@@ -66,7 +66,7 @@ export default function EscritaPage() {
         </p>
 
         <div className="pb-[clamp(3rem,7vw,7rem)]">
-          <Lista escritos={ESCRITOS} />
+          <Lista escritos={lerEscritos()} />
         </div>
       </div>
 

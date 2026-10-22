@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 
-import { REDES } from "@/lib/redes";
+import { lerRedes } from "@/lib/conteudo";
 
 /**
  * A página de espera.
@@ -103,7 +103,7 @@ export default function EmBreve() {
           style={{ "--atraso": 0.32 } as CSSProperties}
           className="flex flex-wrap gap-x-[clamp(1.5rem,6.75vw,7rem)] gap-y-3"
         >
-          {REDES.map((r) =>
+          {lerRedes().map((r) =>
             r.href ? (
               <a
                 key={r.nome}

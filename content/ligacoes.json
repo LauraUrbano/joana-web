@@ -1,0 +1,57 @@
+{
+  "ligacoes": [
+    {
+      "nome": "LinkedIn",
+      "endereco": "https://www.linkedin.com/in/jcmdomingues/",
+      "onde": [
+        "rodape",
+        "menu"
+      ],
+      "activa": true
+    },
+    {
+      "nome": "Substack",
+      "endereco": "https://substack.com/@joanadomingues",
+      "onde": [
+        "rodape",
+        "menu",
+        "escrevo"
+      ],
+      "activa": true
+    },
+    {
+      "nome": "Instagram",
+      "endereco": "https://www.instagram.com/joanadomingues.design/",
+      "onde": [
+        "rodape",
+        "menu"
+      ],
+      "activa": true
+    },
+    {
+      "nome": "WhatsApp",
+      "endereco": "https://wa.me/351915086579",
+      "onde": [
+        "rodape",
+        "menu"
+      ],
+      "activa": true
+    },
+    {
+      "nome": "ORCID",
+      "endereco": "https://orcid.org/0009-0006-0013-609X",
+      "onde": [
+        "investigo"
+      ],
+      "activa": true
+    },
+    {
+      "nome": "Ciência Vitae",
+      "endereco": "https://www.cienciavitae.pt/pt/2E16-8DC8-2D22",
+      "onde": [
+        "investigo"
+      ],
+      "activa": true
+    }
+  ]
+}

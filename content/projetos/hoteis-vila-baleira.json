@@ -1,0 +1,22 @@
+{
+  "titulo": "Hotéis Vila Baleira",
+  "tipo": "Marca · Arquitetura de marca · Comunicação",
+  "ano": "2024",
+  "descricao": "Criação de marca e arquitetura de marca, identidade visual e desenvolvimento de comunicação comercial, institucional e interna. Criação de materiais para eventos internos de grande escala, incluindo a Rota do Atum, o Paddle e a Latin Week.",
+  "capa": "/home/projetos/hoteis-vila-baleira/1.webp",
+  "imagens": [
+    "/home/projetos/hoteis-vila-baleira/1.webp",
+    "/home/projetos/hoteis-vila-baleira/2.webp",
+    "/home/projetos/hoteis-vila-baleira/3.webp",
+    "/home/projetos/hoteis-vila-baleira/4.webp"
+  ],
+  "videos": [
+    {
+      "src": "/home/projetos/hoteis-vila-baleira/video.mp4",
+      "poster": "/home/projetos/hoteis-vila-baleira/video-poster.webp"
+    }
+  ],
+  "naHome": true,
+  "ordem": 5,
+  "estado": "publicado"
+}

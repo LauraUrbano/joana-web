@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import PaginaLegal, { Acto } from "@/components/pagina-legal";
-import { EMAIL, EMAIL_HREF } from "@/lib/contacto";
+import { lerContacto } from "@/lib/conteudo";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade — Joana Domingues Design",
@@ -45,10 +45,10 @@ export default function PoliticaDePrivacidade() {
           de Portugal. Para qualquer questão sobre esta política ou sobre os
           seus dados:{" "}
           <a
-            href={EMAIL_HREF}
+            href={`mailto:${lerContacto().email}`}
             className="border-b border-clay/60 transition-opacity hover:opacity-60"
           >
-            {EMAIL}
+            {lerContacto().email}
           </a>
           .
         </p>
@@ -120,10 +120,10 @@ export default function PoliticaDePrivacidade() {
           opor-se ao tratamento feito com base em interesse legítimo. Basta
           escrever para{" "}
           <a
-            href={EMAIL_HREF}
+            href={`mailto:${lerContacto().email}`}
             className="border-b border-clay/60 transition-opacity hover:opacity-60"
           >
-            {EMAIL}
+            {lerContacto().email}
           </a>
           .
         </p>

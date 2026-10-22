@@ -1,6 +1,12 @@
 import type { Ramp } from "@/components/liquid-background";
 
 /**
+ * Os tipos dos projetos.
+ *
+ * Os dados deixaram de estar aqui: vivem em `content/projetos/*.json`, que é o
+ * que o painel escreve, e são lidos por `lib/conteudo.ts`. Aqui ficam só as
+ * formas, que é o que os componentes precisam de conhecer.
+ *
  * Projetos do portfólio.
  *
  * O nome de cada projeto vem partido em duas metades, `sans` e `serif`: é a
@@ -109,138 +115,4 @@ export type Preparacao = {
   videos?: { src: string; poster: string; w: number; h: number }[];
 };
 
-export const EM_PREPARACAO: Preparacao[] = [
-  {
-    slug: "authentic-studio-pilates",
-    titulo: "Authentic Studio Pilates",
-    tipo: "Marca · Identidade visual",
-    ano: "2024",
-    descricao:
-      "Criação de marca e identidade visual, com desenvolvimento de elementos de comunicação para o espaço, incluindo decoração e lonas.",
-    naCena: true,
-    src: "/home/projetos/authentic-studio-pilates/1.webp",
-    w: 1024,
-    h: 1123,
-    imagens: [
-      "/home/projetos/authentic-studio-pilates/1.webp",
-      "/home/projetos/authentic-studio-pilates/2.webp",
-      "/home/projetos/authentic-studio-pilates/3.webp",
-      "/home/projetos/authentic-studio-pilates/4.webp",
-      "/home/projetos/authentic-studio-pilates/5.webp",
-    ],
-  },
-  {
-    slug: "carla-rocha",
-    titulo: "Carla Rocha — Communication Training",
-    tipo: "Webapp · Marca · Comunicação",
-    ano: "2025",
-    descricao:
-      "Desenvolvimento de webapp com loja online e plataforma de cursos online. Desenvolvimento de materiais de marca e comunicação interna, pastas corporativas e imagem gráfica para webinars.",
-    naCena: true,
-    src: "/home/projetos/carla-rocha/1.webp",
-    w: 1174,
-    h: 1340,
-    imagens: [
-      "/home/projetos/carla-rocha/1.webp",
-      "/home/projetos/carla-rocha/2.webp",
-      "/home/projetos/carla-rocha/3.webp",
-      "/home/projetos/carla-rocha/4.webp",
-    ],
-  },
-  {
-    slug: "segmento-urbano",
-    titulo: "Segmento Urbano",
-    tipo: "Branding · Evento",
-    ano: "2026",
-    descricao:
-      "Desenvolvimento de branding e criação de imagem para evento.",
-    naCena: true,
-    src: "/home/projetos/segmento-urbano/1.webp",
-    w: 1271,
-    h: 1335,
-    imagens: [
-      "/home/projetos/segmento-urbano/1.webp",
-      "/home/projetos/segmento-urbano/2.webp",
-      "/home/projetos/segmento-urbano/3.webp",
-      "/home/projetos/segmento-urbano/4.webp",
-      "/home/projetos/segmento-urbano/5.webp",
-    ],
-  },
-  {
-    slug: "testbeds",
-    titulo: "Testbeds",
-    tipo: "Identidade visual · Evento",
-    ano: "2023",
-    descricao:
-      "Desenvolvimento de identidade visual para evento, com execução em tempo recorde.",
-    naCena: true,
-    videos: [
-      {
-        src: "/home/projetos/testbeds/video.mp4",
-        poster: "/home/projetos/testbeds/video-poster.webp",
-        w: 1600,
-        h: 900,
-      },
-    ],
-    src: "/home/projetos/testbeds/1.webp",
-    w: 1400,
-    h: 1050,
-    imagens: [
-      "/home/projetos/testbeds/1.webp",
-      "/home/projetos/testbeds/2.webp",
-      "/home/projetos/testbeds/3.webp",
-      "/home/projetos/testbeds/4.webp",
-      "/home/projetos/testbeds/5.webp",
-      "/home/projetos/testbeds/6.webp",
-    ],
-  },
-  {
-    slug: "hoteis-vila-baleira",
-    titulo: "Hotéis Vila Baleira",
-    tipo: "Marca · Arquitetura de marca · Comunicação",
-    ano: "2024",
-    descricao:
-      "Criação de marca e arquitetura de marca, identidade visual e desenvolvimento de comunicação comercial, institucional e interna. Criação de materiais para eventos internos de grande escala, incluindo a Rota do Atum, o Paddle e a Latin Week.",
-    naCena: true,
-    videos: [
-      {
-        src: "/home/projetos/hoteis-vila-baleira/video.mp4",
-        poster: "/home/projetos/hoteis-vila-baleira/video-poster.webp",
-        w: 1920,
-        h: 1080,
-      },
-    ],
-    src: "/home/projetos/hoteis-vila-baleira/1.webp",
-    w: 1400,
-    h: 933,
-    imagens: [
-      "/home/projetos/hoteis-vila-baleira/1.webp",
-      "/home/projetos/hoteis-vila-baleira/2.webp",
-      "/home/projetos/hoteis-vila-baleira/3.webp",
-      "/home/projetos/hoteis-vila-baleira/4.webp",
-    ],
-  },
-  {
-    slug: "sonae",
-    titulo: "Sonae — Education Innovators Forum",
-    tipo: "Identidade de evento · Comunicação",
-    ano: "2023",
-    naCena: true,
-    src: "/home/projetos/sonae/1.webp",
-    w: 1400,
-    h: 1050,
-    imagens: [
-      "/home/projetos/sonae/1.webp",
-      "/home/projetos/sonae/2.webp",
-      "/home/projetos/sonae/3.webp",
-      "/home/projetos/sonae/4.webp",
-      "/home/projetos/sonae/5.webp",
-      "/home/projetos/sonae/6.webp",
-      "/home/projetos/sonae/7.webp",
-    ],
-  },
-];
 
-export function getPreparacao(slug: string) {
-  return EM_PREPARACAO.find((p) => p.slug === slug);
-}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { REDES } from "@/lib/redes";
+import { lerRedes } from "@/lib/conteudo";
 import { ALVO, CAPS, GUTTER } from "@/lib/tipo";
 
 /**
@@ -24,7 +24,7 @@ export default function Rodape() {
           className="h-auto w-[clamp(7rem,13.8vw,14.5rem)]"
         />
         <nav className="flex flex-wrap gap-x-[clamp(1.5rem,3.2vw,3.5rem)] gap-y-3">
-          {REDES.map((r) =>
+          {lerRedes().map((r) =>
             r.href ? (
               <a
                 key={r.nome}

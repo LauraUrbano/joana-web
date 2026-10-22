@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import Seta from "@/components/seta";
-import { EMAIL_HREF } from "@/lib/contacto";
+import { lerContacto } from "@/lib/conteudo";
 import { ALVO_CIMA, CAPS, GUTTER } from "@/lib/tipo";
 
 /**
@@ -29,7 +29,7 @@ export default function Conversar() {
           Disponível para novos projetos e colaborações em design e comunicação.
         </p>
         <a
-          href={EMAIL_HREF}
+          href={`mailto:${lerContacto().email}`}
           className={`${CAPS} ${ALVO_CIMA} mt-[clamp(1.75rem,3.5vw,3.5rem)] inline-flex items-center gap-3 border-b border-paper pb-1 text-paper transition-opacity hover:opacity-70`}
         >
           Entrar em contacto <Seta />

@@ -8,16 +8,11 @@ import { Arrow, Pill, SectionLabel } from "@/components/home/primitives";
 import { GridArt, Swatches } from "@/components/projeto/bits";
 import EmPreparacao from "@/components/projeto/em-preparacao";
 import CaseMotion from "@/components/projeto/motion";
-import { EMAIL } from "@/lib/contacto";
-import {
-  EM_PREPARACAO,
-  PROJETOS,
-  getPreparacao,
-  getProjeto,
-} from "@/lib/projetos";
+import { lerContacto, lerProjetos } from "@/lib/conteudo";
+import { PROJETOS, getProjeto } from "@/lib/projetos";
 
 export function generateStaticParams() {
-  return [...PROJETOS, ...EM_PREPARACAO].map((p) => ({ slug: p.slug }));
+  return [...PROJETOS, ...lerProjetos()].map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata(
@@ -29,7 +24,7 @@ export async function generateMetadata(
      este, cada página de projeto dizia que a sua versão canónica era a home. */
   const canonico = { canonical: `/projetos/${slug}` };
   if (!projeto) {
-    const peca = getPreparacao(slug);
+    const peca = lerProjetos().find((p) => p.slug === slug);
     const titulo = peca
       ? `${peca.titulo} — Joana Domingues`
       : "Projeto — Joana Domingues";
@@ -83,8 +78,8 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
   const projeto = getProjeto(slug);
   if (!projeto) {
     // Peça sem caso escrito: mostra-se o que se sabe, em vez de 404 ou de
-    // texto inventado. Ver a nota em `EM_PREPARACAO`.
-    const peca = getPreparacao(slug);
+    // texto inventado. Ver a nota em `lib/projetos.ts`.
+    const peca = lerProjetos().find((p) => p.slug === slug);
     if (!peca) notFound();
     return <EmPreparacao peca={peca} />;
   }
@@ -378,7 +373,7 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
           <div>
             <SectionLabel className="text-paper">Contacto</SectionLabel>
             <ul className="mt-3 grid gap-1.5 text-xs opacity-60">
-              <li>{EMAIL}</li>
+              <li>{lerContacto().email}</li>
               <li>LinkedIn</li>
               <li>Instagram</li>
               <li>ORCID</li>

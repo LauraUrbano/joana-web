@@ -12,14 +12,5 @@
  */
 export type Rede = { nome: string; href: string | null };
 
-export const REDES: Rede[] = [
-  { nome: "LinkedIn", href: "https://www.linkedin.com/in/jcmdomingues/" },
-  { nome: "Substack", href: "https://substack.com/@joanadomingues" },
-  {
-    nome: "Instagram",
-    href: "https://www.instagram.com/joanadomingues.design/",
-  },
-  // +351 915 086 579. O wa.me quer o indicativo colado ao número, sem o mais
-  // e sem espaços; abre a conversa na aplicação ou no WhatsApp Web.
-  { nome: "WhatsApp", href: "https://wa.me/351915086579" },
-];
+/* Os endereços estão em `content/ligacoes.json`, que é o que o painel
+   escreve. `lib/conteudo.ts` lê-os e devolve-os nesta forma. */

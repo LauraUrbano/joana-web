@@ -1,0 +1,17 @@
+{
+  "titulo": "Carla Rocha — Communication Training",
+  "tipo": "Webapp · Marca · Comunicação",
+  "ano": "2025",
+  "descricao": "Desenvolvimento de webapp com loja online e plataforma de cursos online. Desenvolvimento de materiais de marca e comunicação interna, pastas corporativas e imagem gráfica para webinars.",
+  "capa": "/home/projetos/carla-rocha/1.webp",
+  "imagens": [
+    "/home/projetos/carla-rocha/1.webp",
+    "/home/projetos/carla-rocha/2.webp",
+    "/home/projetos/carla-rocha/3.webp",
+    "/home/projetos/carla-rocha/4.webp"
+  ],
+  "videos": [],
+  "naHome": true,
+  "ordem": 2,
+  "estado": "publicado"
+}

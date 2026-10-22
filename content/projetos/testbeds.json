@@ -1,0 +1,24 @@
+{
+  "titulo": "Testbeds",
+  "tipo": "Identidade visual · Evento",
+  "ano": "2023",
+  "descricao": "Desenvolvimento de identidade visual para evento, com execução em tempo recorde.",
+  "capa": "/home/projetos/testbeds/1.webp",
+  "imagens": [
+    "/home/projetos/testbeds/1.webp",
+    "/home/projetos/testbeds/2.webp",
+    "/home/projetos/testbeds/3.webp",
+    "/home/projetos/testbeds/4.webp",
+    "/home/projetos/testbeds/5.webp",
+    "/home/projetos/testbeds/6.webp"
+  ],
+  "videos": [
+    {
+      "src": "/home/projetos/testbeds/video.mp4",
+      "poster": "/home/projetos/testbeds/video-poster.webp"
+    }
+  ],
+  "naHome": true,
+  "ordem": 4,
+  "estado": "publicado"
+}
