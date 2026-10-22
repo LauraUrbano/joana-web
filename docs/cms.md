@@ -183,6 +183,15 @@ que passa a mandar.
 
 Nem contas do GitHub para a Joana, nem tokens para gerir.
 
+**Entretanto, sem a variável na Vercel**, entra-se pelo outro botão do painel,
+**"Sign In Using Access Token"**: cada pessoa cria a sua chave em
+<https://github.com/settings/tokens/new?scopes=repo&description=Painel+Joana+Domingues>
+e cola-a ali. Exige conta do GitHub e convite para o repositório, e é por isso
+que não é o caminho final -- mas grava hoje, sem esperar por ninguém.
+
+Há um guia escrito para a Joana, com os dois caminhos passo a passo:
+<https://claude.ai/artifact/WQUr4hCQRr1fBWBwXN7oxN>
+
 ## O que isto implica, dito com todas as letras
 
 - **A chave é uma só.** Quem entrar com a palavra-passe certa fica com ela no
