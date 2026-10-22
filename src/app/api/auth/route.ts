@@ -35,6 +35,10 @@ import { SENHA_IMPRESSAO } from "@/lib/painel";
  */
 
 export async function GET() {
+  // Sem a chave no servidor, pedir a palavra-passe era mandar alguém a um beco:
+  // acertava e, no fim, levava com um erro. Mais vale dizê-lo à entrada e
+  // apontar o caminho que funciona sem servidor nenhum.
+  if (!process.env.PAINEL_CHAVE_GITHUB) return paginaSemChave();
   return paginaDeEntrada();
 }
 
@@ -135,6 +139,20 @@ function moldura(corpo: string, estado = 200) {
         "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'self'",
     },
   });
+}
+
+/** Quando ainda não há chave no servidor. */
+function paginaSemChave() {
+  return moldura(
+    `<h1>Ainda falta um passo</h1>
+     <p>A chave do repositório ainda não está no servidor, por isso esta
+     palavra-passe ainda não abre nada.</p>
+     <p>Entretanto dá para entrar pelo outro botão do painel,
+     <strong>"Sign In Using Access Token"</strong>, que não passa por aqui:
+     gera-se uma chave no GitHub e cola-se lá.</p>
+     <p>Fecha esta janela e usa esse botão.</p>`,
+    503
+  );
 }
 
 function paginaDeEntrada(erro?: string) {
