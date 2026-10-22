@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { timingSafeEqual } from "node:crypto";
+import { scryptSync, timingSafeEqual } from "node:crypto";
+
+import { SENHA_IMPRESSAO } from "@/lib/painel";
 
 /**
  * O login do painel.
@@ -25,10 +27,11 @@ import { timingSafeEqual } from "node:crypto";
  *   pedidos de integração.
  * - Todas as alterações ficam assinadas pela conta dona da chave, seja quem
  *   for que as fez. Para duas pessoas que trabalham juntas, serve.
- * - A palavra-passe está em `PAINEL_SENHA`, ao lado da chave. Guardá-la
- *   cifrada protegeria pouco: quem conseguisse ler as variáveis já levava a
- *   chave na mesma. O que interessa é ser longa e não andar a passear por
- *   conversas.
+ * - A palavra-passe não precisa de variável nenhuma: vive no repositório como
+ *   impressão digital (`lib/painel.ts`), que é uma conta que só anda para a
+ *   frente -- confirma-se, não se descobre. Assim só há uma coisa para
+ *   configurar na Vercel, que é a chave. Quem quiser trocar a palavra-passe
+ *   sem mexer no código põe `PAINEL_SENHA` nas variáveis, e é essa que manda.
  */
 
 export async function GET() {
@@ -42,11 +45,10 @@ export async function POST(req: NextRequest) {
     return paginaDeEntrada("Pedido vindo de fora. Tenta outra vez.");
   }
 
-  const senhaCerta = process.env.PAINEL_SENHA;
   const chave = process.env.PAINEL_CHAVE_GITHUB;
-  if (!senhaCerta || !chave) {
+  if (!chave) {
     return paginaDeEntrada(
-      "O painel ainda não está configurado no servidor: faltam as variáveis PAINEL_SENHA e PAINEL_CHAVE_GITHUB."
+      "O painel ainda não tem a chave do repositório: falta a variável PAINEL_CHAVE_GITHUB na Vercel."
     );
   }
 
@@ -57,11 +59,30 @@ export async function POST(req: NextRequest) {
   // um ataque por força bruta impraticável numa palavra-passe longa.
   await new Promise((r) => setTimeout(r, 1000));
 
-  if (!igual(tentativa, senhaCerta)) {
+  if (!senhaCerta(tentativa)) {
     return paginaDeEntrada("Palavra-passe errada.");
   }
 
   return paginaDeChave(chave);
+}
+
+/**
+ * Confere a palavra-passe: contra a variável de ambiente, se existir, e senão
+ * contra a impressão digital que está no repositório.
+ */
+function senhaCerta(tentativa: string) {
+  const porVariavel = process.env.PAINEL_SENHA;
+  if (porVariavel) return igual(tentativa, porVariavel);
+
+  const [tipo, sal, impressao] = SENHA_IMPRESSAO.split(":");
+  if (tipo !== "scrypt" || !sal || !impressao) return false;
+
+  const calculada = scryptSync(
+    tentativa,
+    Buffer.from(sal, "hex"),
+    impressao.length / 2
+  );
+  return igual(calculada.toString("hex"), impressao);
 }
 
 /** Comparação de tempo constante: não deixa adivinhar a senha pelo relógio. */

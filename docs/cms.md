@@ -159,20 +159,21 @@ Em <https://github.com/settings/personal-access-tokens> → *Generate new token*
 
 Copia a chave: só aparece uma vez.
 
-**2. Pôr as duas variáveis na Vercel.**
+**2. Pôr **uma** variável na Vercel.**
 No projeto → *Settings* → *Environment Variables*, para *Production*:
 
 | Nome | Valor |
 | --- | --- |
 | `PAINEL_CHAVE_GITHUB` | a chave do passo 1 |
-| `PAINEL_SENHA` | a palavra-passe que vocês vão usar |
-
-A palavra-passe escolhem-na vocês. Que seja **uma frase longa**, não uma
-palavra: quatro ou cinco palavras seguidas valem mais do que oito caracteres
-com símbolos, e é mais fácil de dizer ao telefone.
 
 Depois de gravar é preciso **voltar a publicar** (*Deployments* → o último →
 *Redeploy*): as variáveis só entram numa construção nova.
+
+**A palavra-passe não precisa de variável.** Vive no repositório como
+impressão digital de scrypt (`src/lib/painel.ts`) -- uma conta que só anda para
+a frente: confirma se uma palavra-passe está certa, mas não a revela. Para
+trocar sem mexer no código, acrescenta-se `PAINEL_SENHA` às variáveis e é essa
+que passa a mandar.
 
 ## Como se entra
 
@@ -193,11 +194,13 @@ Nem contas do GitHub para a Joana, nem tokens para gerir.
   for que as fez. Para duas pessoas que trabalham juntas, serve. Se um dia for
   preciso saber quem fez o quê, passa-se ao login por conta do GitHub, que é
   mais seguro e que já esteve construído.
-- **Trocar a palavra-passe** é mudar a variável na Vercel e voltar a publicar.
-  Se a chave andar por onde não devia, revoga-se no GitHub e gera-se outra.
-- A palavra-passe está ao lado da chave nas variáveis da Vercel. Guardá-la
-  cifrada protegeria pouco: quem conseguisse lê-las levava a chave na mesma. O
-  que interessa é ser longa e não andar a passear por conversas.
+- **Trocar a palavra-passe**: pôr `PAINEL_SENHA` nas variáveis da Vercel, ou
+  pedir-me para gerar outra impressão. Se a chave andar por onde não devia,
+  revoga-se no GitHub e gera-se outra -- o painel volta a funcionar assim que a
+  nova estiver na Vercel.
+- A palavra-passe em si não está escrita em lado nenhum do repositório: o que
+  lá está é a impressão digital dela. Mesmo quem leia o código todo não a
+  descobre.
 
 ## Ordem de trabalhos
 
