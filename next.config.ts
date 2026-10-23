@@ -26,6 +26,23 @@ const nextConfig: NextConfig = {
   rewrites() {
     return [{ source: "/admin", destination: "/admin/index.html" }];
   },
+  /* O mesmo código está publicado duas vezes: no domínio dela, e em
+     joana-painel.vercel.app, que existe só para guardar a chave do painel. Uma
+     cópia do sítio inteiro noutro endereço é um problema para os motores de
+     busca -- duas páginas iguais a competir uma com a outra. As etiquetas
+     canónicas já apontam todas para o domínio dela (NEXT_PUBLIC_SITE_URL está
+     definida nesse projeto), e isto fecha a porta de vez: tudo o que for
+     servido por um endereço .vercel.app diz "não indexes". O domínio dela não
+     é apanhado por isto. */
+  headers() {
+    return [
+      {
+        source: "/:caminho*",
+        has: [{ type: "host", value: ".*\\.vercel\\.app" }],
+        headers: [{ key: "x-robots-tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -20,7 +20,16 @@ backend:
   # abre esse endereço numa janela e espera pela chave -- para ele, o que lá
   # acontece dentro é indiferente. O botão continua a dizer "Sign In with
   # GitHub" porque o nome vem da ferramenta; o que ele abre é o nosso login.
-  base_url: https://www.joanadominguesdesign.pt
+  #
+  # Porque é que isto aponta para outro endereço e não para o do sítio: a chave
+  # do GitHub tem de estar numa variável de ambiente, e o projeto da Vercel que
+  # serve joanadominguesdesign.pt está numa conta a que não chegamos. O
+  # `joana-painel` é este mesmo código publicado na conta da Laura, e existe só
+  # para isto: é onde a chave vive. A janela do login pode vir de outro domínio
+  # sem problema -- a conversa entre as duas janelas é por `postMessage`, que é
+  # feito para atravessar domínios. Quando a variável puder ir para o projeto
+  # do sítio, isto volta a ser o domínio dela e o outro projeto apaga-se.
+  base_url: https://joana-painel.vercel.app
   auth_endpoint: api/auth
 
 # Por omissão publica directo. O blog é a excepção e está mais abaixo.

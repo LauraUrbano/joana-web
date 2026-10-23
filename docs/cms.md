@@ -143,7 +143,17 @@ ficava todo por construir.
 
 ## Falta fazer, e é contigo
 
-Dois passos, uma vez só. Precisam do GitHub e do painel da Vercel.
+Dois passos, uma vez só, os dois em contas a que chegas. Feitos estes, entra-se
+no painel com uma palavra-passe e nunca mais se fala de chaves.
+
+O projeto da Vercel que serve `joanadominguesdesign.pt` está numa conta a que
+não chegamos -- a conta que a Laura tem ligada só vê `lauraurbano30-7380's
+projects`, e o `joana-web` não está lá. Para não ficar tudo à espera disso,
+criei o projeto **`joana-painel`** na conta dela: é este mesmo código, publicado
+noutro endereço, e existe só para guardar a chave e servir a página de entrada.
+O painel do sítio vai lá buscá-la (`base_url` no `config.yml`). Se um dia
+aparecer quem tem a conta do sítio, a variável passa para lá, o `base_url` volta
+ao domínio dela e este projeto apaga-se num clique.
 
 **1. Criar a chave do repositório.**
 Em <https://github.com/settings/personal-access-tokens> → *Generate new token*
@@ -159,15 +169,22 @@ Em <https://github.com/settings/personal-access-tokens> → *Generate new token*
 
 Copia a chave: só aparece uma vez.
 
-**2. Pôr **uma** variável na Vercel.**
-No projeto → *Settings* → *Environment Variables*, para *Production*:
+**2. Pôr **uma** variável na Vercel, no `joana-painel`.**
+<https://vercel.com/lauraurbano30-7380s-projects/joana-painel/settings/environment-variables>
 
-| Nome | Valor |
-| --- | --- |
-| `PAINEL_CHAVE_GITHUB` | a chave do passo 1 |
+| Nome | Valor | Ambiente |
+| --- | --- | --- |
+| `PAINEL_CHAVE_GITHUB` | a chave do passo 1 | *Production* |
 
 Depois de gravar é preciso **voltar a publicar** (*Deployments* → o último →
-*Redeploy*): as variáveis só entram numa construção nova.
+*Redeploy*): as variáveis só entram numa construção nova. Ou dizer-me, que eu
+faço o redeploy daqui.
+
+A outra variável desse projeto já está posta: `NEXT_PUBLIC_SITE_URL` aponta
+para o domínio dela, para que os endereços canónicos da cópia continuem a
+apontar ao sítio a sério. As pré-visualizações estão desligadas nesse projeto, e
+tudo o que for servido por um `.vercel.app` leva `x-robots-tag: noindex` -- a
+cópia não compete com o sítio no Google.
 
 **A palavra-passe não precisa de variável.** Vive no repositório como
 impressão digital de scrypt (`src/lib/painel.ts`) -- uma conta que só anda para
@@ -183,11 +200,13 @@ que passa a mandar.
 
 Nem contas do GitHub para a Joana, nem tokens para gerir.
 
-**Entretanto, sem a variável na Vercel**, entra-se pelo outro botão do painel,
-**"Sign In Using Access Token"**: cada pessoa cria a sua chave em
+**Enquanto a variável não estiver posta**, a página de entrada diz logo que
+falta um passo, e dá para entrar pelo outro botão do painel, **"Sign In Using
+Access Token"**: cada pessoa cria a sua chave em
 <https://github.com/settings/tokens/new?scopes=repo&description=Painel+Joana+Domingues>
 e cola-a ali. Exige conta do GitHub e convite para o repositório, e é por isso
-que não é o caminho final -- mas grava hoje, sem esperar por ninguém.
+que não é o caminho final -- é só a rede, para o caso de ser preciso gravar algo
+antes de a chave estar no servidor.
 
 Há um guia escrito para a Joana, com os dois caminhos passo a passo:
 <https://claude.ai/artifact/WQUr4hCQRr1fBWBwXN7oxN>

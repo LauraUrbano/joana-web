@@ -43,9 +43,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  // Só aceita o formulário que serve daqui.
+  // Só aceita o formulário que serve daqui. Compara-se o anfitrião e não a
+  // origem inteira: atrás do proxy da Vercel, o `req.url` pode vir em `http`
+  // enquanto o browser diz `https`, e aí uma comparação de origens recusava o
+  // login legítimo -- foi o que aconteceu no teste.
   const origem = req.headers.get("origin");
-  if (origem && origem !== new URL(req.url).origin) {
+  if (origem && anfitriao(origem) !== req.headers.get("host")) {
     return paginaDeEntrada("Pedido vindo de fora. Tenta outra vez.");
   }
 
@@ -68,6 +71,15 @@ export async function POST(req: NextRequest) {
   }
 
   return paginaDeChave(chave);
+}
+
+/** O anfitrião de um endereço, ou nada se o endereço não se ler. */
+function anfitriao(endereco: string) {
+  try {
+    return new URL(endereco).host;
+  } catch {
+    return null;
+  }
 }
 
 /**
