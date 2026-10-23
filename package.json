@@ -6,9 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "painel:migrar": "node --env-file-if-exists=.env.local scripts/painel-migrar.mjs"
   },
   "dependencies": {
+    "@neon/config": "^1.9.3",
+    "@neon/env": "^1.6.4",
+    "@neondatabase/auth": "^0.6.0-beta",
+    "@neondatabase/serverless": "^1.2.0",
     "gray-matter": "^4.0.3",
     "lenis": "^1.1.18",
     "next": "16.4.2",
