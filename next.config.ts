@@ -18,35 +18,24 @@ const nextConfig: NextConfig = {
      sistema de ficheiros, e um padrão apanhava também as fotografias todas,
      que vivem em /public/home. */
   redirects() {
-    return [{ source: "/home", destination: "/", permanent: true }];
+    return [
+      { source: "/home", destination: "/", permanent: true },
+      /* O painel esteve em /admin, que era a ferramenta de fora. Agora o
+         conteúdo edita-se no próprio sítio e esse endereço não serve nada --
+         mas está em marcadores e em conversas, por isso leva ao painel em vez
+         de dar um erro. Temporário (307): se um dia /admin voltar a ser outra
+         coisa, não fica preso no histórico dos browsers. */
+      { source: "/admin", destination: "/painel", permanent: false },
+      { source: "/admin/:caminho*", destination: "/painel", permanent: false },
+    ];
   },
-  /* O painel é um ficheiro estático em public/admin/index.html. O Next serve-o
-     nesse endereço exacto, mas não em /admin -- e /admin é o que se escreve.
-     Isto faz o endereço curto servir o ficheiro sem mudar de endereço. */
-  rewrites() {
-    return [{ source: "/admin", destination: "/admin/index.html" }];
-  },
-  /* O mesmo código está publicado duas vezes: no domínio dela, e em
-     joana-painel.vercel.app, que existe só para guardar a chave do painel. Uma
-     cópia do sítio inteiro noutro endereço é um problema para os motores de
-     busca -- duas páginas iguais a competir uma com a outra. As etiquetas
-     canónicas já apontam todas para o domínio dela (NEXT_PUBLIC_SITE_URL está
-     definida nesse projeto), e isto fecha a porta de vez: tudo o que for
-     servido por um endereço .vercel.app diz "não indexes". O domínio dela não
-     é apanhado por isto. */
+  /* O sítio responde também nos endereços `.vercel.app` que a Vercel dá a cada
+     projeto, e uma cópia do sítio inteiro noutro endereço é um problema para os
+     motores de busca: duas páginas iguais a competir uma com a outra. As
+     etiquetas canónicas já apontam todas para o domínio dela, e isto fecha a
+     porta de vez. O domínio dela não é apanhado por isto. */
   headers() {
     return [
-      /* O painel lê o `config.yml` ao abrir, e é esse ficheiro que lhe diz onde
-         fica a entrada. Quando mudei o `base_url`, a construção nova já trazia
-         o ficheiro certo e a rede da Vercel continuou a servir o antigo durante
-         minutos (`x-vercel-cache: HIT`, `age` de dois dias). Durante esse tempo
-         o painel mandaria as pessoas ao endereço errado. Isto diz à rede para
-         confirmar sempre: é um ficheiro de configuração lido uma vez por
-         sessão, não vale um cache. */
-      {
-        source: "/admin/:caminho*",
-        headers: [{ key: "cache-control", value: "no-cache" }],
-      },
       {
         source: "/:caminho*",
         has: [{ type: "host", value: ".*\\.vercel\\.app" }],

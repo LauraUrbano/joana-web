@@ -131,8 +131,8 @@ const CAMPOS = [
  * imagem: os projetos reais que a Joana mandou ainda não têm fotografias, e um
  * cartão vazio numa órbita de fotografias seria um buraco, não uma peça.
  */
-function pecasDaCena(): Peca[] {
-  return lerProjetos()
+async function pecasDaCena(): Promise<Peca[]> {
+  return (await lerProjetos())
     .filter((p) => p.naCena && p.src)
     .map((p) => ({
       id: p.slug,
@@ -197,7 +197,24 @@ const TEL = {
   antesDasLigacoes: "mt-[min(12.6vw,56px)] md:mt-[clamp(0.5rem,1.2vw,1.2rem)]",
 } as const;
 
-export default function HomePage() {
+/* O conteúdo vem da base de dados, por isso esta página não pode ser
+   construída uma vez e congelada: o Next guarda-a durante um minuto e
+   reconstrói-a depois, e as acções do painel mandam reconstruir mal se grave.
+   Assim uma alteração aparece no sítio logo a seguir, sem o custo de ir à base
+   de dados a cada visita. */
+export const revalidate = 60;
+
+export default async function HomePage() {
+  // Tudo o que o conteúdo precisa, de uma vez: as peças da cena, as redes do
+  // menu e as ligações das duas linhas dos percursos. São quatro leituras
+  // independentes, por isso vão juntas em vez de uma de cada vez.
+  const [pecas, redes, escrevo, investigo] = await Promise.all([
+    pecasDaCena(),
+    lerRedes("menu"),
+    lerLigacoes("escrevo"),
+    lerLigacoes("investigo"),
+  ]);
+  const ligacoesDaLinha = { escrevo, investigo } as const;
 
   return (
     <div className="min-h-dvh overflow-x-clip bg-sand">
@@ -287,7 +304,7 @@ export default function HomePage() {
                   Entrar em contacto <Seta />
                 </a>
               </div>
-              <MenuTelemovel destinos={[...NAV]} redes={lerRedes("menu")} />
+              <MenuTelemovel destinos={[...NAV]} redes={redes} />
             </nav>
 
             <div
@@ -430,7 +447,7 @@ export default function HomePage() {
       </div>
 
       {/* ========================================================== projetos */}
-      <Orbita pecas={pecasDaCena()} />
+      <Orbita pecas={pecas} />
 
       {/* ========================================================= percursos */}
       {/* "À medida que vamos fazendo scroll vão aparecendo os tópicos 1, 2 e 3."
@@ -480,7 +497,7 @@ export default function HomePage() {
                           externo: false,
                         })),
                         ...(p.ligacoes
-                          ? lerLigacoes(p.ligacoes).map((l) => ({
+                          ? ligacoesDaLinha[p.ligacoes].map((l) => ({
                               label: l.nome,
                               href: l.endereco,
                               externo: true,

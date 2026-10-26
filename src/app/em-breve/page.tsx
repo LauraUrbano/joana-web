@@ -35,7 +35,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/em-breve" },
 };
 
-export default function EmBreve() {
+/* O conteúdo vem da base de dados, por isso esta página não pode ser
+   construída uma vez e congelada: o Next guarda-a durante um minuto e
+   reconstrói-a depois, e as acções do painel mandam reconstruir mal se grave.
+   Assim uma alteração aparece no sítio logo a seguir, sem o custo de ir à base
+   de dados a cada visita. */
+export const revalidate = 60;
+
+export default async function EmBreve() {
+  const redes = await lerRedes();
   return (
     <main className="relative isolate flex min-h-svh flex-col justify-between overflow-hidden bg-olive">
       {/* A mesma parede de azeitona com sombras de folhas que fecha a /home.
@@ -103,7 +111,7 @@ export default function EmBreve() {
           style={{ "--atraso": 0.32 } as CSSProperties}
           className="flex flex-wrap gap-x-[clamp(1.5rem,6.75vw,7rem)] gap-y-3"
         >
-          {lerRedes().map((r) =>
+          {redes.map((r) =>
             r.href ? (
               <a
                 key={r.nome}

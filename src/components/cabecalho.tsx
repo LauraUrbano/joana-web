@@ -22,7 +22,8 @@ export const DESTINOS = [
  * o menu, que é o mesmo da home (a moldura estreita do ficheiro desta página
  * tem lá as duas linhas no canto, tal e qual).
  */
-export default function Cabecalho({ activo }: { activo?: string }) {
+export default async function Cabecalho({ activo }: { activo?: string }) {
+  const redes = await lerRedes("menu");
   return (
     <header
       className={`flex items-start justify-between gap-6 py-[clamp(1.5rem,3.9vw,4rem)] ${GUTTER}`}
@@ -64,7 +65,7 @@ export default function Cabecalho({ activo }: { activo?: string }) {
       </nav>
 
       <div className="md:hidden">
-        <MenuTelemovel destinos={[...DESTINOS]} redes={lerRedes("menu")} />
+        <MenuTelemovel destinos={[...DESTINOS]} redes={redes} />
       </div>
     </header>
   );

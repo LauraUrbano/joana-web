@@ -9,7 +9,7 @@
  *
  * As variáveis vêm do .env.local que o `neon deploy` escreve.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { neon } from "@neondatabase/serverless";
 
 const ligacao = process.env.DATABASE_URL;
@@ -21,22 +21,35 @@ if (!ligacao) {
 }
 
 const sql = neon(ligacao);
-const texto = readFileSync(new URL("../db/painel.sql", import.meta.url), "utf8");
+const pasta = new URL("../db/", import.meta.url);
 
-// O driver HTTP manda uma instrução por pedido, por isso o ficheiro é partido
-// aos pontos e vírgulas. Nenhuma destas instruções tem `;` lá dentro.
-const instrucoes = texto
-  .split(/;\s*$/m)
-  .map((i) => i.replace(/^\s*--.*$/gm, "").trim())
-  .filter(Boolean);
+for (const ficheiro of readdirSync(pasta).filter((f) => f.endsWith(".sql")).sort()) {
+  const texto = readFileSync(new URL(ficheiro, pasta), "utf8");
 
-for (const instrucao of instrucoes) {
-  const nome = instrucao.split("\n")[0].slice(0, 60);
-  await sql.query(instrucao);
-  console.log(`ok  ${nome}`);
+  // O driver HTTP manda uma instrução por pedido, por isso o ficheiro é partido
+  // aos pontos e vírgulas. Nenhuma destas instruções tem `;` lá dentro.
+  const instrucoes = texto
+    .split(/;\s*$/m)
+    .map((i) => i.replace(/^\s*--.*$/gm, "").trim())
+    .filter(Boolean);
+
+  console.log(`\n${ficheiro}`);
+  for (const instrucao of instrucoes) {
+    await sql.query(instrucao);
+    console.log(`  ok  ${instrucao.split("\n")[0].slice(0, 58)}`);
+  }
 }
 
-const [{ quantas }] = await sql.query(
-  "select count(*)::int as quantas from painel_pessoas"
-);
-console.log(`\nTabelas prontas. Pessoas com entrada: ${quantas}.`);
+const contas = async (tabela) =>
+  (await sql.query(`select count(*)::int as quantas from ${tabela}`))[0].quantas;
+
+console.log("\nTabelas prontas.");
+for (const t of [
+  "painel_pessoas",
+  "conteudo_projetos",
+  "conteudo_escritos",
+  "conteudo_ligacoes",
+  "conteudo_contacto",
+]) {
+  console.log(`  ${t.padEnd(20)} ${await contas(t)} linhas`);
+}

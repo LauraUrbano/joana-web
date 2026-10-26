@@ -41,13 +41,13 @@ export default async function Ajuda() {
       </header>
 
       <P>
-        Tudo o que se edita está em{" "}
-        <A href="https://www.joanadominguesdesign.pt/admin">
-          joanadominguesdesign.pt/admin
-        </A>
-        . Abre, carrega em <B>&quot;Sign In with GitHub&quot;</B> — apesar do
-        nome, o que abre é a nossa entrada — e escreve o teu email e a tua
-        palavra-passe.
+        Tudo se edita aqui dentro. Entras em{" "}
+        <A href="https://www.joanadominguesdesign.pt/painel">
+          joanadominguesdesign.pt/painel
+        </A>{" "}
+        com o teu email e a tua palavra-passe, e a página que abre já é o
+        conteúdo. Gravar escreve no sítio: a alteração aparece na visita
+        seguinte.
       </P>
 
       <H>O que se pode mudar</H>
@@ -58,24 +58,27 @@ export default async function Ajuda() {
       </P>
       <P>
         Os textos do desenho — a bio, os campos do &quot;Designer&quot;, as
-        linhas dos percursos, as frases de entrada — não estão aí de propósito:
-        vêm do ficheiro do Figma e mudam-se a pedido, para o desenho não se
-        desalinhar sem ninguém ver.
+        linhas dos percursos, as frases de entrada — não estão aqui de
+        propósito: vêm do ficheiro do Figma e mudam-se a pedido, para o desenho
+        não se desalinhar sem ninguém ver.
       </P>
 
-      <H>Nada se perde</H>
+      <H>Nada se perde de repente</H>
       <P>
-        Cada alteração fica gravada com data e autor, e desfaz-se. Se um projeto
-        for apagado por engano, recupera-se. Não há nenhum botão aqui que
-        estrague o site de forma definitiva — por isso vale a pena experimentar
-        sem medo.
+        Cada linha guarda quem a mudou e quando. E a base de dados inteira tem
+        uma janela de recuperação: se alguma coisa for apagada por engano,
+        volta-se atrás no tempo. Não é o mesmo que desfazer alteração a
+        alteração — para isso avisa, e trata-se.
+      </P>
+      <P>
+        Em dúvida, grava como <B>rascunho</B>: fica guardado, não aparece no
+        sítio, e publica-se quando estiver bom.
       </P>
 
       <H>Acrescentar ou mudar um projeto</H>
       <P>
-        <B>Projetos</B> → <I>New Projetos</I> para um novo, ou carregar num da
-        lista. Depois <B>Publish</B> → <I>Publish now</I>. Dois minutos depois
-        está no site.
+        Na lista de projetos, carrega no nome para mudar, ou em{" "}
+        <B>Novo projeto</B>. No fim, <B>Guardar</B>.
       </P>
       <Tabela
         cabecalho={["Campo", "O que lá vai"]}
@@ -83,38 +86,47 @@ export default async function Ajuda() {
           ["Título", "“Authentic Studio Pilates”"],
           [
             "Endereço",
-            "Nasce do título. Num projeto que já está no ar, não se muda — parte as ligações que andem por aí",
+            "A parte final do link da página. Num projeto que já está no ar, não se muda — parte as ligações que andem por aí",
           ],
           ["Tipo", "“Marca · Identidade visual”. Sai no cartão, em maiúsculas"],
-          ["Ano", "2023 a 2026"],
+          ["Ano", "2024"],
           ["Descrição", "Um a três parágrafos"],
-          ["Capa", "Quadrada, mínimo 1400×1400. É a que vai à órbita da home"],
-          ["Imagens", "A galeria da página. Mínimo 1600 de largura"],
-          ["Vídeos", "MP4, sempre com o poster — sem ele fica um buraco preto"],
-          ["Aparece na home", "Se entra na órbita e na tira do telemóvel"],
+          [
+            "Capa",
+            "O caminho da imagem quadrada. É a que vai à órbita da home e à tira do telemóvel",
+          ],
+          ["Imagens da página", "Um caminho por linha, pela ordem em que aparecem"],
+          [
+            "Vídeos",
+            "Um por linha: o MP4, uma barra vertical, e o cartaz. Sem cartaz fica um rectângulo preto a carregar",
+          ],
           ["Ordem", "A ordem na home, do menor para o maior. Não é a data"],
+          ["Aparece na home", "Se entra na órbita e na tira do telemóvel"],
           ["Estado", "Rascunho não aparece em lado nenhum, nem no Google"],
         ]}
       />
       <P>
-        <B>O ponto que costuma correr mal são as imagens.</B> Uma fotografia
-        tirada da câmara pesa 8 MB e faz o site demorar segundos a abrir no
-        telemóvel — uma página de projeto inteira, hoje, pesa menos do que isso.
-        Antes de carregar, reduz para 2000 px de largura. Se for mais simples,
-        manda-as à Laura, que converte.
+        <B>As imagens, por agora, são caminhos</B> — as que já lá estão vivem no
+        próprio sítio e foram convertidas à mão. Carregar ficheiros novos a
+        partir daqui é o passo seguinte; até lá, manda-as à Laura, que as
+        converte e te diz o caminho. Há uma razão para isso e não é preguiça:
+        uma fotografia da câmara pesa 8 MB e faz o site demorar segundos a abrir
+        no telemóvel — uma página de projeto inteira, hoje, pesa menos do que
+        isso.
       </P>
 
       <H>Escrever no blog</H>
       <P>
-        <B>Escritos</B>. A lista pública é a página{" "}
+        A lista pública é a página{" "}
         <A href="https://www.joanadominguesdesign.pt/escrita">/escrita</A>. Há
         dois tipos de texto, e a diferença conta:
       </P>
       <Lista>
         <li>
-          <B>Um texto que vive aqui</B> — escreve-se o corpo no painel e abre
-          uma página do próprio site. É o único que trabalha o teu SEO: o Google
-          dá o crédito ao domínio onde o texto está.
+          <B>Um texto que vive aqui</B> — escreve-se o corpo no campo{" "}
+          <I>Corpo</I> e o cartão abre uma página do próprio site. É o único que
+          trabalha o teu SEO: o Google dá o crédito ao domínio onde o texto
+          está.
         </li>
         <li>
           <B>Um texto publicado noutro sítio</B>, como o do Marketeer —
@@ -128,23 +140,21 @@ export default async function Ajuda() {
         a descrição que o Google mostra.
       </P>
       <P>
-        <B>O blog não publica directo.</B> Gravar um texto não o põe no site:
-        <I> Save</I> deixa-o em rascunho; arrastá-lo para <I>In review</I> faz
-        aparecer a ligação <I>Check for Preview</I>, com o texto na página a
-        sério, num endereço só teu; e só o <B>Publish</B> o põe no ar. Vê sempre
-        a pré-visualização antes.
+        Um texto só se publica com corpo ou com endereço externo — sem um dos
+        dois, o cartão não levaria a lado nenhum. Enquanto escreves, grava como
+        rascunho: aí não é exigido nada e não se perde o que já está escrito.
       </P>
 
       <H>Ligações e contactos</H>
       <P>
-        Estão em <B>Definições</B>, e publicam directo. Para esconder uma
-        ligação, desliga o interruptor <I>activa</I> — não é preciso apagá-la.
+        Estão no fim da página do conteúdo. Para esconder uma ligação, desliga
+        o <I>Activa</I> e grava — não é preciso apagá-la.
       </P>
       <P>
         O email aparece em <B>cinco sítios</B> do site e o telefone em três. Nas
         páginas legais não é decoração: é o contacto do responsável pelo
         tratamento de dados, que o RGPD obriga a estar lá e a estar certo.
-        Trocar sim; apagar sem pôr outro, não.
+        Trocar sim; apagar sem pôr outro, o painel recusa.
       </P>
 
       <H>Se alguma coisa correr mal</H>
@@ -153,11 +163,11 @@ export default async function Ajuda() {
         linhas={[
           [
             "Gravei e o site não mudou",
-            "Esperar dois minutos e recarregar com Ctrl+Shift+R (ou Cmd+Shift+R)",
+            "Recarregar com Ctrl+Shift+R (ou Cmd+Shift+R). Se o estado for rascunho, é isso: rascunho não aparece",
           ],
           [
             "Diz que não consegue gravar",
-            "A chave do repositório expirou. Avisa a Laura — é um minuto a pôr outra",
+            "Avisa a Laura: é a base de dados a não responder, e vê-se do lado dela",
           ],
           ["Pede-me para entrar outra vez", "Normal. A sessão caducou"],
           [
@@ -167,6 +177,10 @@ export default async function Ajuda() {
           [
             "A imagem ficou esticada",
             "A proporção não é a pedida: capa de projeto quadrada, imagem de texto 3:2",
+          ],
+          [
+            "Escrevi e perdi o que tinha escrito",
+            "Grava como rascunho primeiro. Um rascunho aceita tudo e guarda; a publicação é que exige",
           ],
           [
             "O site ficou lento no telemóvel",

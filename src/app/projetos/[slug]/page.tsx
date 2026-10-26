@@ -11,8 +11,15 @@ import CaseMotion from "@/components/projeto/motion";
 import { lerContacto, lerProjetos } from "@/lib/conteudo";
 import { PROJETOS, getProjeto } from "@/lib/projetos";
 
-export function generateStaticParams() {
-  return [...PROJETOS, ...lerProjetos()].map((p) => ({ slug: p.slug }));
+/* O conteúdo vem da base de dados, por isso esta página não pode ser
+   construída uma vez e congelada: o Next guarda-a durante um minuto e
+   reconstrói-a depois, e as acções do painel mandam reconstruir mal se grave.
+   Assim uma alteração aparece no sítio logo a seguir, sem o custo de ir à base
+   de dados a cada visita. */
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  return [...PROJETOS, ...(await lerProjetos())].map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata(
@@ -24,7 +31,7 @@ export async function generateMetadata(
      este, cada página de projeto dizia que a sua versão canónica era a home. */
   const canonico = { canonical: `/projetos/${slug}` };
   if (!projeto) {
-    const peca = lerProjetos().find((p) => p.slug === slug);
+    const peca = (await lerProjetos()).find((p) => p.slug === slug);
     const titulo = peca
       ? `${peca.titulo} — Joana Domingues`
       : "Projeto — Joana Domingues";
@@ -79,7 +86,7 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
   if (!projeto) {
     // Peça sem caso escrito: mostra-se o que se sabe, em vez de 404 ou de
     // texto inventado. Ver a nota em `lib/projetos.ts`.
-    const peca = lerProjetos().find((p) => p.slug === slug);
+    const peca = (await lerProjetos()).find((p) => p.slug === slug);
     if (!peca) notFound();
     return <EmPreparacao peca={peca} />;
   }
@@ -373,7 +380,7 @@ export default async function ProjetoPage(props: PageProps<"/projetos/[slug]">) 
           <div>
             <SectionLabel className="text-paper">Contacto</SectionLabel>
             <ul className="mt-3 grid gap-1.5 text-xs opacity-60">
-              <li>{lerContacto().email}</li>
+              <li>{(await lerContacto()).email}</li>
               <li>LinkedIn</li>
               <li>Instagram</li>
               <li>ORCID</li>

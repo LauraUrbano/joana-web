@@ -1,15 +1,14 @@
 /**
- * As leituras e escritas do painel: quem pode entrar, e a chave do GitHub.
+ * As leituras e escritas do painel: quem pode entrar.
  *
- * Todas as funções devolvem `null` quando não há base de dados configurada,
- * para que as páginas possam dizer isso em vez de estoirar -- o mesmo código
- * está publicado em dois sítios e só um tem as variáveis.
+ * A chave do GitHub esteve aqui, enquanto o conteúdo vivia em ficheiros e uma
+ * ferramenta de fora os escrevia. Já não existe nenhuma das duas coisas: o
+ * conteúdo está na base de dados e edita-se no painel.
+ *
+ * As funções devolvem `null` ou falso quando não há base de dados configurada,
+ * para que as páginas possam dizer isso em vez de estoirar.
  */
 import { base } from "@/lib/painel/neon";
-
-/** O nome com que a chave do GitHub está guardada. */
-const CHAVE = "chave_github";
-
 
 export type Pessoa = {
   email: string;
@@ -68,48 +67,4 @@ export async function tirarPessoa(email: string) {
     where lower(email) = lower(${email})
       and (select count(*) from painel_pessoas) > 1
   `;
-}
-
-/** A chave do GitHub, ou nada se ainda não foi guardada. */
-export async function chaveGithub() {
-  const sql = base();
-  if (!sql) return null;
-  const linhas = (await sql`
-    select valor from painel_segredos where nome = ${CHAVE} limit 1
-  `) as unknown as { valor: string }[];
-  return linhas[0]?.valor ?? null;
-}
-
-/** Quando foi posta e por quem, para a página mostrar sem revelar a chave. */
-export async function estadoDaChave() {
-  const sql = base();
-  if (!sql) return null;
-  const linhas = (await sql`
-    select actualizado_em, actualizado_por, length(valor) as tamanho
-    from painel_segredos where nome = ${CHAVE} limit 1
-  `) as unknown as {
-    actualizado_em: string;
-    actualizado_por: string | null;
-    tamanho: number;
-  }[];
-  return linhas[0] ?? null;
-}
-
-export async function guardarChave(valor: string, por: string) {
-  const sql = base();
-  if (!sql) return;
-  await sql`
-    insert into painel_segredos (nome, valor, actualizado_por)
-    values (${CHAVE}, ${valor}, ${por})
-    on conflict (nome) do update
-      set valor = excluded.valor,
-          actualizado_em = now(),
-          actualizado_por = excluded.actualizado_por
-  `;
-}
-
-export async function apagarChave() {
-  const sql = base();
-  if (!sql) return;
-  await sql`delete from painel_segredos where nome = ${CHAVE}`;
 }

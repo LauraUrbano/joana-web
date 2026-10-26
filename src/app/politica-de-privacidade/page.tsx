@@ -24,7 +24,15 @@ export const metadata: Metadata = {
  * Se algum dia entrar análise de tráfego, um formulário ou um vídeo
  * incorporado, esta página tem de ser revista no mesmo dia.
  */
-export default function PoliticaDePrivacidade() {
+/* O conteúdo vem da base de dados, por isso esta página não pode ser
+   construída uma vez e congelada: o Next guarda-a durante um minuto e
+   reconstrói-a depois, e as acções do painel mandam reconstruir mal se grave.
+   Assim uma alteração aparece no sítio logo a seguir, sem o custo de ir à base
+   de dados a cada visita. */
+export const revalidate = 60;
+
+export default async function PoliticaDePrivacidade() {
+  const contacto = await lerContacto();
   return (
     <PaginaLegal
       titulo="Política de Privacidade"
@@ -45,10 +53,10 @@ export default function PoliticaDePrivacidade() {
           de Portugal. Para qualquer questão sobre esta política ou sobre os
           seus dados:{" "}
           <a
-            href={`mailto:${lerContacto().email}`}
+            href={`mailto:${contacto.email}`}
             className="border-b border-clay/60 transition-opacity hover:opacity-60"
           >
-            {lerContacto().email}
+            {contacto.email}
           </a>
           .
         </p>
@@ -120,10 +128,10 @@ export default function PoliticaDePrivacidade() {
           opor-se ao tratamento feito com base em interesse legítimo. Basta
           escrever para{" "}
           <a
-            href={`mailto:${lerContacto().email}`}
+            href={`mailto:${contacto.email}`}
             className="border-b border-clay/60 transition-opacity hover:opacity-60"
           >
-            {lerContacto().email}
+            {contacto.email}
           </a>
           .
         </p>

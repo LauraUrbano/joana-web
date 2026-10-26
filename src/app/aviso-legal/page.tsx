@@ -21,7 +21,15 @@ export const metadata: Metadata = {
  * inventar dados de identificação de alguém é a última coisa a fazer numa
  * página destas. Quando a Joana as mandar, entram na primeira secção.
  */
-export default function AvisoLegal() {
+/* O conteúdo vem da base de dados, por isso esta página não pode ser
+   construída uma vez e congelada: o Next guarda-a durante um minuto e
+   reconstrói-a depois, e as acções do painel mandam reconstruir mal se grave.
+   Assim uma alteração aparece no sítio logo a seguir, sem o custo de ir à base
+   de dados a cada visita. */
+export const revalidate = 60;
+
+export default async function AvisoLegal() {
+  const contacto = await lerContacto();
   return (
     <PaginaLegal titulo="Aviso legal" atualizado="16 de outubro de 2026">
       <Acto titulo="Quem é responsável por este sítio">
@@ -33,10 +41,10 @@ export default function AvisoLegal() {
         <p>
           Para falar com ela:{" "}
           <a
-            href={`mailto:${lerContacto().email}`}
+            href={`mailto:${contacto.email}`}
             className="border-b border-clay/60 transition-opacity hover:opacity-60"
           >
-            {lerContacto().email}
+            {contacto.email}
           </a>{" "}
           ou{" "}
           <a

@@ -9,7 +9,8 @@ import { ALVO, CAPS, GUTTER } from "@/lib/tipo";
  * Igual em todas as páginas que o ficheiro desenha com rodapé -- a home e a da
  * escrita.
  */
-export default function Rodape() {
+export default async function Rodape() {
+  const redes = await lerRedes();
   return (
     <footer
       className={`bg-olive-deep pb-10 pt-[clamp(2.5rem,6vw,6.5rem)] text-paper ${GUTTER}`}
@@ -24,7 +25,7 @@ export default function Rodape() {
           className="h-auto w-[clamp(7rem,13.8vw,14.5rem)]"
         />
         <nav className="flex flex-wrap gap-x-[clamp(1.5rem,3.2vw,3.5rem)] gap-y-3">
-          {lerRedes().map((r) =>
+          {redes.map((r) =>
             r.href ? (
               <a
                 key={r.nome}

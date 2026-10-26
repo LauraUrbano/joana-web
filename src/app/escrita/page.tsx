@@ -38,7 +38,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EscritaPage() {
+/* O conteúdo vem da base de dados, por isso esta página não pode ser
+   construída uma vez e congelada: o Next guarda-a durante um minuto e
+   reconstrói-a depois, e as acções do painel mandam reconstruir mal se grave.
+   Assim uma alteração aparece no sítio logo a seguir, sem o custo de ir à base
+   de dados a cada visita. */
+export const revalidate = 60;
+
+export default async function EscritaPage() {
+  const escritos = await lerEscritos();
   return (
     <main className="min-h-dvh bg-sand">
       <Cabecalho activo="Escrita" />
@@ -66,7 +74,7 @@ export default function EscritaPage() {
         </p>
 
         <div className="pb-[clamp(3rem,7vw,7rem)]">
-          <Lista escritos={lerEscritos()} />
+          <Lista escritos={escritos} />
         </div>
       </div>
 

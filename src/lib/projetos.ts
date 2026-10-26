@@ -113,6 +113,16 @@ export type Preparacao = {
    * home -- é o que a Joana pediu: na home só imagens.
    */
   videos?: { src: string; poster: string; w: number; h: number }[];
+  /**
+   * A ordem na home, do menor para o maior -- é dela, não é a data. E se está
+   * publicado ou se é rascunho.
+   *
+   * Estes dois não interessam ao desenho: interessam ao painel, que mostra e
+   * edita os rascunhos também. Ficam aqui, opcionais, para o painel e o sítio
+   * falarem da mesma coisa em vez de haver duas formas de projeto.
+   */
+  ordem?: number;
+  estado?: "rascunho" | "publicado";
 };
 
 
