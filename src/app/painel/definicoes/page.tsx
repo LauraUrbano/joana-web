@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { Atalho, Botao, Recado, Seccao, Texto } from "@/components/painel/campos";
+import { Botao, Cabeca, Recado, Seccao, Texto } from "@/components/painel/campos";
 import { acrescentarPessoa, pessoas, tirarPessoa } from "@/lib/painel/dados";
 import { login } from "@/lib/painel/neon";
 import { exigeSessao, exigeSessaoNaAccao } from "@/lib/painel/sessao";
@@ -24,13 +24,10 @@ export default async function Definicoes({
 
   return (
     <>
-      <header className="flex items-baseline justify-between gap-4">
-        <h1 className="font-serif text-[2rem] leading-tight">Definições</h1>
-        <Atalho para="/painel">Voltar ao conteúdo</Atalho>
-      </header>
-      <p className="mt-1 font-body text-[1.05rem] opacity-70">
-        {quem.nome || quem.email}
-      </p>
+      <Cabeca
+        titulo="Definições"
+        nota={`A tua conta é ${quem.email}. Aqui mudas a palavra-passe e quem mais pode entrar.`}
+      />
 
       {feito && <Recado tom="bom">{feito}</Recado>}
       {erro && <Recado tom="mau">{erro}</Recado>}

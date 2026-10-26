@@ -50,7 +50,7 @@ export default async function EditarEscrito({
   const { erro } = await searchParams;
   const novo = slug === "novo";
   const e = novo ? null : (await escritosTodos()).find((x) => x.slug === slug);
-  if (!novo && !e) redirect("/painel?erro=Esse+texto+não+existe.");
+  if (!novo && !e) redirect("/painel/escritos?erro=Esse+texto+não+existe.");
 
   return (
     <>
@@ -58,7 +58,7 @@ export default async function EditarEscrito({
         <h1 className="font-serif text-[2rem] leading-tight">
           {novo ? "Texto novo" : e!.titulo}
         </h1>
-        <Atalho para="/painel">Voltar</Atalho>
+        <Atalho para="/painel/escritos">Voltar à lista</Atalho>
       </header>
 
       {erro && <Recado tom="mau">{erro}</Recado>}
@@ -217,7 +217,7 @@ async function guardar(form: FormData) {
 
   refrescarSitio();
 
-  redirect(`/painel?feito=${encodeURIComponent(`“${titulo}” guardado.`)}`);
+  redirect(`/painel/escritos?feito=${encodeURIComponent(`“${titulo}” guardado.`)}`);
 }
 
 async function apagar(form: FormData) {
@@ -226,5 +226,5 @@ async function apagar(form: FormData) {
   const original = String(form.get("original") ?? "");
   if (original) await apagarEscrito(original);
   refrescarSitio();
-  redirect(`/painel?feito=${encodeURIComponent("Texto apagado.")}`);
+  redirect(`/painel/escritos?feito=${encodeURIComponent("Texto apagado.")}`);
 }

@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+
+import { Cabeca } from "@/components/painel/campos";
 
 import { podeEntrar } from "@/lib/painel/dados";
 import { ambiente, login } from "@/lib/painel/neon";
@@ -28,17 +29,10 @@ export default async function Ajuda() {
 
   return (
     <>
-      <header className="flex items-baseline justify-between gap-4">
-        <h1 className="font-serif text-[2rem] leading-tight">
-          Como se edita o site
-        </h1>
-        <Link
-          href="/painel"
-          className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] opacity-70 hover:opacity-100"
-        >
-          Voltar
-        </Link>
-      </header>
+      <Cabeca
+        titulo="Como se edita o site"
+        nota="O que se pode mudar, onde, e o que correr mal quer dizer."
+      />
 
       <P>
         Tudo se edita aqui dentro. Entras em{" "}

@@ -46,7 +46,7 @@ export default async function EditarProjeto({
   const { erro } = await searchParams;
   const novo = slug === "novo";
   const p = novo ? null : await projeto(slug);
-  if (!novo && !p) redirect("/painel?erro=Esse+projeto+não+existe.");
+  if (!novo && !p) redirect("/painel/projetos?erro=Esse+projeto+não+existe.");
 
   return (
     <>
@@ -54,7 +54,7 @@ export default async function EditarProjeto({
         <h1 className="font-serif text-[2rem] leading-tight">
           {novo ? "Projeto novo" : p!.titulo}
         </h1>
-        <Atalho para="/painel">Voltar</Atalho>
+        <Atalho para="/painel/projetos">Voltar à lista</Atalho>
       </header>
 
       {erro && <Recado tom="mau">{erro}</Recado>}
@@ -231,7 +231,7 @@ async function guardar(form: FormData) {
 
   refrescarSitio();
 
-  redirect(`/painel?feito=${encodeURIComponent(`“${titulo}” guardado.`)}`);
+  redirect(`/painel/projetos?feito=${encodeURIComponent(`“${titulo}” guardado.`)}`);
 }
 
 async function apagar(form: FormData) {
@@ -240,5 +240,5 @@ async function apagar(form: FormData) {
   const original = String(form.get("original") ?? "");
   if (original) await apagarProjeto(original);
   refrescarSitio();
-  redirect(`/painel?feito=${encodeURIComponent("Projeto apagado.")}`);
+  redirect(`/painel/projetos?feito=${encodeURIComponent("Projeto apagado.")}`);
 }

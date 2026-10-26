@@ -229,3 +229,102 @@ export function Atalho({
     </Link>
   );
 }
+
+/**
+ * O topo de uma secção: o nome, uma linha a dizer o que é, e a acção principal
+ * à direita (o "novo projeto", o "novo texto").
+ */
+export function Cabeca({
+  titulo,
+  nota,
+  accao,
+}: {
+  titulo: string;
+  nota?: string;
+  accao?: React.ReactNode;
+}) {
+  return (
+    <header className="mb-8 flex flex-wrap items-start justify-between gap-4 border-b border-clay/20 pb-5">
+      <div>
+        <h1 className="font-serif text-[1.9rem] leading-none">{titulo}</h1>
+        {nota && (
+          <p className="mt-2 max-w-[48ch] font-body text-[1rem] opacity-70">
+            {nota}
+          </p>
+        )}
+      </div>
+      {accao}
+    </header>
+  );
+}
+
+/** Um botão que é uma ligação -- o "novo projeto" do topo das listas. */
+export function BotaoLigacao({
+  para,
+  children,
+}: {
+  para: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={para}
+      className="shrink-0 bg-clay px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-paper transition-opacity hover:opacity-80"
+    >
+      {children}
+    </Link>
+  );
+}
+
+/** Uma linha de lista: o nome à esquerda, o estado à direita, tudo clicável. */
+export function Linha({
+  para,
+  titulo,
+  detalhe,
+  etiqueta,
+  esmorecido = false,
+}: {
+  para: string;
+  titulo: string;
+  detalhe?: string;
+  etiqueta?: string;
+  esmorecido?: boolean;
+}) {
+  return (
+    <li>
+      <Link
+        href={para}
+        className="group flex items-baseline justify-between gap-4 border-b border-clay/15 py-3.5 transition-colors hover:bg-clay/5"
+      >
+        <span className="min-w-0">
+          <span
+            className={`font-body text-[1.08rem] group-hover:underline ${
+              esmorecido ? "opacity-60" : ""
+            }`}
+          >
+            {titulo}
+          </span>
+          {detalhe && (
+            <span className="ml-2 font-body text-[0.95rem] opacity-45">
+              {detalhe}
+            </span>
+          )}
+        </span>
+        {etiqueta && (
+          <span className="shrink-0 text-[0.65rem] font-semibold uppercase tracking-[0.18em] opacity-45">
+            {etiqueta}
+          </span>
+        )}
+      </Link>
+    </li>
+  );
+}
+
+/** Quando uma lista está vazia. */
+export function Vazio({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="border border-dashed border-clay/30 px-4 py-8 text-center font-body text-[1.02rem] opacity-60">
+      {children}
+    </p>
+  );
+}

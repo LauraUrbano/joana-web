@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 /**
@@ -26,12 +27,19 @@ import { useEffect, useRef } from "react";
  *    fica como está -- esconder o cursor a quem precisa dele seria mau;
  *  - só esconde o cursor nativo depois de o seu já estar no ecrã, e devolve-o
  *    ao sair da página.
+ *
+ * E não entra no painel. Lá dentro escreve-se em formulários e carrega-se em
+ * botões: um anel que chega um instante depois é ruído, e esconder o cursor
+ * nativo a quem está a escrever é pior do que não ter cursor nenhum.
  */
 export default function Cursor() {
   const ponto = useRef<HTMLDivElement>(null);
   const anel = useRef<HTMLDivElement>(null);
+  const caminho = usePathname();
+  const noPainel = caminho.startsWith("/painel");
 
   useEffect(() => {
+    if (noPainel) return;
     const fino = window.matchMedia("(pointer: fine)");
     const reduz = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!fino.matches || reduz.matches) return;
@@ -112,7 +120,9 @@ export default function Cursor() {
       window.removeEventListener("pointerup", aoLargar);
       delete raiz.dataset.cursorVivo;
     };
-  }, []);
+  }, [noPainel]);
+
+  if (noPainel) return null;
 
   return (
     <>
