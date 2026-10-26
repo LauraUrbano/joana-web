@@ -99,6 +99,33 @@ export default async function Painel({
             </>
           )}
         </p>
+        <p className="mt-4 font-body text-[1.05rem]">
+          <Link href="/painel/ajuda" className="border-b border-clay/60">
+            Como se edita cada coisa
+          </Link>{" "}
+          — projetos, textos do blog, ligações e contactos, passo a passo.
+        </p>
+      </Seccao>
+
+      <Seccao titulo="A tua palavra-passe">
+        <p className="font-body text-[1.05rem]">
+          Se entraste com uma palavra-passe que outra pessoa escolheu, troca-a
+          aqui. A partir daí só tu a sabes.
+        </p>
+        <form action={mudarSenha} className="mt-5 flex flex-col gap-3">
+          <Campo
+            etiqueta="A actual"
+            nome="actual"
+            autoComplete="current-password"
+          />
+          <Campo
+            etiqueta="A nova"
+            nome="nova"
+            autoComplete="new-password"
+            ajuda="Oito caracteres ou mais."
+          />
+          <Botao>Trocar a palavra-passe</Botao>
+        </form>
       </Seccao>
 
       <Seccao titulo="A chave do repositório">
@@ -250,6 +277,51 @@ async function porChave(form: FormData) {
   redirect(`/painel?feito=${encodeURIComponent("Chave guardada.")}`);
 }
 
+/**
+ * Trocar a palavra-passe.
+ *
+ * Existe porque uma conta pode ser criada por outra pessoa -- foi assim que a
+ * da Joana nasceu -- e uma palavra-passe que passou por uma conversa deixa de
+ * ser só dela. Isto fecha essa porta sem ninguém ter de me pedir nada.
+ */
+async function mudarSenha(form: FormData) {
+  "use server";
+  const quem = await quemPede();
+  if (!quem) redirect("/painel/entrar");
+
+  const actual = String(form.get("actual") ?? "");
+  const nova = String(form.get("nova") ?? "");
+  if (nova.length < 8) {
+    redirect(
+      `/painel?erro=${encodeURIComponent(
+        "A palavra-passe nova precisa de oito caracteres ou mais."
+      )}`
+    );
+  }
+
+  const auth = await login();
+  if (!auth) redirect("/painel/entrar");
+  const { error } = await auth.changePassword({
+    currentPassword: actual,
+    newPassword: nova,
+    // As outras sessões caem: se a antiga andou por onde não devia, não fica
+    // ninguém lá dentro com ela.
+    revokeOtherSessions: true,
+  });
+  if (error) {
+    redirect(
+      `/painel?erro=${encodeURIComponent(
+        error.message?.toLowerCase().includes("password")
+          ? "A palavra-passe actual não está certa."
+          : error.message || "Não foi possível trocar a palavra-passe."
+      )}`
+    );
+  }
+  redirect(
+    `/painel?feito=${encodeURIComponent("Palavra-passe trocada. Só tu a sabes.")}`
+  );
+}
+
 async function tirarChave() {
   "use server";
   const quem = await quemPede();
@@ -309,6 +381,38 @@ function Seccao({
       </h2>
       <div className="mt-4">{children}</div>
     </section>
+  );
+}
+
+function Campo({
+  etiqueta,
+  nome,
+  autoComplete,
+  ajuda,
+}: {
+  etiqueta: string;
+  nome: string;
+  autoComplete: string;
+  ajuda?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.18em]">
+        {etiqueta}
+      </span>
+      <input
+        name={nome}
+        type="password"
+        autoComplete={autoComplete}
+        required
+        className="mt-2 w-full border border-clay/40 bg-paper px-3 py-2.5 font-body text-[1.05rem] outline-offset-2 focus-visible:outline-2 focus-visible:outline-clay"
+      />
+      {ajuda && (
+        <span className="mt-1 block font-body text-[0.9rem] opacity-60">
+          {ajuda}
+        </span>
+      )}
+    </label>
   );
 }
 
