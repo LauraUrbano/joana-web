@@ -170,30 +170,8 @@ faltava para a entrada ser um login normal.
 
 ## Falta fazer, e é contigo
 
-Feitos estes passos, entra-se no painel com email e palavra-passe e nunca mais
-se fala de chaves.
+Uma coisa só: **a chave do repositório**. Tudo o resto está montado e provado.
 
-O projeto da Vercel que serve `joanadominguesdesign.pt` está numa conta a que
-não chegamos -- a conta que a Laura tem ligada só vê `lauraurbano30-7380's
-projects`, e o `joana-web` não está lá. Para não ficar tudo à espera disso,
-criei o projeto **`joana-painel`** na conta dela: é este mesmo código, publicado
-noutro endereço, e existe só para guardar a chave e servir a página de entrada.
-O painel do sítio vai lá buscá-la (`base_url` no `config.yml`). Se um dia
-aparecer quem tem a conta do sítio, a variável passa para lá, o `base_url` volta
-ao domínio dela e este projeto apaga-se num clique.
-
-**1. Pôr a chave do Neon à mão deste lado.**
-No ambiente desta sessão (menu do ambiente na barra do título → *Edit*),
-acrescentar a variável `NEON_API_KEY` com uma chave de API do Neon
-(<https://console.neon.tech> → *Account settings* → *API keys*). Uma sessão nova
-apanha-a. Sem isto não há como correr o `neon deploy` daqui: o `neon login` abre
-o browser e devolve a resposta ao `127.0.0.1` do contentor, onde o teu browser
-não chega.
-
-Com ela, daqui faço: `neon deploy`, `npm run painel:migrar`, as duas variáveis
-na Vercel e o domínio de confiança do Neon Auth.
-
-**2. Criar a chave do repositório.**
 Em <https://github.com/settings/personal-access-tokens> → *Generate new token*
 (*fine-grained*):
 
@@ -205,27 +183,26 @@ Em <https://github.com/settings/personal-access-tokens> → *Generate new token*
 | Contents | **Read and write** -- é o que grava o conteúdo |
 | Pull requests | **Read and write** -- é o que faz a pré-visualização do blog |
 
-Copia a chave: só aparece uma vez. **Esta não vai a nenhuma variável de
-ambiente** -- cola-se em `/painel`, já dentro, e fica na base de dados. Trocar
-por outra é lá, sem publicar nada outra vez.
+Copia a chave: só aparece uma vez. **Não vai a variável de ambiente nenhuma** --
+cola-se em <https://www.joanadominguesdesign.pt/painel>, já lá dentro com a tua
+conta, e fica na base de dados. Trocar por outra é lá, sem publicar nada.
 
-**3. As variáveis do Neon no `joana-painel`.**
-<https://vercel.com/lauraurbano30-7380s-projects/joana-painel/settings/environment-variables>
+### O que já está feito
 
-| Nome | De onde vem | Ambiente |
-| --- | --- | --- |
-| `DATABASE_URL` | o `neon deploy` escreve-a no `.env.local` | *Production* |
-| `NEON_AUTH_BASE_URL` | idem | *Production* |
+| O quê | Onde |
+| --- | --- |
+| `neon deploy` -- Postgres, Neon Auth e o bucket `assets` | ramo `production` |
+| Tabelas `painel_pessoas` e `painel_segredos` | `npm run painel:migrar` |
+| Domínios de confiança do Neon Auth | `joanadominguesdesign.pt` e `www.` |
+| `DATABASE_URL` e `NEON_AUTH_BASE_URL` | projeto `joana-web` da Vercel, em *Production* |
+| A entrada no próprio domínio | `base_url` no `config.yml` |
 
-São só estas duas: o segredo dos cookies nasce na base de dados. Depois de
-gravar é preciso **voltar a publicar** (*Deployments* → o último → *Redeploy*).
-Ou dizer-me, que eu faço o redeploy daqui.
+O segredo que assina os cookies não está nessa lista de propósito: nasce na base
+de dados à primeira utilização e ninguém precisa de lhe tocar.
 
-A outra variável desse projeto já está posta: `NEXT_PUBLIC_SITE_URL` aponta
-para o domínio dela, para que os endereços canónicos da cópia continuem a
-apontar ao sítio a sério. As pré-visualizações estão desligadas nesse projeto, e
-tudo o que for servido por um `.vercel.app` leva `x-robots-tag: noindex` -- a
-cópia não compete com o sítio no Google.
+Houve pelo caminho um projeto `joana-painel`, na conta da Laura, para servir a
+entrada enquanto não havia acesso ao projeto do sítio. Já não faz falta e
+apaga-se.
 
 ## Como se entra
 
@@ -274,6 +251,6 @@ Há um guia escrito para a Joana, com os dois caminhos passo a passo:
 | Fase | O quê | Estado |
 | --- | --- | --- |
 | 0 | Mapa de conteúdos validado | feito |
-| 1 | Conteúdo em ficheiros, painel, login com contas | código feito e construído; à espera dos três passos acima para se poder provar de ponta a ponta |
+| 1 | Conteúdo em ficheiros, painel, login com contas | feito e provado em produção (14/14); falta só colar a chave do repositório |
 | 2 | Página de artigo (moldura "Artigo" do Figma) + dados estruturados | a seguir |
 | 3 | Títulos, descrições e palavras-chave por página | depende da validação da procura |

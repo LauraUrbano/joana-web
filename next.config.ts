@@ -36,6 +36,17 @@ const nextConfig: NextConfig = {
      é apanhado por isto. */
   headers() {
     return [
+      /* O painel lê o `config.yml` ao abrir, e é esse ficheiro que lhe diz onde
+         fica a entrada. Quando mudei o `base_url`, a construção nova já trazia
+         o ficheiro certo e a rede da Vercel continuou a servir o antigo durante
+         minutos (`x-vercel-cache: HIT`, `age` de dois dias). Durante esse tempo
+         o painel mandaria as pessoas ao endereço errado. Isto diz à rede para
+         confirmar sempre: é um ficheiro de configuração lido uma vez por
+         sessão, não vale um cache. */
+      {
+        source: "/admin/:caminho*",
+        headers: [{ key: "cache-control", value: "no-cache" }],
+      },
       {
         source: "/:caminho*",
         has: [{ type: "host", value: ".*\\.vercel\\.app" }],
