@@ -28,7 +28,7 @@ export default function Navegacao({
   definicoes: Entrada[];
 }) {
   return (
-    <nav aria-label="Secções do painel" className="lg:sticky lg:top-8">
+    <nav aria-label="Secções do painel">
       <Grupo titulo="Conteúdo" entradas={conteudo} />
       <div className="mt-8 hidden lg:block">
         <Grupo titulo="Painel" entradas={definicoes} />

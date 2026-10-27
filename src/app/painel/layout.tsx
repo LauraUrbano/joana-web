@@ -51,7 +51,10 @@ export default async function PainelLayout({
   return (
     <div className="min-h-svh bg-paper-warm text-clay">
       <div className="mx-auto grid w-full max-w-[72rem] gap-x-10 px-5 py-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:px-8 lg:py-10">
-        <div className="lg:border-r lg:border-clay/20 lg:pr-8">
+        {/* A coluna inteira é que fica colada ao topo, e não só o menu: com o
+            menu colado sozinho, ele deslizava por cima do "Sair", que ficava
+            parado onde estava. */}
+        <div className="lg:sticky lg:top-10 lg:self-start lg:border-r lg:border-clay/20 lg:pr-8">
           <header className="mb-6 hidden lg:block">
             <p className="font-serif text-[1.5rem] leading-none">Painel</p>
             <p className="mt-1 truncate font-body text-[0.95rem] opacity-60">

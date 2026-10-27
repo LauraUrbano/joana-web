@@ -72,7 +72,9 @@ export default async function Ajuda() {
       <H>Acrescentar ou mudar um projeto</H>
       <P>
         Na lista de projetos, carrega no nome para mudar, ou em{" "}
-        <B>Novo projeto</B>. No fim, <B>Guardar</B>.
+        <B>Novo projeto</B>. No fim, <B>Guardar</B>. As imagens vêm a seguir, e
+        têm secção própria — um projeto novo tem de ser gravado antes de lhe
+        acrescentares imagens.
       </P>
       <Tabela
         cabecalho={["Campo", "O que lá vai"]}
@@ -86,11 +88,6 @@ export default async function Ajuda() {
           ["Ano", "2024"],
           ["Descrição", "Um a três parágrafos"],
           [
-            "Capa",
-            "O caminho da imagem quadrada. É a que vai à órbita da home e à tira do telemóvel",
-          ],
-          ["Imagens da página", "Um caminho por linha, pela ordem em que aparecem"],
-          [
             "Vídeos",
             "Um por linha: o MP4, uma barra vertical, e o cartaz. Sem cartaz fica um rectângulo preto a carregar",
           ],
@@ -99,14 +96,37 @@ export default async function Ajuda() {
           ["Estado", "Rascunho não aparece em lado nenhum, nem no Google"],
         ]}
       />
+      <H>As imagens de um projeto</H>
       <P>
-        <B>As imagens, por agora, são caminhos</B> — as que já lá estão vivem no
-        próprio sítio e foram convertidas à mão. Carregar ficheiros novos a
-        partir daqui é o passo seguinte; até lá, manda-as à Laura, que as
-        converte e te diz o caminho. Há uma razão para isso e não é preguiça:
-        uma fotografia da câmara pesa 8 MB e faz o site demorar segundos a abrir
-        no telemóvel — uma página de projeto inteira, hoje, pesa menos do que
-        isso.
+        Estão por baixo do formulário, em duas partes: a <B>capa</B>, que é a
+        imagem que representa o projeto na home, e as <B>imagens da página</B>,
+        que é a galeria. Carrega os ficheiros como eles estão — são reduzidos e
+        convertidos aqui.
+      </P>
+      <Lista>
+        <li>
+          <B>↑ ↓</B> trocam a ordem em que aparecem na página.
+        </li>
+        <li>
+          <B>★</B> usa aquela imagem como capa.
+        </li>
+        <li>
+          <B>✕</B> remove-a do projeto e apaga-a.
+        </li>
+      </Lista>
+      <P>
+        Tudo isto aplica-se na hora, sem precisar do <I>Guardar</I> do
+        formulário de cima — é só para os textos.
+      </P>
+      <P>
+        <B>Não penses no tamanho dos ficheiros.</B> Podes mandar a fotografia tal
+        como saiu da câmara: aqui é reduzida (2000 px na galeria, 1600 na capa) e
+        convertida para um formato leve. É isso que evita o problema antigo — uma
+        fotografia de 8 MB fazia o site demorar segundos a abrir no telemóvel.
+      </P>
+      <P>
+        Os <B>vídeos</B> ainda se põem por caminho, no formulário: são pesados de
+        mais para passarem por aqui. Para esses, fala com a Laura.
       </P>
 
       <H>Escrever no blog</H>
@@ -169,8 +189,8 @@ export default async function Ajuda() {
             "Não mexer em mais nada e avisar. Está no histórico e volta como estava",
           ],
           [
-            "A imagem ficou esticada",
-            "A proporção não é a pedida: capa de projeto quadrada, imagem de texto 3:2",
+            "A imagem ficou cortada",
+            "A capa é mostrada em quadrado. Uma fotografia muito deitada ou muito ao alto perde as pontas",
           ],
           [
             "Escrevi e perdi o que tinha escrito",

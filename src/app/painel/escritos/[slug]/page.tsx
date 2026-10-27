@@ -8,12 +8,14 @@ import {
   Recado,
   Texto,
 } from "@/components/painel/campos";
+import { Capa } from "@/components/painel/imagens";
 import {
   apagarEscrito,
   comoDia,
   escritosTodos,
   guardarEscrito,
 } from "@/lib/painel/conteudo-db";
+import { apagarImagem, idDoEndereco, receberImagem } from "@/lib/painel/imagens";
 import {
   exigeSessao,
   exigeSessaoNaAccao,
@@ -97,12 +99,6 @@ export default async function EditarEscrito({
           linhas={3}
           ajuda="Duas linhas. Sai no cartão e é a descrição que o Google mostra — não é enfeite."
         />
-        <Texto
-          etiqueta="Imagem"
-          nome="imagem"
-          valor={e?.imagem}
-          ajuda="Proporção 3:2, mínimo 1200×800. Sem ela fica a ilustração do desenho."
-        />
 
         <div className="grid gap-5 sm:grid-cols-2">
           <Texto
@@ -146,14 +142,91 @@ export default async function EditarEscrito({
             <button
               type="submit"
               formAction={apagar}
-              className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] opacity-60 hover:opacity-100"
+              className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] opacity-50 hover:opacity-100"
             >
               Apagar este texto
             </button>
           )}
         </div>
       </form>
+
+      {!novo && (
+        <section className="mt-14 border-t border-clay/20 pt-8">
+          <h2 className="text-[0.7rem] font-semibold uppercase tracking-[0.18em]">
+            Imagem do cartão
+          </h2>
+          <p className="mb-5 mt-2 max-w-[52ch] font-body text-[1rem] opacity-70">
+            É a imagem que aparece ao lado do texto na lista. Sem ela fica a
+            ilustração do desenho.
+          </p>
+          <Capa
+            src={e!.imagem}
+            accoes={{
+              carregar: porImagem.bind(null, slug),
+              remover: tirarImagem.bind(null, slug),
+            }}
+            ajuda="Deitada, 3:2 de preferência. É reduzida e convertida aqui."
+            proporcao="aspect-[3/2]"
+            nada="Sem imagem"
+          />
+        </section>
+      )}
     </>
+  );
+}
+
+/** Grava só a imagem, deixando o texto como está. */
+async function gravarImagem(slug: string, quem: string, imagem: string | null) {
+  const linha = (await escritosTodos()).find((x) => x.slug === slug);
+  if (!linha) redirect("/painel/escritos?erro=Esse+texto+não+existe.");
+  await guardarEscrito(
+    {
+      slug,
+      titulo: linha.titulo,
+      familia: linha.familia,
+      data: comoDia(linha.data),
+      resumo: linha.resumo,
+      imagem,
+      publicado: linha.publicado,
+      enderecoExterno: linha.endereco_externo,
+      corpo: linha.corpo,
+      estado: linha.estado,
+    },
+    quem
+  );
+  refrescarSitio();
+  return linha;
+}
+
+async function porImagem(slug: string, form: FormData) {
+  "use server";
+  const quem = await exigeSessaoNaAccao();
+  const ficheiro = form.get("ficheiro");
+  if (!(ficheiro instanceof File)) {
+    redirect(
+      `/painel/escritos/${slug}?erro=${encodeURIComponent("Não veio nenhum ficheiro.")}`
+    );
+  }
+  const r = await receberImagem(ficheiro, "cartao", `escrito:${slug}`, quem);
+  if (!r.ok) {
+    redirect(`/painel/escritos/${slug}?erro=${encodeURIComponent(r.razao)}`);
+  }
+  const antes = await gravarImagem(slug, quem, r.endereco);
+  const id = idDoEndereco(antes.imagem);
+  if (id) await apagarImagem(id);
+  redirect(
+    `/painel/escritos/${slug}?feito=${encodeURIComponent("Imagem trocada.")}`
+  );
+}
+
+async function tirarImagem(slug: string) {
+  "use server";
+  const quem = await exigeSessaoNaAccao();
+  const antes = await gravarImagem(slug, quem, null);
+  const id = idDoEndereco(antes.imagem);
+  if (id) await apagarImagem(id);
+  redirect(
+    `/painel/escritos/${slug}?feito=${encodeURIComponent("Imagem removida.")}`
   );
 }
 
@@ -197,6 +270,12 @@ async function guardar(form: FormData) {
     );
   }
 
+  // A imagem não vem deste formulário -- carrega-se na secção de baixo --, por
+  // isso vai-se buscar a que já lá está em vez de a apagar sem querer.
+  const anterior = original
+    ? (await escritosTodos()).find((x) => x.slug === original)
+    : null;
+
   await guardarEscrito(
     {
       slug,
@@ -204,7 +283,7 @@ async function guardar(form: FormData) {
       familia: String(form.get("familia") ?? "Artigo de opinião") as Familia,
       data,
       resumo: String(form.get("resumo") ?? "").trim(),
-      imagem: String(form.get("imagem") ?? "").trim() || null,
+      imagem: anterior?.imagem ?? null,
       publicado: String(form.get("publicado") ?? "").trim() || null,
       enderecoExterno: externo,
       corpo,
